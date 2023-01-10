@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+             x:Class="BeatClikr.Maui.Views.AboutPage"
+             x:DataType="vm:AboutViewModel"
+             Title="AboutPage">
+    <Shell.TitleView>
+        <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
+            <Image HeightRequest="40" Source="titleicon" />
+            <StackLayout Spacing="0" VerticalOptions="Center">
+                <Label
+                    FontAttributes="Bold"
+                    FontFamily="RegularFont"
+                    FontSize="Medium"
+                    Text="About BeatClikr"
+                    TextColor="{AppThemeBinding Dark={StaticResource TextDark},
+                                                Light={StaticResource TextLight}}" />
+                <Label
+                    FontAttributes="Bold"
+                    FontFamily="RegularFont"
+                    FontSize="Micro"
+                    Text="THE LIVE METRONOME"
+                    TextColor="{AppThemeBinding Dark={StaticResource TextDark},
+                                                Light={StaticResource TextLight}}" />
+            </StackLayout>
+        </StackLayout>
+    </Shell.TitleView>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackLayout Grid.Row="1" HorizontalOptions="CenterAndExpand">
+            <Image HeightRequest="64" Source="titleicon" />
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="BeatClikr" />
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="© 2020 BFunk Studios" />
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="All Rights Reserved" />
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Some icons by" />
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Freepik"
+                TextColor="Blue">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding IconAuthorLabelCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Good Ware"
+                TextColor="Blue">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BulbAuthorLabelCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                <Label
+                    HorizontalTextAlignment="Center"
+                    Text="from"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center" />
+                <Label
+                    Text="FlatIcon.com"
+                    TextColor="Blue"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SiteLabelCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+            <BoxView HeightRequest="60" Color="Transparent" />
+            <Button Command="{Binding SendFeedbackCommand}" Text="FEEDBACK" />
+        </StackLayout>
+    </Grid>
+</ContentPage>

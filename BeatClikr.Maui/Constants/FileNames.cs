@@ -1,4 +1,4 @@
-﻿namespace BeatClikr.Maui.Enums;
+﻿namespace BeatClikr.Maui.Constants;
 
 public static class FileNames
 {

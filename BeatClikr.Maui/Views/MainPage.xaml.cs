@@ -1,4 +1,4 @@
-﻿namespace BeatClikr.Views.Maui;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class MainPage : ContentPage
 {

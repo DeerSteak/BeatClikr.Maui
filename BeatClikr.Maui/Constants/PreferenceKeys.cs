@@ -1,11 +1,12 @@
-﻿namespace BeatClikr.Maui.Enums;
+﻿namespace BeatClikr.Maui.Constants;
 
 public static class PreferenceKeys
 {
-    public static string InstantBeat { get; private set; } = "InstantBeat";
-    public static string InstantRhythm { get; private set; } = "InstantRhythm";
-    public static string RehearsalBeat { get; private set; } = "RehearsalBeat";
-    public static string RehearsalRhythm { get; private set; } = "RehearsalRhythm";
-    public static string LiveBeat { get; private set; } = "LiveBeat";
-    public static string LiveRhythm { get; private set; } = "LiveRhythm";
+    public const string InstantBeat = "InstantBeat";
+    public const string InstantRhythm = "InstantRhythm";
+    public const string RehearsalBeat = "RehearsalBeat";
+    public const string RehearsalRhythm = "RehearsalRhythm";
+    public const string LiveBeat = "LiveBeat";
+    public const string LiveRhythm = "LiveRhythm";
+    public const string UsePersonalizedAds = "UsePersonalizedAds";
 }

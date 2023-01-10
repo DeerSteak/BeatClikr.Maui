@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace BeatClikr.Maui.Enums;
 
-namespace LiveMetronome.Enumerations
+public enum SubdivisionEnum
 {
-    public enum SubdivisionEnum
-    {
-        Quarter = 0,
-        Eighth = 1,
-        TripletEighth = 2,
-        Sixteenth = 3
-    }
+    Quarter = 0,
+    Eighth = 1,
+    TripletEighth = 2,
+    Sixteenth = 3
 }

@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
 		<RootNamespace>BeatClikr.Maui</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -30,6 +30,9 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -45,4 +48,106 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Views\" />
+	  <None Remove="Models\" />
+	  <None Remove="ViewModels\" />
+	  <None Remove="CommunityToolkit.Maui" />
+	  <None Remove="CommunityToolkit.Mvvm" />
+	  <None Remove="sqlite-net-pcl" />
+	  <None Remove="Enums\" />
+	  <None Remove="Services\" />
+	  <None Remove="Services\Interfaces\" />
+	  <None Remove="Helpers\" />
+	  <None Remove="SQLitePCLRaw.bundle_green" />
+	  <None Remove="Constants\" />
+	  <None Remove="LiteDB" />
+	  <None Remove="CustomControls\" />
+	  <None Remove="Plugin.MauiMTAdmob" />
+	  <None Remove="Plugin.Maui.Audio" />
+	  <None Remove="Resources\Sounds\Set1\crashr.m4a" />
+	  <None Remove="Resources\Sounds\Set1\ridebell.m4a" />
+	  <None Remove="Resources\Sounds\Set1\tomhi.m4a" />
+	  <None Remove="Resources\Sounds\Set1\cowbell.m4a" />
+	  <None Remove="Resources\Sounds\Set1\hatclosed.m4a" />
+	  <None Remove="Resources\Sounds\Set1\crashl.m4a" />
+	  <None Remove="Resources\Sounds\Set1\hatopen.m4a" />
+	  <None Remove="Resources\Sounds\Set1\tomlow.m4a" />
+	  <None Remove="Resources\Sounds\Set1\snare.m4a" />
+	  <None Remove="Resources\Sounds\Set1\tommid.m4a" />
+	  <None Remove="Resources\Sounds\Set1\kick.m4a" />
+	  <None Remove="Resources\Sounds\Set1\ride.m4a" />
+	  <None Remove="Resources\Sounds\Set1\tamb.m4a" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Views\" />
+	  <Folder Include="Models\" />
+	  <Folder Include="ViewModels\" />
+	  <Folder Include="Enums\" />
+	  <Folder Include="Services\" />
+	  <Folder Include="Services\Interfaces\" />
+	  <Folder Include="Helpers\" />
+	  <Folder Include="Constants\" />
+	  <Folder Include="CustomControls\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\AppShell.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MainPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\AboutPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\HelpPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\LibraryPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\LivePage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MetronomePage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\RehearsalPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\SettingsPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\SongDetailsPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="CustomControls\MetronomeClickerView.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\GetStartedPage.xaml">
+	    <SubType></SubType>
+	  </MauiXaml>
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui" Version="3.1.0" />
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+	  <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.2" />
+	  <PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Sounds\Set1\crashr.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\ridebell.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\tomhi.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\cowbell.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\hatclosed.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\crashl.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\hatopen.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\tomlow.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\snare.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\tommid.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\kick.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\ride.m4a" />
+	  <BundleResource Include="Resources\Sounds\Set1\tamb.m4a" />
+	</ItemGroup>
 </Project>
