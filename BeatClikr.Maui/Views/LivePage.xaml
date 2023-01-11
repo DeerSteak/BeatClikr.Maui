@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-             xmlns:m="clr-namespace:BeatClikr.Maui.Models"
-             xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
-             xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
-             x:Class="BeatClikr.Maui.Views.LivePage"
-             x:DataType="vm:LiveViewModel"
-             Title="LivePage">
+<ContentPage
+    x:Class="BeatClikr.Maui.Views.LivePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:m="clr-namespace:BeatClikr.Maui.Models"
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="LivePage"
+    x:DataType="vm:LiveViewModel">
     <Shell.TitleView>
         <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
             <Image HeightRequest="40" Source="titleicon" />
@@ -16,16 +17,12 @@
                     FontAttributes="Bold"
                     FontFamily="RegularFont"
                     FontSize="Medium"
-                    Text="Live Mode"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextDark},
-                                                Light={StaticResource TextLight}}" />
+                    Text="Live Mode"/>
                 <Label
                     FontAttributes="Bold"
                     FontFamily="RegularFont"
                     FontSize="Micro"
-                    Text="THE LIVE METRONOME"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextDark},
-                                                Light={StaticResource TextLight}}" />
+                    Text="THE LIVE METRONOME"/>
             </StackLayout>
         </StackLayout>
     </Shell.TitleView>
@@ -46,9 +43,9 @@
             <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
             <CollectionView
                 Grid.Row="1"
-                SelectionChangedCommand="{Binding SongSelectedCommand}"
                 ItemsSource="{Binding LiveSongPlaylist}"
-                SelectedItem="{Binding SelectedSong, Mode=TwoWay}">
+                SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
+                SelectionChangedCommand="{Binding SongSelectedCommand}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Song">
                         <ViewCell>
@@ -58,10 +55,10 @@
                                     FontSize="Medium"
                                     Text="{Binding Title}" />
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Artist}" TextColor="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}"/>
-                                    <Label Text=" / " TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                    <Label Text="{Binding BeatsPerMinute}" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                    <Label Text="BPM" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                                    <Label Text="{Binding Artist}" />
+                                    <Label Text=" / " />
+                                    <Label Text="{Binding BeatsPerMinute}" />
+                                    <Label Text="BPM" />
                                 </StackLayout>
                             </StackLayout>
                         </ViewCell>
@@ -69,7 +66,6 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <StackLayout
-                x:Name="CheckboxStack"
                 Grid.Row="2"
                 Margin="8"
                 Padding="0"
@@ -77,8 +73,7 @@
                 Orientation="Horizontal"
                 Spacing="4">
                 <CheckBox
-                    x:Name="PlaybackCheckbox"
-                    Margin="0"                    
+                    Margin="0"
                     IsChecked="{Binding IsPlaybackMode}"
                     VerticalOptions="Center" />
                 <StackLayout VerticalOptions="Center">
@@ -90,7 +85,7 @@
                     HorizontalOptions="EndAndExpand"
                     Text="STOP" />
             </StackLayout>
-            <mt:MTAdView x:Name="AdBanner" Grid.Row="3" />
+            <mt:MTAdView Grid.Row="3" AdsId="{Binding AdsId}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

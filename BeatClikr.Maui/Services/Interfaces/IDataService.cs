@@ -1,7 +1,7 @@
 ﻿using BeatClikr.Maui.Models;
 namespace BeatClikr.Maui.Services.Interfaces
 {
-	public interface IDataContext
+	public interface IDataService
 	{
         Task<List<Song>> GetLibrarySongs();
         Task<int> SaveSongToLibrary(Song song);

@@ -7,4 +7,9 @@ public partial class MetronomePage : ContentPage
 		InitializeComponent();
 		BindingContext = metronomeViewModel;
 	}
+
+	public MetronomePage() : this(ServiceHelper.GetService<ViewModels.MetronomeViewModel>())
+	{
+
+	}
 }

@@ -2,8 +2,14 @@
 
 public partial class LibraryPage : ContentPage
 {
-	public LibraryPage()
+	public LibraryPage(ViewModels.LibraryViewModel libraryViewModel)
 	{
 		InitializeComponent();
+		BindingContext = libraryViewModel;
+	}
+
+	public LibraryPage() : this(ServiceHelper.GetService<ViewModels.LibraryViewModel>())
+	{
+
 	}
 }

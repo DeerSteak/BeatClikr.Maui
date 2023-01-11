@@ -75,8 +75,8 @@ namespace BeatClikr.Maui.ViewModels
                     break;
             }
 
-            playerRhythm1 = audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(rhythm, set));
-            playerBeat1 = audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(beat, set));
+            playerRhythm1 = audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(rhythm, set).Result);
+            playerBeat1 = audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(beat, set).Result);
         }
 
         [RelayCommand]

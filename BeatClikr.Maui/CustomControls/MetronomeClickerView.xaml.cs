@@ -2,14 +2,14 @@
 
 public partial class MetronomeClickerView : ContentView
 {
-	public MetronomeClickerView(MetronomeClickerViewModel viewModel)
+	public MetronomeClickerView(ViewModels.MetronomeClickerViewModel viewModel)
 	{
 		InitializeComponent();
 		BindingContext = viewModel;
 	}
 
 	public MetronomeClickerView()
-		: this(ServiceHelper.GetService<MetronomeClickerViewModel>())
+		: this(ServiceHelper.GetService<ViewModels.MetronomeClickerViewModel>())
 	{		
 	}
 }

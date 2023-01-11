@@ -1,12 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeatClikr.Maui.Views.SongDetailsPage"
-             Title="SongDetailsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="BeatClikr.Maui.Views.SongDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="SongDetailsPage"
+    x:DataType="vm:SongDetailsViewModel">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding CancelCommand}"
+            IconImageSource="cancel"
+            Text="CANCEL" />
+        <ToolbarItem
+            Command="{Binding SaveCommand}"
+            IconImageSource="check"
+            Text="SAVE" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="16" Spacing="16">
+                <cc:MetronomeClickerView />
+                <Entry Placeholder="Title" Text="{Binding Title, Mode=TwoWay}" />
+                <Entry Placeholder="Artist" Text="{Binding Artist, Mode=TwoWay}" />
+                <Entry
+                    HorizontalTextAlignment="Start"
+                    Keyboard="Numeric"
+                    Placeholder="Beats Per Measure"
+                    Text="{Binding BeatsPerMeasure}" />
+                <Picker Title="Groove" SelectedIndex="{Binding Subdivision, Mode=TwoWay}" />
+                <BoxView BackgroundColor="Transparent" HeightRequest="8" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="BPM" />
+                    <Slider
+                        Grid.Column="1"
+                        Maximum="180"
+                        Minimum="30"
+                        Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
+                    <Label
+                        Grid.Column="2"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding BeatsPerMinute}" />
+                </Grid>
+                <BoxView BackgroundColor="Transparent" HeightRequest="8" />
+                <Button
+                    Command="{Binding PlayPauseCommand}"
+                    Text="PLAY/PAUSE" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
 </ContentPage>

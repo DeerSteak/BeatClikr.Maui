@@ -1,12 +1,91 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeatClikr.Maui.Views.RehearsalPage"
-             Title="RehearsalPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="BeatClikr.Maui.Views.RehearsalPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:m="clr-namespace:BeatClikr.Maui.Models"
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="RehearsalPage"
+    x:DataType="vm:RehearsalViewModel">
+    <Shell.TitleView>
+        <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
+            <Image HeightRequest="40" Source="titleicon" />
+            <StackLayout Spacing="0" VerticalOptions="Center">
+                <Label
+                    FontAttributes="Bold"
+                    FontFamily="RegularFont"
+                    FontSize="Medium"
+                    Text="Rehearsal Mode" />
+                <Label
+                    FontAttributes="Bold"
+                    FontFamily="RegularFont"
+                    FontSize="Micro"
+                    Text="THE LIVE METRONOME" />
+            </StackLayout>
+        </StackLayout>
+    </Shell.TitleView>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding AddSongToPlaylistCommand}"
+            IconImageSource="add"
+            Text="ADD" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding RehearsalSongPlayList}"
+                SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
+                SelectionChangedCommand="{Binding SongSelectedCommand}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="m:Song">
+                        <ViewCell>
+                            <StackLayout Margin="8,0" VerticalOptions="Center">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    Text="{Binding Title}" />
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Artist}" />
+                                    <Label Text=" / " />
+                                    <Label Text="{Binding BeatsPerMinute}" />
+                                    <Label Text="BPM" />
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <StackLayout
+                Grid.Row="2"
+                Margin="8"
+                Padding="0"
+                HorizontalOptions="FillAndExpand"
+                Orientation="Horizontal"
+                Spacing="4">
+                <CheckBox
+                    Margin="0"
+                    IsChecked="{Binding IsPlaybackMode}"
+                    VerticalOptions="Center" />
+                <StackLayout VerticalOptions="Center">
+                    <Label Text="Play song on tap" />
+                    <Label Text="(uncheck for edit mode)" />
+                </StackLayout>
+                <Button
+                    Command="{Binding StopCommand}"
+                    HorizontalOptions="EndAndExpand"
+                    Text="STOP" />
+            </StackLayout>
+            <mt:MTAdView Grid.Row="3" AdsId="{Binding AdsId}" />
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

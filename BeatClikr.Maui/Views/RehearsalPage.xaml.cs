@@ -1,9 +1,19 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using BeatClikr.Maui.ViewModels;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class RehearsalPage : ContentPage
 {
-	public RehearsalPage()
+	public RehearsalPage(RehearsalViewModel rehearsalViewModel)
 	{
 		InitializeComponent();
-	}
+        rehearsalViewModel.InitSongs();
+        Disappearing += (s, e) => rehearsalViewModel.StopCommand.Execute(null);
+        BindingContext = rehearsalViewModel;
+    }
+
+    public RehearsalPage() : this(ServiceHelper.GetService<RehearsalViewModel>())
+    {
+
+    }
 }

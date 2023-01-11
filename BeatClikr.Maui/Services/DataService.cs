@@ -5,7 +5,7 @@ using SQLite;
 
 namespace BeatClikr.Maui.Services;
 
-public class DataService : IDataContext
+public class DataService : IDataService
 {
     SQLiteAsyncConnection db;
     public DataService()

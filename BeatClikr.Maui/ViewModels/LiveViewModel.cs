@@ -13,19 +13,20 @@ namespace BeatClikr.Maui.ViewModels
 
 		[ObservableProperty]
 		private bool _isPlaybackMode = true;
+        partial void OnIsPlaybackModeChanged(bool value) => PlaybackCheckboxChanged();
 
-		[ObservableProperty]
+        [ObservableProperty]
 		private string _adsId;
 
 		[ObservableProperty]
 		private Song _selectedSong;
 
-		private CustomControls.MetronomeClickerViewModel _metronomeClickerViewModel;
+		private MetronomeClickerViewModel _metronomeClickerViewModel;
 		private Services.Interfaces.IShellService _shellService;
-		private Services.Interfaces.IPersistence _persistence;
+		private Services.Interfaces.IDataService _persistence;
 
-		public LiveViewModel(CustomControls.MetronomeClickerViewModel metronomeClickerViewModel,
-			Services.Interfaces.IPersistence persistence,
+		public LiveViewModel(MetronomeClickerViewModel metronomeClickerViewModel,
+			Services.Interfaces.IDataService persistence,
 			Services.Interfaces.IShellService shellService)
 		{
 			_metronomeClickerViewModel = metronomeClickerViewModel;
@@ -108,14 +109,9 @@ namespace BeatClikr.Maui.ViewModels
 
 		private async Task RemoveFromPlaylist()
 		{
-            // find the item being removed and null its playlist index
             SelectedSong.LiveSequence = null;
             await _persistence.SaveSongToLibrary(SelectedSong);
-
-			// remove the item from the list
 			LiveSongPlaylist.Remove(SelectedSong);
-
-            //refresh the list. 
             await SetLiveSequence();
         }
 

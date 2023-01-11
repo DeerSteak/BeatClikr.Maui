@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-             xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
-             xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
-             x:Class="BeatClikr.Maui.Views.MetronomePage"
-             x:DataType="vm:MetronomeViewModel"
-             Title="MetronomePage">
+<ContentPage
+    x:Class="BeatClikr.Maui.Views.MetronomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="MetronomePage"
+    x:DataType="vm:MetronomeViewModel">
     <Shell.TitleView>
         <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
             <Image HeightRequest="40" Source="titleicon" />
@@ -32,7 +33,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
+                <cc:MetronomeClickerView Grid.Row="0" />
                 <StackLayout
                     Grid.Row="1"
                     Padding="16"
@@ -44,9 +45,9 @@
                         Placeholder="Beats Per Measure"
                         Text="{Binding BeatsPerMeasure}" />
                     <Picker
-                        ItemsSource="{Binding Subdivisions}"
                         Title="Groove"
-                        SelectedIndex="1" />
+                        ItemsSource="{Binding Subdivisions}"
+                        SelectedIndex="{Binding SelectedSubdivisionIndex}" />
                     <BoxView BackgroundColor="Transparent" HeightRequest="30" />
                     <Grid>
                         <Grid.RowDefinitions>
@@ -58,11 +59,10 @@
                             HorizontalOptions="CenterAndExpand"
                             Orientation="Horizontal">
                             <Label
-                                x:Name="BpmLabel"
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center"
-                                Text="{Binding BeatsPerMinute}"/>
+                                Text="{Binding BeatsPerMinute}" />
                             <Label
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
@@ -70,17 +70,13 @@
                                 Text="BPM" />
                         </StackLayout>
                         <Slider
-                            x:Name="BpmSlider"
                             Grid.Row="1"
                             Maximum="210"
                             Minimum="30"
-                            DragCompletedCommand="{Binding BeatsPerMinuteChangedCommand}"
-                            Value="{Binding BeatsPerMinute}" />
+                            Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
                     <BoxView BackgroundColor="Transparent" HeightRequest="30" />
-                    <Button
-                        Command="{Binding PlayStopToggledCommand}"
-                        Text="Play/Pause" />
+                    <Button Command="{Binding PlayStopToggledCommand}" Text="Play/Pause" />
                 </StackLayout>
                 <mt:MTAdView Grid.Row="2" AdsId="{Binding AdsId}" />
             </Grid>

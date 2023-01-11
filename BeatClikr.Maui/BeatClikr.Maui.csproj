@@ -12,10 +12,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>BeatClikr.Maui</ApplicationTitle>
+		<ApplicationTitle>BeatClikr</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.beatclikr.maui</ApplicationId>
+		<ApplicationId>com.bfunkstudios.BeatClikr</ApplicationId>
 		<ApplicationIdGuid>c1d2a1a3-2e25-4345-ab63-ec83b8ef4862</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -23,7 +23,7 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
@@ -32,12 +32,22 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignProvision>Automatic</CodesignProvision>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignProvision>Automatic</CodesignProvision>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	  <CodesignKey>Mac Developer</CodesignKey>
+	  <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+	  <EnableCodeSigning>False</EnableCodeSigning>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
-		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
@@ -65,19 +75,22 @@
 	  <None Remove="CustomControls\" />
 	  <None Remove="Plugin.MauiMTAdmob" />
 	  <None Remove="Plugin.Maui.Audio" />
-	  <None Remove="Resources\Sounds\Set1\crashr.m4a" />
-	  <None Remove="Resources\Sounds\Set1\ridebell.m4a" />
-	  <None Remove="Resources\Sounds\Set1\tomhi.m4a" />
-	  <None Remove="Resources\Sounds\Set1\cowbell.m4a" />
-	  <None Remove="Resources\Sounds\Set1\hatclosed.m4a" />
-	  <None Remove="Resources\Sounds\Set1\crashl.m4a" />
-	  <None Remove="Resources\Sounds\Set1\hatopen.m4a" />
-	  <None Remove="Resources\Sounds\Set1\tomlow.m4a" />
-	  <None Remove="Resources\Sounds\Set1\snare.m4a" />
-	  <None Remove="Resources\Sounds\Set1\tommid.m4a" />
-	  <None Remove="Resources\Sounds\Set1\kick.m4a" />
-	  <None Remove="Resources\Sounds\Set1\ride.m4a" />
-	  <None Remove="Resources\Sounds\Set1\tamb.m4a" />
+	  <None Remove="Resources\Raw\Set1\cowbell.m4a" />
+	  <None Remove="Resources\Raw\Set1\crashl.m4a" />
+	  <None Remove="Resources\Raw\Set1\crashr.m4a" />
+	  <None Remove="Resources\Raw\Set1\hatclosed.m4a" />
+	  <None Remove="Resources\Raw\Set1\hatopen.m4a" />
+	  <None Remove="Resources\Raw\Set1\kick.m4a" />
+	  <None Remove="Resources\Raw\Set1\ride.m4a" />
+	  <None Remove="Resources\Raw\Set1\ridebell.m4a" />
+	  <None Remove="Resources\Raw\Set1\snare.m4a" />
+	  <None Remove="Resources\Raw\Set1\tamb.m4a" />
+	  <None Remove="Resources\Raw\Set1\tomhi.m4a" />
+	  <None Remove="Resources\Raw\Set1\tomlow.m4a" />
+	  <None Remove="Resources\Raw\Set1\tommid.m4a" />
+	  <None Remove="Resources\Raw\Set1\" />
+	  <None Remove="Resources\Sounds\" />
+	  <None Remove="Resources\AppIcon\1024.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -89,12 +102,11 @@
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Constants\" />
 	  <Folder Include="CustomControls\" />
+	  <Folder Include="Resources\Raw\Set1\" />
+	  <Folder Include="Resources\Sounds\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\AppShell.xaml">
-	    <SubType>Designer</SubType>
-	  </MauiXaml>
-	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MainPage.xaml">
 	    <SubType>Designer</SubType>
 	  </MauiXaml>
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\AboutPage.xaml">
@@ -136,18 +148,73 @@
 	  <PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <BundleResource Include="Resources\Sounds\Set1\crashr.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\ridebell.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\tomhi.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\cowbell.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\hatclosed.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\crashl.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\hatopen.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\tomlow.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\snare.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\tommid.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\kick.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\ride.m4a" />
-	  <BundleResource Include="Resources\Sounds\Set1\tamb.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\cowbell.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\crashl.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\crashr.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\hatclosed.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\hatopen.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\kick.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\ride.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\ridebell.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\snare.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\tamb.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\tomhi.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\tomlow.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\tommid.m4a" />
+	  <BundleResource Include="Resources\Raw\Set1\crashr.m4a">
+	    <LogicalName>Set1\crashr.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\ridebell.m4a">
+	    <LogicalName>Set1\ridebell.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\tomhi.m4a">
+	    <LogicalName>Set1\tomhi.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\cowbell.m4a">
+	    <LogicalName>Set1\cowbell.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\hatclosed.m4a">
+	    <LogicalName>Set1\hatclosed.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\crashl.m4a">
+	    <LogicalName>Set1\crashl.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\hatopen.m4a">
+	    <LogicalName>Set1\hatopen.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\tomlow.m4a">
+	    <LogicalName>Set1\tomlow.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\snare.m4a">
+	    <LogicalName>Set1\snare.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\tommid.m4a">
+	    <LogicalName>Set1\tommid.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\kick.m4a">
+	    <LogicalName>Set1\kick.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\ride.m4a">
+	    <LogicalName>Set1\ride.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\Raw\Set1\tamb.m4a">
+	    <LogicalName>Set1\tamb.m4a</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="Resources\AppIcon\appicon.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiAsset Remove="Resources\Raw\Set1\crashr.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\ridebell.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\tomhi.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\cowbell.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\hatclosed.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\crashl.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\hatopen.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\tomlow.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\snare.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\tommid.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\kick.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\ride.m4a" />
+	  <MauiAsset Remove="Resources\Raw\Set1\tamb.m4a" />
 	</ItemGroup>
 </Project>

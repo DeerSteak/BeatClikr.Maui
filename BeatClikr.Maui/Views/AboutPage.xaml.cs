@@ -7,4 +7,9 @@ public partial class AboutPage : ContentPage
 		InitializeComponent();
 		BindingContext = vm;
 	}
+
+	public AboutPage() : this(ServiceHelper.GetService<ViewModels.AboutViewModel>())
+	{
+
+	}
 }

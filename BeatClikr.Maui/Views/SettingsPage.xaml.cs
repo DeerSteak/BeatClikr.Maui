@@ -6,14 +6,4 @@ public partial class SettingsPage : ContentPage
 	{
 		InitializeComponent();
 	}
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
-        {
-            Preferences.Set(PreferenceKeys.UsePersonalizedAds, true);
-            //do first time stuff
-        }
-    }
 }

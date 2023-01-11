@@ -9,4 +9,9 @@ public partial class HelpPage : ContentPage
 		InitializeComponent();
 		BindingContext = viewModel;
 	}
+
+	public HelpPage() : this(ServiceHelper.GetService<ViewModels.HelpViewModel>())
+	{
+
+	}
 }

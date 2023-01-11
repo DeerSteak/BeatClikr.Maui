@@ -6,26 +6,25 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 
-		Routing.RegisterRoute(RouteNames.AboutPage, typeof(AboutPage));
-        Routing.RegisterRoute(RouteNames.AppShell, typeof(AppShell));
-        Routing.RegisterRoute(RouteNames.HelpPage, typeof(HelpPage));
-        Routing.RegisterRoute(RouteNames.LibraryPage, typeof(LibraryPage));
-        Routing.RegisterRoute(RouteNames.LivePage, typeof(LivePage));
-        Routing.RegisterRoute(RouteNames.MainPage, typeof(MainPage));
-        Routing.RegisterRoute(RouteNames.MetronomePage, typeof(MetronomePage));
-        Routing.RegisterRoute(RouteNames.RehearsalPage, typeof(RehearsalPage));
-        Routing.RegisterRoute(RouteNames.SettingsPage, typeof(SettingsPage));
-        Routing.RegisterRoute(RouteNames.SongDetailsPage, typeof(SongDetailsPage));
-        Routing.RegisterRoute(RouteNames.GetStartedPage, typeof(GetStartedPage));
+		Routing.RegisterRoute(RouteNames.AboutRoute, typeof(AboutPage));
+        Routing.RegisterRoute(RouteNames.AppShellRoute, typeof(AppShell));
+        Routing.RegisterRoute(RouteNames.HelpRoute, typeof(HelpPage));
+        Routing.RegisterRoute(RouteNames.LibraryRoute, typeof(LibraryPage));
+        Routing.RegisterRoute(RouteNames.LiveRoute, typeof(LivePage));
+        Routing.RegisterRoute(RouteNames.MetronomeRoute, typeof(MetronomePage));
+        Routing.RegisterRoute(RouteNames.RehearsalRoute, typeof(RehearsalPage));
+        Routing.RegisterRoute(RouteNames.SettingsRoute, typeof(SettingsPage));
+        Routing.RegisterRoute(RouteNames.SongDetailsRoute, typeof(SongDetailsPage));
+        Routing.RegisterRoute(RouteNames.GetStartedRoute, typeof(GetStartedPage));
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
-        {
-            GoToAsync($"/{RouteNames.GetStartedPage}");
-        }
+        //if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
+        //{
+        //    GoToAsync($"/{RouteNames.GetStartedRoute}");
+        //}
     }
 }
 
