@@ -5,12 +5,18 @@ using SQLite;
 
 namespace BeatClikr.Maui.Services;
 
-public class Persistence : IPersistence
+public class DataService : IDataContext
 {
     SQLiteAsyncConnection db;
-    public Persistence()
+    public DataService()
     {
         db = new SQLiteAsyncConnection(DatabaseConstants.DatabasePath);
+    }
+
+    public async Task<Song> GetById(int id)
+    {
+        await db.CreateTableAsync<Song>();
+        return await db.GetAsync<Song>(id);
     }
 
     public async Task<List<Song>> GetLibrarySongs()

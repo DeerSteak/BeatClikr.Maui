@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Audio;
 
-namespace BeatClikr.Maui.CustomControls
+namespace BeatClikr.Maui.ViewModels
 {
     public partial class MetronomeClickerViewModel : ObservableObject
     {
