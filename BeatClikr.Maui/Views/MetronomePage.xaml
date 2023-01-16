@@ -4,51 +4,29 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
-    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="MetronomePage"
+    Title="Metronome Page"
     x:DataType="vm:MetronomeViewModel">
     <Shell.TitleView>
-        <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
-            <Image HeightRequest="40" Source="titleicon" />
-            <StackLayout Spacing="0" VerticalOptions="Center">
-                <Label
-                    FontAttributes="Bold"
-                    FontFamily="RegularFont"
-                    FontSize="Medium"
-                    Text="Instant Metronome" />
-                <Label
-                    FontAttributes="Bold"
-                    FontFamily="RegularFont"
-                    FontSize="Micro"
-                    Text="THE LIVE METRONOME" />
-            </StackLayout>
-        </StackLayout>
+        <cc:TitleView Title="Instant Metronome" />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <ScrollView>
-            <Grid RowSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <cc:MetronomeClickerView Grid.Row="0" />
+        <Grid
+            ColumnDefinitions="*"
+            RowDefinitions="Auto,*,Auto"
+            RowSpacing="0">
+            <cc:MetronomeClickerView Grid.Row="0" />
+            <ScrollView Grid.Row="1">
                 <StackLayout
-                    Grid.Row="1"
                     Padding="16"
-                    Spacing="16">
-                    <Entry
-                        HorizontalTextAlignment="Start"
-                        IsVisible="False"
-                        Keyboard="Numeric"
-                        Placeholder="Beats Per Measure"
-                        Text="{Binding BeatsPerMeasure}" />
+                    VerticalOptions="StartAndExpand">
+                    <Label Text="Groove" />
                     <Picker
                         Title="Groove"
                         ItemsSource="{Binding Subdivisions}"
                         SelectedIndex="{Binding SelectedSubdivisionIndex}" />
-                    <BoxView BackgroundColor="Transparent" HeightRequest="30" />
+                    <BoxView HeightRequest="30" />
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -57,7 +35,8 @@
                         <StackLayout
                             Grid.Row="0"
                             HorizontalOptions="CenterAndExpand"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal"
+                            Spacing="6">
                             <Label
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
@@ -75,11 +54,11 @@
                             Minimum="30"
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
-                    <BoxView BackgroundColor="Transparent" HeightRequest="30" />
-                    <Button Command="{Binding PlayStopToggledCommand}" Text="Play/Pause" />
+                    <BoxView HeightRequest="30" />
+                    <Button Clicked="Button_Clicked" Text="Play/Pause" />
                 </StackLayout>
-                <mt:MTAdView Grid.Row="2" AdsId="{Binding AdsId}" />
-            </Grid>
-        </ScrollView>
+            </ScrollView>
+            <cc:AdMobView Grid.Row="2" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

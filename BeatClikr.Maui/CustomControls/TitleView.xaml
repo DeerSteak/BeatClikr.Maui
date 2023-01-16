@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeatClikr.Maui.CustomControls.TitleView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Grid
+        ColumnDefinitions="Auto,Auto,*"
+        ColumnSpacing="0"
+        RowDefinitions="Auto, Auto"
+        RowSpacing="0">
+        <Image
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Margin="5,0,5,0"
+            Aspect="AspectFit"
+            HeightRequest="40"
+            HorizontalOptions="Start"
+            Source="titleicon"
+            VerticalOptions="Center"
+            WidthRequest="40" />
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            FontAttributes="Bold"
+            FontSize="Micro"
+            Text="BeatClikr" />
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            FontAttributes="Bold"
+            FontSize="Medium"
+            x:Name="TitleLabel" />
+
+    </Grid>
+</ContentView>
+

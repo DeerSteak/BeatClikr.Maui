@@ -14,10 +14,13 @@ public class ShellService : IShellService
 
     public async Task PushModalAsync(Page page) => await _appShell.Navigation.PushModalAsync(page);
     public async Task<Page> PopModalAsync(bool animated = true) => await _appShell.Navigation.PopModalAsync(animated);
+    public async Task PushAsync(Page page) => await _appShell.Navigation.PushAsync(page);
+    public async Task<Page> PopAsync() => await _appShell.Navigation.PopAsync();
 
     public async Task GoToAsync(ShellNavigationState state) => await _appShell.GoToAsync(state);
     public async Task GoToAsync(ShellNavigationState state, bool animate) => await _appShell.GoToAsync(state, animate);
     public async Task GoToAsync(ShellNavigationState state, IDictionary<string, object> parameters) => await _appShell.GoToAsync(state, parameters);
     public async Task GoToAsync(ShellNavigationState state, bool animate, IDictionary<string, object> parameters) => await _appShell.GoToAsync(state, animate, parameters);
+    
 }
 

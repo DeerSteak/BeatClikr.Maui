@@ -15,9 +15,6 @@ namespace BeatClikr.Maui.ViewModels
 		private bool _isPlaybackMode = true;
         partial void OnIsPlaybackModeChanged(bool value) => PlaybackCheckboxChanged();
 
-        [ObservableProperty]
-		private string _adsId;
-
 		[ObservableProperty]
 		private Song _selectedSong;
 
@@ -32,9 +29,6 @@ namespace BeatClikr.Maui.ViewModels
 			_metronomeClickerViewModel = metronomeClickerViewModel;
 			_persistence = persistence;
 			_shellService = shellService;
-			AdsId = DeviceInfo.Platform == DevicePlatform.iOS
-				? "ca-app-pub-8377432895177958/9628716771"
-				: "ca-app-pub-8377432895177958/5497900071";
 		}
 
 		public void InitSongs()
@@ -46,13 +40,29 @@ namespace BeatClikr.Maui.ViewModels
         }
 
         [RelayCommand]
+        private void Cancel()
+        {
+			_shellService.GoToAsync("..");
+        }
+
+        [RelayCommand]
 		private async void AddSongToPlaylist()
 		{
 			var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
 			addPage.Title = "Add to Live Playlist";
 			addPage.Disappearing += (s, e) => AddPageDisappearing(s as Views.LibraryPage);
 			Shell.SetPresentationMode(addPage, PresentationMode.ModalAnimated);
-            addPage.ToolbarItems.Add(new ToolbarItem("CANCEL", "cancel", async () => { await _shellService.PopModalAsync(); }));
+			var cancelButton = new ToolbarItem()
+			{
+				Text = "CANCEL",
+				IconImageSource = new FontImageSource()
+                {
+                    Glyph = Constants.IconFont.Ban,
+                    FontFamily = "FARegular"
+                },
+			    Command = CancelCommand
+			};
+            addPage.ToolbarItems.Add(cancelButton);
             await _shellService.PushModalAsync(addPage);
 		}
 
@@ -61,7 +71,8 @@ namespace BeatClikr.Maui.ViewModels
 			if (Song.Instance != null)
 				LiveSongPlaylist.Add(Song.Instance);
 			Shell.SetPresentationMode(page, PresentationMode.Animated);
-			
+			page.ToolbarItems.Clear();
+			page.Title = "Library";
 			Song.Instance = null;
 		}
 

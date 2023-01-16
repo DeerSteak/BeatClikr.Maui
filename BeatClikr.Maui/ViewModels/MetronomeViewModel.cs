@@ -7,8 +7,7 @@ namespace BeatClikr.Maui.ViewModels;
 public partial class MetronomeViewModel : ObservableObject
 {
     private SubdivisionEnum _subdivision;
-    private int _numBeats;
-    private int _tempo;
+    private const int _numBeats = 4;
     private MetronomeClickerViewModel _metronomeClickerViewModel;
 
     [ObservableProperty]
@@ -37,39 +36,23 @@ public partial class MetronomeViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _beatsPerMeasure;
-    partial void OnBeatsPerMeasureChanged(string value)
+    private int _beatsPerMinute;
+    partial void OnBeatsPerMinuteChanged(int value)
     {
-        if (int.TryParse(_beatsPerMeasure, out _tempo))
-            SetupMetronome();
-    }
-
-    [ObservableProperty]
-    private string _beatsPerMinute;
-    partial void OnBeatsPerMinuteChanged(string value)
-    {
-        if (int.TryParse(_beatsPerMinute, out _numBeats))
-            SetupMetronome();
+        SetupMetronome();
     }
 
     [ObservableProperty]
     private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
 
-    [ObservableProperty]
-    private string _adsId;
-
     public MetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel)
     {
         _metronomeClickerViewModel = metronomeClickerViewModel;
-        _numBeats = 4;
-        _tempo = 60;
         _subdivision = SubdivisionEnum.Eighth;
+        _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
+        _metronomeClickerViewModel.IsLiveMode = false;
 
-        BeatsPerMeasure = "4";
-        BeatsPerMinute = "60";
-        AdsId = DeviceInfo.Platform == DevicePlatform.iOS
-            ? "ca-app-pub-8377432895177958/7490720167"
-            : "ca-app-pub-8377432895177958/9298625858";
+        BeatsPerMinute = 60;
         SelectedSubdivisionIndex = 1;
 
         SetupMetronome();
@@ -90,8 +73,8 @@ public partial class MetronomeViewModel : ObservableObject
         {
             Title = "Instant metronome",
             Artist = "BeatClikr",
-            BeatsPerMeasure = _tempo,
-            BeatsPerMinute = _numBeats,
+            BeatsPerMeasure = _numBeats,
+            BeatsPerMinute = this.BeatsPerMinute,
             Subdivision = _subdivision
         };
         _metronomeClickerViewModel.Song = song;

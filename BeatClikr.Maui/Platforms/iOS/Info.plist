@@ -30,5 +30,9 @@
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.bfunkstudios.BeatClikr</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-8377432895177958~7682291854</string>
+	<key>GADIsAdManagerApp</key>
+	<true/>
 </dict>
 </plist>

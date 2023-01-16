@@ -28,7 +28,7 @@ public partial class Song : ObservableObject
     private int? rehearsalSequence;
 
     [PrimaryKey, AutoIncrement]
-    public int? ID { get; set; }
+    public int? Id { get; set; }
 
     public Song()
     {

@@ -22,10 +22,11 @@ namespace BeatClikr.Maui.ViewModels
 			BeatsPerMeasure = value.BeatsPerMeasure;
 			BeatsPerMinute = value.BeatsPerMinute;
 			Subdivision = value.Subdivision;
-			Id = value.ID;
+			Id = value.Id;
 			RehearsalSequence = value.RehearsalSequence;
 			LiveSequence = value.LiveSequence;
 			_recordChanged = false;
+			_metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
 			_metronomeClickerViewModel.SetSongCommand.Execute(value);
         }
 
@@ -76,6 +77,33 @@ namespace BeatClikr.Maui.ViewModels
         }
 
         [ObservableProperty]
+        private int _selectedSubdivisionIndex;
+        partial void OnSelectedSubdivisionIndexChanged(int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    Subdivision = SubdivisionEnum.Quarter;
+                    break;
+                case 1:
+                    Subdivision = SubdivisionEnum.Eighth;
+                    break;
+                case 2:
+                    Subdivision = SubdivisionEnum.TripletEighth;
+                    break;
+                case 3:
+                    Subdivision = SubdivisionEnum.Sixteenth;
+                    break;
+                default:
+                    Subdivision = SubdivisionEnum.Eighth;
+                    break;
+            }
+        }
+
+        [ObservableProperty]
+        private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
+
+        [ObservableProperty]
 		private int? _id;
         partial void OnIdChanged(int? value)
         {
@@ -85,7 +113,12 @@ namespace BeatClikr.Maui.ViewModels
 			}
 			else
 			{
-				Song = new Song();
+				Song = new Song()
+				{
+					BeatsPerMeasure = 4,
+					BeatsPerMinute = 60,
+					Subdivision = SubdivisionEnum.Eighth
+				};
 			}
 			_recordChanged = false;
 			_metronomeClickerViewModel.SetSongCommand.Execute(Song);
@@ -114,7 +147,9 @@ namespace BeatClikr.Maui.ViewModels
 			_persistence = persistence;
 			_shellService = shellService;
 			_metronomeClickerViewModel = metronomeClickerViewModel;
-		}
+            _metronomeClickerViewModel.IsLiveMode = false;
+			_metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
+        }
 
 		[RelayCommand]
 		private async void Cancel()
@@ -129,9 +164,18 @@ namespace BeatClikr.Maui.ViewModels
 		[RelayCommand]
 		private async void Save()
 		{
+			var result = 0;
 			if (_recordChanged)
-				await _persistence.SaveSongToLibrary(Song);
-			await _shellService.GoToAsync("..");
+				result = await _persistence.SaveSongToLibrary(Song);
+			try
+			{
+                await _shellService.PopAsync();
+
+            }
+            catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
 		}
 
 		[RelayCommand]

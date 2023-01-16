@@ -1,10 +1,13 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using Plugin.MauiMTAdmob;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class AppShell : Shell
 {
-	public AppShell()
+	public AppShell(ViewModels.AppShellViewModel viewModel)
 	{
-		InitializeComponent();
+        InitializeComponent();
+        BindingContext = viewModel;
 
 		Routing.RegisterRoute(RouteNames.AboutRoute, typeof(AboutPage));
         Routing.RegisterRoute(RouteNames.AppShellRoute, typeof(AppShell));
@@ -21,10 +24,6 @@ public partial class AppShell : Shell
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        //if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
-        //{
-        //    GoToAsync($"/{RouteNames.GetStartedRoute}");
-        //}
     }
 }
 

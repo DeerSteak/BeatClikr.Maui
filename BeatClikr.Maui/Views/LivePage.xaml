@@ -5,32 +5,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
-    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     Title="LivePage"
     x:DataType="vm:LiveViewModel">
     <Shell.TitleView>
-        <StackLayout Margin="20,0,0,0" Orientation="Horizontal">
-            <Image HeightRequest="40" Source="titleicon" />
-            <StackLayout Spacing="0" VerticalOptions="Center">
-                <Label
-                    FontAttributes="Bold"
-                    FontFamily="RegularFont"
-                    FontSize="Medium"
-                    Text="Live Mode"/>
-                <Label
-                    FontAttributes="Bold"
-                    FontFamily="RegularFont"
-                    FontSize="Micro"
-                    Text="THE LIVE METRONOME"/>
-            </StackLayout>
-        </StackLayout>
+        <cc:TitleView Title="Live Playlist" />
     </Shell.TitleView>
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding AddSongToPlaylistCommand}"
-            IconImageSource="add"
-            Text="ADD" />
+            Text="ADD">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FARegular"
+                                 Glyph="{Static const:IconFont.Plus}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid RowSpacing="0">
@@ -40,7 +30,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
+            <!--<cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />-->
             <CollectionView
                 Grid.Row="1"
                 ItemsSource="{Binding LiveSongPlaylist}"
@@ -85,7 +75,7 @@
                     HorizontalOptions="EndAndExpand"
                     Text="STOP" />
             </StackLayout>
-            <mt:MTAdView Grid.Row="3" AdsId="{Binding AdsId}" />
+            <cc:AdMobView Grid.Row="3" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -4,12 +4,17 @@ public partial class MetronomePage : ContentPage
 {
 	public MetronomePage(ViewModels.MetronomeViewModel metronomeViewModel)
 	{
-		InitializeComponent();
 		BindingContext = metronomeViewModel;
-	}
+        InitializeComponent();
+    }
 
-	public MetronomePage() : this(ServiceHelper.GetService<ViewModels.MetronomeViewModel>())
+    public MetronomePage() : this(ServiceHelper.GetService<ViewModels.MetronomeViewModel>())
 	{
-
+		
 	}
+
+    void Button_Clicked(System.Object sender, System.EventArgs e)
+    {
+        (BindingContext as ViewModels.MetronomeViewModel).PlayStopToggledCommand.Execute(null);
+    }
 }

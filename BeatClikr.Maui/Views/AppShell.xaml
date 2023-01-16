@@ -3,96 +3,134 @@
     x:Class="BeatClikr.Maui.Views.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:tk="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:v="clr-namespace:BeatClikr.Maui.Views"
-    Shell.FlyoutBehavior="Disabled">
-    <Shell.TitleView>
-        <StackLayout Orientation="Horizontal">
-            <Image HeightRequest="40" Source="titleicon" />
-            <Label Text="BeatKeepr" />
-        </StackLayout>
-    </Shell.TitleView>
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    ios:Page.UseSafeArea="True"
+    x:DataType="vm:AppShellViewModel">
 
-    <ShellContent
-        Title="Instant"
-        ContentTemplate="{DataTemplate v:LivePage}"
-        Icon="monkey.png" />
-
-    <!--  Pages can be added as references or inline  -->
-
-    <!--<FlyoutItem Title="Instant" FlyoutIcon="instant">
-        <ShellContent>
-            <v:MetronomePage />
-        </ShellContent>
-    </FlyoutItem>
-    <FlyoutItem Title="Library" FlyoutIcon="library">
-        <ShellContent>
-            <v:LibraryPage />
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Rehearsal" FlyoutIcon="rehearsal">
-        <ShellContent>
-            <v:RehearsalPage />
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Live" FlyoutIcon="live">
-        <ShellContent>
-            <v:LivePage />
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Help" FlyoutIcon="help">
-        <ShellContent>
-            <v:HelpPage />
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Settings" FlyoutIcon="settings">
-        <ShellContent>
-            <v:SettingsPage />
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem Title="About" FlyoutIcon="about">
-        <ShellContent>
-            <v:AboutPage />
-        </ShellContent>
-    </FlyoutItem>-->
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid
-                HeightRequest="120"
-                VerticalOptions="Center">
+                HeightRequest="200"
+                Style="{StaticResource FlyoutHeaderStyle}"
+                VerticalOptions="FillAndExpand">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <StackLayout Grid.Row="1" Margin="20,0,0,0">
-                    <StackLayout Orientation="Horizontal">
-                        <Image HeightRequest="56" Source="titleicon" />
-                        <StackLayout Spacing="0" VerticalOptions="Center">
-                            <Label
-                                FontAttributes="Bold"
-                                FontFamily="RegularFont"
-                                FontSize="Medium"
-                                Text="About BeatClikr"/>
-                            <Label
-                                FontAttributes="Bold"
-                                FontFamily="RegularFont"
-                                FontSize="Micro"
-                                Text="THE LIVE METRONOME"/>
-                            <Label
-                                x:Name="VersionLabel"
-                                FontAttributes="Bold"
-                                FontFamily="RegularFont"
-                                FontSize="Micro"/>
-                        </StackLayout>
-                    </StackLayout>
-                </StackLayout>
+                <Image
+                    Grid.Row="1"
+                    HeightRequest="56"
+                    WidthRequest="56"
+                    Aspect="AspectFit"
+                    Source="titleicon" />
+                <VerticalStackLayout Grid.Row="2">
+                    <Label
+                        FontAttributes="Bold"
+                        FontFamily="RegularFont"
+                        FontSize="Medium"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="About BeatClikr" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontFamily="RegularFont"
+                        FontSize="Micro"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="THE LIVE METRONOME" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontFamily="RegularFont"
+                        FontSize="Micro"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding VersionInfo}" />
+                </VerticalStackLayout>
             </Grid>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
+
+    <FlyoutItem Title="Instant">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.Music}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:MetronomePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Library">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.ListMusic}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:LibraryPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Live Mode">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.VolumeHigh}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:LivePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Rehearsal Mode">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.Drum}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:RehearsalPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Settings">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.Gear}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:SettingsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Help">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.CircleQuestion}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:HelpPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="About">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.CircleInfo}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:AboutPage}" />
+    </FlyoutItem>
 </Shell>
 

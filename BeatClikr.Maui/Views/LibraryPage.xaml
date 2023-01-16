@@ -3,11 +3,81 @@
     x:Class="BeatClikr.Maui.Views.LibraryPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="LibraryPage">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
+    xmlns:m="clr-namespace:BeatClikr.Maui.Models"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="LibraryPage"
+    x:DataType="vm:LibraryViewModel">
+    <Shell.TitleView>
+        <cc:TitleView Title="Library" />
+    </Shell.TitleView>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddItemCommand}" Text="ADD">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Plus}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0" Spacing="0">
+                <ContentView>
+                    <cc:MetronomeClickerView />
+                </ContentView>
+                <SearchBar Grid.Row="0" Text="{Binding Filter}" />
+            </StackLayout>
+            <ListView
+                Grid.Row="1"
+                ItemsSource="{Binding FilteredSongs}"
+                SelectedItem="{Binding SelectedSong}"
+                ItemSelected="ListView_ItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <VerticalStackLayout Margin="8,0" VerticalOptions="Center" x:DataType="m:Song">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    Text="{Binding Title}" />
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding Artist}" TextColor="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                                    <Label Text=" / " TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                                    <Label Text="{Binding BeatsPerMinute}" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                                    <Label Text="BPM" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackLayout
+                Grid.Row="2"
+                Margin="8"
+                Padding="0"
+                HorizontalOptions="FillAndExpand"
+                Orientation="Horizontal"
+                Spacing="4">
+                <CheckBox
+                    Margin="0"
+                    IsChecked="{Binding IsPlaybackMode}"
+                    VerticalOptions="Center" />
+                <StackLayout VerticalOptions="Center">
+                    <Label Text="Play song on tap" />
+                    <Label Text="(uncheck for edit mode)" />
+                </StackLayout>
+                <Button
+                    Command="{Binding StopCommand}"
+                    HorizontalOptions="EndAndExpand"
+                    Text="STOP" />
+            </StackLayout>
+            <cc:AdMobView Grid.Row="3" />
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

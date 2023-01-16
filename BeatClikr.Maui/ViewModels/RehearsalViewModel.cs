@@ -14,9 +14,6 @@ public partial class RehearsalViewModel : ObservableObject
     private ObservableCollection<Models.Song> _rehearsalSongPlayList;
 
     [ObservableProperty]
-    private string _adsId;
-
-    [ObservableProperty]
     private Models.Song _selectedSong;
 
     [ObservableProperty]
@@ -29,13 +26,11 @@ public partial class RehearsalViewModel : ObservableObject
     {
         _metronomeClickerViewModel = metronomeClickerViewModel;
         _metronomeClickerViewModel.IsLiveMode = false;
+        _metronomeClickerViewModel.BeatType = ClickerBeatType.Rehearsal;
         _shellService = shellService;
         _persistence = persistence;
 
         IsPlaybackMode = true;
-        AdsId = DeviceInfo.Platform == DevicePlatform.iOS
-            ? "ca-app-pub-8377432895177958/8507206795"
-            : "ca-app-pub-8377432895177958/8149195717";
     }
 
     public void InitSongs()
@@ -47,13 +42,29 @@ public partial class RehearsalViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void Cancel()
+    {
+        _shellService.GoToAsync("..");
+    }
+
+    [RelayCommand]
     private async void AddSongToPlaylist()
     {
         var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
-        addPage.Title = "Add to Rehearsal Playlist";
+        addPage.Title = "Add to Live Playlist";
         addPage.Disappearing += (s, e) => AddPageDisappearing(s as Views.LibraryPage);
         Shell.SetPresentationMode(addPage, PresentationMode.ModalAnimated);
-        addPage.ToolbarItems.Add(new ToolbarItem("CANCEL", "cancel", async () => { await _shellService.PopModalAsync(); }));
+        var cancelButton = new ToolbarItem()
+        {
+            Text = "CANCEL",
+            IconImageSource = new FontImageSource()
+            {
+                Glyph = Constants.IconFont.Ban,
+                FontFamily = "FARegular"
+            },
+            Command = CancelCommand
+        };
+        addPage.ToolbarItems.Add(cancelButton);
         await _shellService.PushModalAsync(addPage);
     }
 
@@ -62,7 +73,8 @@ public partial class RehearsalViewModel : ObservableObject
         if (Models.Song.Instance != null)
             RehearsalSongPlayList.Add(Models.Song.Instance);
         Shell.SetPresentationMode(page, PresentationMode.Animated);
-
+        page.ToolbarItems.Clear();
+        page.Title = "Library";
         Models.Song.Instance = null;
     }
 
@@ -74,7 +86,6 @@ public partial class RehearsalViewModel : ObservableObject
 
         if (IsPlaybackMode)
         {
-            _metronomeClickerViewModel.IsLiveMode = true;
             _metronomeClickerViewModel.SetSongCommand.Execute(SelectedSong);
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
         }

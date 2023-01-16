@@ -4,6 +4,7 @@ namespace BeatClikr.Maui.Services.Interfaces
 	public interface IDataService
 	{
         Task<List<Song>> GetLibrarySongs();
+        Task<List<Song>> GetLibrarySongs(string filter);
         Task<int> SaveSongToLibrary(Song song);
         Task<int> SaveSongListToLibrary(List<Song> songs);
         Task<List<Song>> GetLiveSongs();

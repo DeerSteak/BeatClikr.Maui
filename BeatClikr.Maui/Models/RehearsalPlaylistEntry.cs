@@ -9,7 +9,7 @@ public class RehearsalPlaylistEntry
     }
 
     [PrimaryKey, AutoIncrement]
-    public int? ID { get; set; }
+    public int Id { get; set; }
 
     public int SongID { get; set; }
 }

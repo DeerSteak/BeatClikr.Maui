@@ -5,6 +5,7 @@ global using BeatClikr.Maui.Services;
 using System.Reflection;
 using CommunityToolkit.Maui;
 using Plugin.Maui.Audio;
+using Plugin.MauiMTAdmob;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -21,10 +22,12 @@ public static class MauiProgram
 			.RegisterAppServices()
 			.RegisterViewModels()
 			.RegisterViews()
+			.UseMauiMTAdmob()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+				fonts.AddFont("FontAwesome6Pro-Regular-400.otf", "FARegular");
 			});
 
 		return builder.Build();
@@ -42,6 +45,8 @@ public static class MauiProgram
 
 	public static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
 	{
+		mauiAppBuilder.Services.AddSingleton<IDeviceInfo>(DeviceInfo.Current);
+		mauiAppBuilder.Services.AddSingleton<IAppInfo>(AppInfo.Current);
 		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IShellService, Services.ShellService>();
 		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IDataService, Services.DataService>();
 		mauiAppBuilder.Services.AddSingleton<IAudioManager>(AudioManager.Current);

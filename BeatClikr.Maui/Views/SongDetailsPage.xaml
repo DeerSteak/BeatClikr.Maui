@@ -4,31 +4,43 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="SongDetailsPage"
     x:DataType="vm:SongDetailsViewModel">
+    <Shell.TitleView>
+        <cc:TitleView Title="Song Details" />
+    </Shell.TitleView>
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding CancelCommand}"
-            IconImageSource="cancel"
-            Text="CANCEL" />
-        <ToolbarItem
-            Command="{Binding SaveCommand}"
-            IconImageSource="check"
-            Text="SAVE" />
+        <ToolbarItem Command="{Binding CancelCommand}" Text="CANCEL">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Xmark}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Command="{Binding SaveCommand}" Text="SAVE">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Check}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="16" Spacing="16">
                 <cc:MetronomeClickerView />
+                <Label Text="Title" />
                 <Entry Placeholder="Title" Text="{Binding Title, Mode=TwoWay}" />
+                <Label Text="Artist" />
                 <Entry Placeholder="Artist" Text="{Binding Artist, Mode=TwoWay}" />
+                <Label Text="Beats per Measure" />
                 <Entry
                     HorizontalTextAlignment="Start"
                     Keyboard="Numeric"
                     Placeholder="Beats Per Measure"
                     Text="{Binding BeatsPerMeasure}" />
-                <Picker Title="Groove" SelectedIndex="{Binding Subdivision, Mode=TwoWay}" />
+                <Picker
+                    Title="Groove"
+                    ItemsSource="{Binding Subdivisions}"
+                    SelectedIndex="{Binding SelectedSubdivisionIndex}" />
+                <BoxView HeightRequest="30" />       
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -53,9 +65,7 @@
                         Text="{Binding BeatsPerMinute}" />
                 </Grid>
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
-                <Button
-                    Command="{Binding PlayPauseCommand}"
-                    Text="PLAY/PAUSE" />
+                <Button Command="{Binding PlayPauseCommand}" Text="PLAY/PAUSE" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
