@@ -31,9 +31,7 @@ namespace BeatClikr.Maui.Helpers
 
         public static async Task<Stream> GetStreamFromFile(string filename, string set)
         {
-            //var assembly = typeof(App).GetTypeInfo().Assembly;
-            //var fileString = $"BeatClikr.Maui.Resources.Sounds.{set}.{filename}.m4a";
-            var stream = await FileSystem.OpenAppPackageFileAsync($"{set}/{filename}.m4a");
+            var stream = await FileSystem.OpenAppPackageFileAsync($"{set}/{FileNames.Platform}/{filename}.{FileNames.Extension}");
             return stream;
         }
     }

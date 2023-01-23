@@ -22,6 +22,7 @@ namespace BeatClikr.Maui.ViewModels
         private bool _playSubdivisions;
         private readonly bool _onApple;
         private readonly IAudioManager _audioManager;
+        private bool _flashlightEnabled;
         //private IconTintColorBehavior _behavior = new IconTintColorBehavior();
 
         [ObservableProperty]
@@ -73,6 +74,8 @@ namespace BeatClikr.Maui.ViewModels
                 Color = appInfo.RequestedTheme == AppTheme.Dark ? Color.FromArgb("#FAFAFA") : Color.FromArgb("#212121"),
                 Size = 90
             };
+
+            _flashlightEnabled = true;
 
             BeatBox = _bulbDim;
             Song = new Song();
@@ -150,11 +153,13 @@ namespace BeatClikr.Maui.ViewModels
                 if (_subdivisionNumber == 0)
                 {
                     MainThread.BeginInvokeOnMainThread(() => BeatBox = _bulbLit);
+                    Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
                     PlayBeat();
                 }
                 else
                 {
                     MainThread.BeginInvokeOnMainThread(() => BeatBox = _bulbDim);
+                    Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
                     if (_playSubdivisions)
                         PlayRhythm();
                 }
