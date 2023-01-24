@@ -93,8 +93,6 @@
 	  <None Remove="Resources\Images\live.png" />
 	  <None Remove="Resources\Images\rehearsal.png" />
 	  <None Remove="Resources\Images\settings.png" />
-	  <None Remove="Resources\Images\splashbackground.xml" />
-	  <None Remove="Resources\Images\splashimage.png" />
 	  <None Remove="Resources\Images\titleicon.png" />
 	  <None Remove="Resources\Splash\splash.png" />
 	  <None Remove="Resources\Fonts\Font Awesome 6 Pro-Regular-400.otf" />
@@ -129,6 +127,9 @@
 	  <None Remove="Resources\Raw\Set1\apple\tomhi.caf" />
 	  <None Remove="Resources\Raw\Set1\apple\tomlow.caf" />
 	  <None Remove="Resources\Raw\Set1\apple\tommid.caf" />
+	  <None Remove="Resources\Images\splash.png" />
+	  <None Remove="Platforms\Android\Resources\mipmap\" />
+	  <None Remove="Platforms\Android\Resources\mipmap\splash.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -144,6 +145,7 @@
 	  <Folder Include="Resources\Sounds\" />
 	  <Folder Include="Resources\Raw\Set1\other\" />
 	  <Folder Include="Resources\Raw\Set1\apple\" />
+	  <Folder Include="Platforms\Android\Resources\mipmap\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\AppShell.xaml">
@@ -187,7 +189,7 @@
 	  </MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Maui" Version="3.1.0" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 	  <PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.2" />
@@ -268,5 +270,7 @@
 	  <BundleResource Include="Resources\Raw\Set1\apple\tomhi.caf" />
 	  <BundleResource Include="Resources\Raw\Set1\apple\tomlow.caf" />
 	  <BundleResource Include="Resources\Raw\Set1\apple\tommid.caf" />
+	  <BundleResource Include="Resources\Images\splash.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap\splash.png" />
 	</ItemGroup>
 </Project>
