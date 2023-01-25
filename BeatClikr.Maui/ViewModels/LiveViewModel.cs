@@ -9,7 +9,7 @@ namespace BeatClikr.Maui.ViewModels
 	public partial class LiveViewModel : ObservableObject
 	{
 		[ObservableProperty]
-		private ObservableCollection<Song> _liveSongPlaylist;
+		private List<Song> _liveSongPlaylist;
 
 		[ObservableProperty]
 		private bool _isPlaybackMode = true;
@@ -18,7 +18,7 @@ namespace BeatClikr.Maui.ViewModels
 		[ObservableProperty]
 		private Song _selectedSong;
 
-		private MetronomeClickerViewModel _metronomeClickerViewModel;
+        private MetronomeClickerViewModel _metronomeClickerViewModel;
 		private Services.Interfaces.IShellService _shellService;
 		private Services.Interfaces.IDataService _persistence;
 
@@ -33,10 +33,7 @@ namespace BeatClikr.Maui.ViewModels
 
 		public void InitSongs()
 		{
-            var songList = _persistence.GetLiveSongs().Result;
-            LiveSongPlaylist = new ObservableCollection<Song>();
-			foreach (var song in songList)
-				LiveSongPlaylist.Add(song);
+            LiveSongPlaylist = _persistence.GetLiveSongs().Result;
         }
 
         [RelayCommand]
@@ -50,34 +47,32 @@ namespace BeatClikr.Maui.ViewModels
 		{
 			var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
 			addPage.Title = "Add to Live Playlist";
+			addPage.Disappearing -= (s, e) => AddPageDisappearing(s as Views.LibraryPage);
 			addPage.Disappearing += (s, e) => AddPageDisappearing(s as Views.LibraryPage);
-			Shell.SetPresentationMode(addPage, PresentationMode.ModalAnimated);
-			var cancelButton = new ToolbarItem()
-			{
-				Text = "CANCEL",
-				IconImageSource = new FontImageSource()
-                {
-                    Glyph = Constants.IconFont.Ban,
-                    FontFamily = "FARegular"
-                },
-			    Command = CancelCommand
-			};
-            addPage.ToolbarItems.Add(cancelButton);
-            await _shellService.PushModalAsync(addPage);
+
+			var addVm = ServiceHelper.GetService<LibraryViewModel>();
+			addVm.AddToPlaylist = true;
+
+            await _shellService.GoToAsync(RouteNames.LibraryRoute, true);
 		}
 
 		private void AddPageDisappearing(Views.LibraryPage page)
 		{
+            page.Title = "Library";
+
+            var addVm = ServiceHelper.GetService<LibraryViewModel>();
+			addVm.AddToPlaylist = false;
+			
 			if (Song.Instance != null)
-				LiveSongPlaylist.Add(Song.Instance);
-			Shell.SetPresentationMode(page, PresentationMode.Animated);
-			page.ToolbarItems.Clear();
-			page.Title = "Library";
+			{
+                Song.Instance.LiveSequence = LiveSongPlaylist.Count;
+				_persistence.SaveSongToLibrary(Song.Instance);
+			}
 			Song.Instance = null;
 		}
 
 		[RelayCommand]
-		private async void SongSelected()
+        private async void SongSelected()
 		{
 			if (SelectedSong == null)
 				return;

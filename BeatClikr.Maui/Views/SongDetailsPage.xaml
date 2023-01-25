@@ -35,11 +35,11 @@
                     HorizontalTextAlignment="Start"
                     Keyboard="Numeric"
                     Placeholder="Beats Per Measure"
-                    Text="{Binding BeatsPerMeasure}" />
+                    Text="{Binding BeatsPerMeasure, Mode=TwoWay}" />
                 <Picker
                     Title="Groove"
                     ItemsSource="{Binding Subdivisions}"
-                    SelectedIndex="{Binding SelectedSubdivisionIndex}" />
+                    SelectedIndex="{Binding SelectedSubdivisionIndex, Mode=TwoWay}" />
                 <BoxView HeightRequest="30" />       
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
                 <Grid>
@@ -62,7 +62,7 @@
                         Grid.Column="2"
                         HorizontalOptions="Center"
                         HorizontalTextAlignment="Center"
-                        Text="{Binding BeatsPerMinute}" />
+                        Text="{Binding BeatsPerMinute, Mode=TwoWay}" />
                 </Grid>
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
                 <Button Command="{Binding PlayPauseCommand}" Text="PLAY/PAUSE" />

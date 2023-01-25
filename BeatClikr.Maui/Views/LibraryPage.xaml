@@ -36,7 +36,7 @@
             <ListView
                 Grid.Row="1"
                 ItemsSource="{Binding FilteredSongs}"
-                SelectedItem="{Binding SelectedSong}"
+                SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
                 ItemSelected="ListView_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>

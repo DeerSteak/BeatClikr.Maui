@@ -9,6 +9,7 @@ public partial class RehearsalPage : ContentPage
 		InitializeComponent();
         rehearsalViewModel.InitSongs();
         Disappearing += (s, e) => rehearsalViewModel.StopCommand.Execute(null);
+        Appearing += (s, e) => rehearsalViewModel.InitSongs();
         BindingContext = rehearsalViewModel;
     }
 

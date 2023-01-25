@@ -34,5 +34,7 @@
 	<string>ca-app-pub-8377432895177958~7682291854</string>
 	<key>GADIsAdManagerApp</key>
 	<true/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

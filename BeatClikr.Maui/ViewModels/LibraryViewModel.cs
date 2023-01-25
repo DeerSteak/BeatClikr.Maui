@@ -14,6 +14,9 @@ namespace BeatClikr.Maui.ViewModels
 		[ObservableProperty]
 		private Models.Song _selectedSong = null;
 
+		[ObservableProperty]
+		private bool _addToPlaylist;
+
         [ObservableProperty]
 		private List<Models.Song> _filteredSongs = new List<Models.Song>();
 
@@ -52,30 +55,40 @@ namespace BeatClikr.Maui.ViewModels
 		[RelayCommand]
 		private void AddItem()
 		{
-			var addPage = ServiceHelper.GetService<Views.SongDetailsPage>();
-			addPage.Disappearing += (s, e) => OnFilterChanged(Filter);
-			_shellService.PushAsync(addPage);
+			GoToSongDetails();
 		}
 
-		private void ItemAdded(object s, EventArgs e)
+		private void GoToSongDetails()
 		{
-			OnFilterChanged(Filter);
-		}
+            var addPage = ServiceHelper.GetService<Views.SongDetailsPage>();
+            addPage.Disappearing -= (s, e) => OnFilterChanged(Filter);
+            addPage.Disappearing += (s, e) => OnFilterChanged(Filter);
+
+            var addVm = ServiceHelper.GetService<ViewModels.SongDetailsViewModel>();
+            addVm.SongId = SelectedSong?.Id ?? null;
+
+            _shellService.GoToAsync(RouteNames.SongDetailsRoute);
+        }
 
 		[RelayCommand]
 		private void SelectionChanged()
 		{
 			if (SelectedSong == null)
 				return;
-			if (IsPlaybackMode)
+			if (IsPlaybackMode && !AddToPlaylist)
 			{
 				_metronomeClickerViewModel.StopCommand.Execute(null);
 				_metronomeClickerViewModel.SetSongCommand.Execute(SelectedSong);
 				_metronomeClickerViewModel.StartStopCommand.Execute(null);
 			}
+			else if (AddToPlaylist)
+			{
+				Song.Instance = SelectedSong;
+				_shellService.PopAsync();
+			}
 			else
 			{
-				_shellService.GoToAsync($"{RouteNames.SongDetailsRoute}?Id={SelectedSong.Id}");
+				GoToSongDetails();
 			}
 			SelectedSong = null;
 		}

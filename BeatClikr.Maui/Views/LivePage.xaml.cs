@@ -6,18 +6,13 @@ public partial class LivePage : ContentPage
 	public LivePage(ViewModels.LiveViewModel liveViewModel)
 	{
 		InitializeComponent();
-		liveViewModel.InitSongs();
-        Disappearing += (s, e) => liveViewModel.StopCommand.Execute(null);
         BindingContext = liveViewModel;
+        Disappearing += (s, e) => liveViewModel.StopCommand.Execute(null);
+		Appearing += (s, e) => liveViewModel.InitSongs();
 	}
 
 	public LivePage() : this(ServiceHelper.GetService<ViewModels.LiveViewModel>())
 	{
 
 	}
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-    }
 }

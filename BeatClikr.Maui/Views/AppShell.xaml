@@ -10,25 +10,26 @@
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
     ios:Page.UseSafeArea="True"
     x:DataType="vm:AppShellViewModel">
-
+    <Shell.Behaviors>
+        <tk:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark={StaticResource PrimaryLight}, Light={StaticResource PrimaryDark}}" />
+    </Shell.Behaviors>
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid
-                HeightRequest="200"
+                Margin="0"
+                ColumnDefinitions="*"
+                ColumnSpacing="0"
+                HeightRequest="250"
+                RowDefinitions="*, Auto, Auto, *"
+                RowSpacing="0"
                 Style="{StaticResource FlyoutHeaderStyle}"
                 VerticalOptions="FillAndExpand">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
                 <Image
                     Grid.Row="1"
-                    HeightRequest="56"
-                    WidthRequest="56"
                     Aspect="AspectFit"
-                    Source="titleicon" />
+                    HeightRequest="56"
+                    Source="titleicon"
+                    WidthRequest="56" />
                 <VerticalStackLayout Grid.Row="2">
                     <Label
                         FontAttributes="Bold"
