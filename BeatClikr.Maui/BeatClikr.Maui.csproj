@@ -70,6 +70,32 @@
 	  <MauiCss Remove="Resources\Sounds\**" />
 	  <MauiXaml Remove="Resources\Sounds\**" />
 	  <None Remove="Resources\Sounds\**" />
+	  <None Remove="Resources\Raw\SET-1\apple\crashr.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\ridebell.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\tomhi.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\crashl.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\tomlow.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\hatopen.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\snare.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\tommid.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\kick.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\tamb.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\ride.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\cowbell.caf" />
+	  <None Remove="Resources\Raw\SET-1\apple\hatclosed.caf" />
+	  <None Remove="Resources\Raw\SET-1\other\ridebell.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\tomhi.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\crashr.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\kick.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\tommid.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\tamb.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\ride.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\crashl.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\hatopen.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\tomlow.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\snare.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\hatclosed.wav" />
+	  <None Remove="Resources\Raw\SET-1\other\cowbell.wav" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
@@ -92,7 +118,7 @@
 	  <None Remove="CustomControls\" />
 	  <None Remove="Plugin.MauiMTAdmob" />
 	  <None Remove="Plugin.Maui.Audio" />
-	  <None Remove="Resources\Raw\Set1\" />
+	  <None Remove="Resources\Raw\set1\" />
 	  <None Remove="Resources\Sounds\" />
 	  <None Remove="Resources\AppIcon\1024.png" />
 	  <None Remove="Resources\Images\bulb_dim.png" />
@@ -112,37 +138,11 @@
 	  <None Remove="SQLitePCLRaw.provider.dynamic_cdecl" />
 	  <None Remove="SQLitePCLRaw.core" />
 	  <None Remove="SQLitePCLRaw.provider.e_sqlite3" />
-	  <None Remove="Resources\Raw\set1\other\" />
-	  <None Remove="Resources\Raw\set1\apple\" />
-	  <None Remove="Resources\Raw\set1\apple\cowbell.caf" />
-	  <None Remove="Resources\Raw\set1\apple\crashl.caf" />
-	  <None Remove="Resources\Raw\set1\apple\crashr.caf" />
-	  <None Remove="Resources\Raw\set1\apple\hatclosed.caf" />
-	  <None Remove="Resources\Raw\set1\apple\hatopen.caf" />
-	  <None Remove="Resources\Raw\set1\apple\kick.caf" />
-	  <None Remove="Resources\Raw\set1\apple\ride.caf" />
-	  <None Remove="Resources\Raw\set1\apple\ridebell.caf" />
-	  <None Remove="Resources\Raw\set1\apple\snare.caf" />
-	  <None Remove="Resources\Raw\set1\apple\tamb.caf" />
-	  <None Remove="Resources\Raw\set1\apple\tomhi.caf" />
-	  <None Remove="Resources\Raw\set1\apple\tomlow.caf" />
-	  <None Remove="Resources\Raw\set1\apple\tommid.caf" />
+	  <None Remove="Resources\Raw\Set1\other\" />
+	  <None Remove="Resources\Raw\Set1\apple\" />
 	  <None Remove="Resources\Images\splash.png" />
 	  <None Remove="Platforms\Android\Resources\mipmap\" />
 	  <None Remove="Platforms\Android\Resources\mipmap\splash.png" />
-	  <None Remove="Resources\Raw\set1\other\cowbell.wav" />
-	  <None Remove="Resources\Raw\set1\other\crashl.wav" />
-	  <None Remove="Resources\Raw\set1\other\crashr.wav" />
-	  <None Remove="Resources\Raw\set1\other\hatclosed.wav" />
-	  <None Remove="Resources\Raw\set1\other\hatopen.wav" />
-	  <None Remove="Resources\Raw\set1\other\kick.wav" />
-	  <None Remove="Resources\Raw\set1\other\ride.wav" />
-	  <None Remove="Resources\Raw\set1\other\ridebell.wav" />
-	  <None Remove="Resources\Raw\set1\other\snare.wav" />
-	  <None Remove="Resources\Raw\set1\other\tamb.wav" />
-	  <None Remove="Resources\Raw\set1\other\tomhi.wav" />
-	  <None Remove="Resources\Raw\set1\other\tomlow.wav" />
-	  <None Remove="Resources\Raw\set1\other\tommid.wav" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -154,7 +154,6 @@
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Constants\" />
 	  <Folder Include="CustomControls\" />
-	  <Folder Include="Resources\Raw\set1\" />
 	  <Folder Include="Platforms\Android\Resources\mipmap\" />
 	</ItemGroup>
 	<ItemGroup>
@@ -227,33 +226,111 @@
 	  <BundleResource Include="Resources\Images\titleicon.png" />
 	  <BundleResource Include="Resources\Splash\splash.png" />
 	  <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Regular-400.otf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\cowbell.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\crashl.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\crashr.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\hatclosed.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\hatopen.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\kick.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\ride.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\ridebell.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\snare.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\tamb.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\tomhi.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\tomlow.caf" />
-	  <BundleResource Include="Resources\Raw\Set1\apple\tommid.caf" />
 	  <BundleResource Include="Resources\Images\splash.png" />
 	  <BundleResource Include="Platforms\Android\Resources\mipmap\splash.png" />
-	  <BundleResource Include="Resources\Raw\Set1\other\cowbell.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\crashl.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\crashr.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\hatclosed.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\hatopen.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\kick.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\ride.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\ridebell.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\snare.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\tamb.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\tomhi.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\tomlow.wav" />
-	  <BundleResource Include="Resources\Raw\Set1\other\tommid.wav" />
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
+	  <BundleResource Include="**/*" />
+	  <BundleResource Include="Resources\Raw\**">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </BundleResource>
 	</ItemGroup>
 </Project>
