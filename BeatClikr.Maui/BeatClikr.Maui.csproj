@@ -59,6 +59,14 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 	<ItemGroup>
+	  <AndroidResource Remove="Resources\Sounds\**" />
+	  <Compile Remove="Resources\Sounds\**" />
+	  <EmbeddedResource Remove="Resources\Sounds\**" />
+	  <MauiCss Remove="Resources\Sounds\**" />
+	  <MauiXaml Remove="Resources\Sounds\**" />
+	  <None Remove="Resources\Sounds\**" />
+	</ItemGroup>
+	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
 
@@ -99,37 +107,37 @@
 	  <None Remove="SQLitePCLRaw.provider.dynamic_cdecl" />
 	  <None Remove="SQLitePCLRaw.core" />
 	  <None Remove="SQLitePCLRaw.provider.e_sqlite3" />
-	  <None Remove="Resources\Raw\Set1\other\" />
-	  <None Remove="Resources\Raw\Set1\apple\" />
-	  <None Remove="Resources\Raw\Set1\apple\cowbell.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\crashl.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\crashr.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\hatclosed.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\hatopen.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\kick.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\ride.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\ridebell.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\snare.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\tamb.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\tomhi.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\tomlow.caf" />
-	  <None Remove="Resources\Raw\Set1\apple\tommid.caf" />
+	  <None Remove="Resources\Raw\set1\other\" />
+	  <None Remove="Resources\Raw\set1\apple\" />
+	  <None Remove="Resources\Raw\set1\apple\cowbell.caf" />
+	  <None Remove="Resources\Raw\set1\apple\crashl.caf" />
+	  <None Remove="Resources\Raw\set1\apple\crashr.caf" />
+	  <None Remove="Resources\Raw\set1\apple\hatclosed.caf" />
+	  <None Remove="Resources\Raw\set1\apple\hatopen.caf" />
+	  <None Remove="Resources\Raw\set1\apple\kick.caf" />
+	  <None Remove="Resources\Raw\set1\apple\ride.caf" />
+	  <None Remove="Resources\Raw\set1\apple\ridebell.caf" />
+	  <None Remove="Resources\Raw\set1\apple\snare.caf" />
+	  <None Remove="Resources\Raw\set1\apple\tamb.caf" />
+	  <None Remove="Resources\Raw\set1\apple\tomhi.caf" />
+	  <None Remove="Resources\Raw\set1\apple\tomlow.caf" />
+	  <None Remove="Resources\Raw\set1\apple\tommid.caf" />
 	  <None Remove="Resources\Images\splash.png" />
 	  <None Remove="Platforms\Android\Resources\mipmap\" />
 	  <None Remove="Platforms\Android\Resources\mipmap\splash.png" />
-	  <None Remove="Resources\Raw\Set1\other\cowbell.wav" />
-	  <None Remove="Resources\Raw\Set1\other\crashl.wav" />
-	  <None Remove="Resources\Raw\Set1\other\crashr.wav" />
-	  <None Remove="Resources\Raw\Set1\other\hatclosed.wav" />
-	  <None Remove="Resources\Raw\Set1\other\hatopen.wav" />
-	  <None Remove="Resources\Raw\Set1\other\kick.wav" />
-	  <None Remove="Resources\Raw\Set1\other\ride.wav" />
-	  <None Remove="Resources\Raw\Set1\other\ridebell.wav" />
-	  <None Remove="Resources\Raw\Set1\other\snare.wav" />
-	  <None Remove="Resources\Raw\Set1\other\tamb.wav" />
-	  <None Remove="Resources\Raw\Set1\other\tomhi.wav" />
-	  <None Remove="Resources\Raw\Set1\other\tomlow.wav" />
-	  <None Remove="Resources\Raw\Set1\other\tommid.wav" />
+	  <None Remove="Resources\Raw\set1\other\cowbell.wav" />
+	  <None Remove="Resources\Raw\set1\other\crashl.wav" />
+	  <None Remove="Resources\Raw\set1\other\crashr.wav" />
+	  <None Remove="Resources\Raw\set1\other\hatclosed.wav" />
+	  <None Remove="Resources\Raw\set1\other\hatopen.wav" />
+	  <None Remove="Resources\Raw\set1\other\kick.wav" />
+	  <None Remove="Resources\Raw\set1\other\ride.wav" />
+	  <None Remove="Resources\Raw\set1\other\ridebell.wav" />
+	  <None Remove="Resources\Raw\set1\other\snare.wav" />
+	  <None Remove="Resources\Raw\set1\other\tamb.wav" />
+	  <None Remove="Resources\Raw\set1\other\tomhi.wav" />
+	  <None Remove="Resources\Raw\set1\other\tomlow.wav" />
+	  <None Remove="Resources\Raw\set1\other\tommid.wav" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -141,10 +149,7 @@
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Constants\" />
 	  <Folder Include="CustomControls\" />
-	  <Folder Include="Resources\Raw\Set1\" />
-	  <Folder Include="Resources\Sounds\" />
-	  <Folder Include="Resources\Raw\Set1\other\" />
-	  <Folder Include="Resources\Raw\Set1\apple\" />
+	  <Folder Include="Resources\Raw\set1\" />
 	  <Folder Include="Platforms\Android\Resources\mipmap\" />
 	</ItemGroup>
 	<ItemGroup>
