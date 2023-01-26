@@ -18,5 +18,5 @@ public static class FileNames
     public const string Set1 = "Set1";
     public const string Set2 = "Set2";
     public static readonly string Platform = DeviceInfo.Platform == DevicePlatform.iOS ? "apple" : "other";
-    public static readonly string Extension = DeviceInfo.Platform == DevicePlatform.iOS ? "caf" : "m4a";
+    public static readonly string Extension = DeviceInfo.Platform == DevicePlatform.iOS ? "caf" : "wav";
 }

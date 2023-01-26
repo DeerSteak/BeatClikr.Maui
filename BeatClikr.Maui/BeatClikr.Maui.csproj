@@ -100,19 +100,6 @@
 	  <None Remove="SQLitePCLRaw.core" />
 	  <None Remove="SQLitePCLRaw.provider.e_sqlite3" />
 	  <None Remove="Resources\Raw\Set1\other\" />
-	  <None Remove="Resources\Raw\Set1\other\cowbell.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\crashl.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\crashr.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\hatclosed.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\hatopen.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\kick.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\ride.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\ridebell.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\snare.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\tamb.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\tomhi.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\tomlow.m4a" />
-	  <None Remove="Resources\Raw\Set1\other\tommid.m4a" />
 	  <None Remove="Resources\Raw\Set1\apple\" />
 	  <None Remove="Resources\Raw\Set1\apple\cowbell.caf" />
 	  <None Remove="Resources\Raw\Set1\apple\crashl.caf" />
@@ -130,6 +117,19 @@
 	  <None Remove="Resources\Images\splash.png" />
 	  <None Remove="Platforms\Android\Resources\mipmap\" />
 	  <None Remove="Platforms\Android\Resources\mipmap\splash.png" />
+	  <None Remove="Resources\Raw\Set1\other\cowbell.wav" />
+	  <None Remove="Resources\Raw\Set1\other\crashl.wav" />
+	  <None Remove="Resources\Raw\Set1\other\crashr.wav" />
+	  <None Remove="Resources\Raw\Set1\other\hatclosed.wav" />
+	  <None Remove="Resources\Raw\Set1\other\hatopen.wav" />
+	  <None Remove="Resources\Raw\Set1\other\kick.wav" />
+	  <None Remove="Resources\Raw\Set1\other\ride.wav" />
+	  <None Remove="Resources\Raw\Set1\other\ridebell.wav" />
+	  <None Remove="Resources\Raw\Set1\other\snare.wav" />
+	  <None Remove="Resources\Raw\Set1\other\tamb.wav" />
+	  <None Remove="Resources\Raw\Set1\other\tomhi.wav" />
+	  <None Remove="Resources\Raw\Set1\other\tomlow.wav" />
+	  <None Remove="Resources\Raw\Set1\other\tommid.wav" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -200,7 +200,6 @@
 	  <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.4" />
 	</ItemGroup>
 	<ItemGroup>
-	  <BundleResource Include="Resources\Raw\Set1\other\cowbell.m4a" />
 	  <BundleResource Include="Resources\AppIcon\appicon.png" />
 	  <BundleResource Include="Resources\Images\bulb_dim.png" />
 	  <BundleResource Include="Resources\Images\bulb_lit.png" />
@@ -218,45 +217,6 @@
 	  <BundleResource Include="Resources\Images\titleicon.png" />
 	  <BundleResource Include="Resources\Splash\splash.png" />
 	  <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Regular-400.otf" />
-	  <BundleResource Include="Resources\Raw\Set1\other\cowbell.m4a">
-	    <LogicalName>Set1\cowbell.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\crashl.m4a">
-	    <LogicalName>Set1\crashl.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\crashr.m4a">
-	    <LogicalName>Set1\crashr.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\hatclosed.m4a">
-	    <LogicalName>Set1\hatclosed.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\hatopen.m4a">
-	    <LogicalName>Set1\hatopen.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\kick.m4a">
-	    <LogicalName>Set1\kick.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\ride.m4a">
-	    <LogicalName>Set1\ride.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\ridebell.m4a">
-	    <LogicalName>Set1\ridebell.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\snare.m4a">
-	    <LogicalName>Set1\snare.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\tamb.m4a">
-	    <LogicalName>Set1\tamb.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\tomhi.m4a">
-	    <LogicalName>Set1\tomhi.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\tomlow.m4a">
-	    <LogicalName>Set1\tomlow.m4a</LogicalName>
-	  </BundleResource>
-	  <BundleResource Include="Resources\Raw\Set1\other\tommid.m4a">
-	    <LogicalName>Set1\tommid.m4a</LogicalName>
-	  </BundleResource>
 	  <BundleResource Include="Resources\Raw\Set1\apple\cowbell.caf" />
 	  <BundleResource Include="Resources\Raw\Set1\apple\crashl.caf" />
 	  <BundleResource Include="Resources\Raw\Set1\apple\crashr.caf" />
@@ -272,5 +232,18 @@
 	  <BundleResource Include="Resources\Raw\Set1\apple\tommid.caf" />
 	  <BundleResource Include="Resources\Images\splash.png" />
 	  <BundleResource Include="Platforms\Android\Resources\mipmap\splash.png" />
+	  <BundleResource Include="Resources\Raw\Set1\other\cowbell.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\crashl.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\crashr.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\hatclosed.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\hatopen.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\kick.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\ride.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\ridebell.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\snare.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\tamb.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\tomhi.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\tomlow.wav" />
+	  <BundleResource Include="Resources\Raw\Set1\other\tommid.wav" />
 	</ItemGroup>
 </Project>
