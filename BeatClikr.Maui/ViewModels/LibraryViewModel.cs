@@ -102,9 +102,16 @@ namespace BeatClikr.Maui.ViewModels
 			_metronomeClickerViewModel.StopCommand.Execute(null);
 		}
 
+		[RelayCommand]
 		private void MuteToggle()
 		{
+			_metronomeClickerViewModel.MuteOverride = !_metronomeClickerViewModel.MuteOverride;
+			Preferences.Set(PreferenceKeys.MuteMetronome, _metronomeClickerViewModel.MuteOverride);
+		}
 
+		private void FlashlightToggle()
+		{
+			
 		}
 	}
 }

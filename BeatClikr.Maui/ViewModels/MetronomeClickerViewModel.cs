@@ -22,8 +22,6 @@ namespace BeatClikr.Maui.ViewModels
         private bool _playSubdivisions;
         private readonly bool _onApple;
         private readonly IAudioManager _audioManager;
-        private bool _flashlightEnabled;
-        //private IconTintColorBehavior _behavior = new IconTintColorBehavior();
 
         [ObservableProperty]
         private bool _isPlaying;
@@ -36,6 +34,18 @@ namespace BeatClikr.Maui.ViewModels
 
         [ObservableProperty]
         private bool _muteOverride;
+        partial void OnMuteOverrideChanged(bool value)
+        {
+            IsSilent = value;
+        }
+
+        [ObservableProperty]
+        private bool _useFlashlight;
+        partial void OnUseFlashlightChanged(bool value)
+        {
+            if (!value)
+                Task.Run(async () => await Flashlight.Default.TurnOffAsync());
+        }
 
         [ObservableProperty]
         private ClickerBeatType _beatType;
@@ -57,10 +67,11 @@ namespace BeatClikr.Maui.ViewModels
             _onApple = DeviceInfo.Platform == DevicePlatform.iOS
                 || DeviceInfo.Platform == DevicePlatform.MacCatalyst;
 
-            var currentTheme = appInfo.RequestedTheme;            
-            //_behavior.TintColor = appInfo.RequestedTheme == AppTheme.Light
-            //    ? Color.FromArgb("#212121")
-            //    : Color.FromArgb("#FAFAFA");
+            var currentTheme = appInfo.RequestedTheme;
+
+            MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
+
+            UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, true);
 
             _bulbDim = new FontImageSource()
             {
@@ -77,8 +88,6 @@ namespace BeatClikr.Maui.ViewModels
                 Color = appInfo.RequestedTheme == AppTheme.Dark ? Color.FromArgb("#FAFAFA") : Color.FromArgb("#212121"),
                 Size = 90
             };
-
-            _flashlightEnabled = true;
 
             BeatBox = _bulbDim;
             Song = new Song();
@@ -147,20 +156,20 @@ namespace BeatClikr.Maui.ViewModels
             else
                 BeatBox = _bulbDim;
 
-            if (!IsSilent)
+            if (_subdivisionNumber == 0)
             {
-                if (_subdivisionNumber == 0)
-                {
-                    _beatsPlayed++;
+                _beatsPlayed++;
+                if (UseFlashlight)
                     Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
+                if (!IsSilent && !MuteOverride)
                     PlayBeat();
-                }
-                else
-                {
+            }
+            else
+            {
+                if (UseFlashlight)
                     Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
-                    if (_playSubdivisions)
-                        PlayRhythm();
-                }
+                if (_playSubdivisions && !IsSilent && !MuteOverride)
+                    PlayRhythm();
             }
 
             _subdivisionNumber++;
