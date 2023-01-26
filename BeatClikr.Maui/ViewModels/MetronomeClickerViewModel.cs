@@ -35,6 +35,9 @@ namespace BeatClikr.Maui.ViewModels
         private ImageSource _beatBox;
 
         [ObservableProperty]
+        private bool _muteOverride;
+
+        [ObservableProperty]
         private ClickerBeatType _beatType;
         partial void OnBeatTypeChanged(ClickerBeatType value)
         {
@@ -111,7 +114,8 @@ namespace BeatClikr.Maui.ViewModels
 
         private void PlaySongMetronome()
         {
-            IsSilent = false;
+            _beatsPlayed = 0;
+            IsSilent = !MuteOverride;
             float timerInterval = PlaybackUtilities.GetTimerInterval(Song.Subdivision, Song.BeatsPerMinute);
             _playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
             _subdivisionNumber = 0;
@@ -132,33 +136,27 @@ namespace BeatClikr.Maui.ViewModels
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
 
-            if (IsLiveMode)
+            if (IsLiveMode && !IsSilent && _subdivisionNumber == 0)
             {
-                _beatsPlayed++;
-                if (_beatsPlayed > Song.BeatsPerMeasure)
+                if (_beatsPlayed >= Song.BeatsPerMeasure)
                     IsSilent = true;
             }
 
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                if (_subdivisionNumber == 0)
-                    BeatBox = _bulbLit;
-                else
-                    BeatBox = _bulbDim;
-                //(BeatBox.Parent as Image).Behaviors.Add(_behavior);
-            });
+            if (_subdivisionNumber == 0)
+                BeatBox = _bulbLit;
+            else
+                BeatBox = _bulbDim;
 
             if (!IsSilent)
             {
                 if (_subdivisionNumber == 0)
                 {
-                    MainThread.BeginInvokeOnMainThread(() => BeatBox = _bulbLit);
+                    _beatsPlayed++;
                     Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
                     PlayBeat();
                 }
                 else
                 {
-                    MainThread.BeginInvokeOnMainThread(() => BeatBox = _bulbDim);
                     Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
                     if (_playSubdivisions)
                         PlayRhythm();
@@ -186,7 +184,6 @@ namespace BeatClikr.Maui.ViewModels
             {
                 _playerBeat.Stop();
             }
-            _playerBeat.Seek(0);
             _playerBeat.Play();
         }
 

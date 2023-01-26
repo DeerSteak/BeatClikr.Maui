@@ -1,44 +1,38 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using BeatClikr.Maui.Models;
 
 namespace BeatClikr.Maui.ViewModels;
 
 public partial class RehearsalViewModel : ObservableObject
 {
-    private MetronomeClickerViewModel _metronomeClickerViewModel;
-    private Services.Interfaces.IShellService _shellService;
-    private Services.Interfaces.IDataService _persistence;
-
     [ObservableProperty]
-    private ObservableCollection<Models.Song> _rehearsalSongPlayList;
-
-    [ObservableProperty]
-    private Models.Song _selectedSong;
+    private List<Song> _rehearsalSongPlayList = new List<Song>();
 
     [ObservableProperty]
     private bool _isPlaybackMode = true;
     partial void OnIsPlaybackModeChanged(bool value) => PlaybackCheckboxChanged();
 
+    [ObservableProperty]
+    private Song _selectedSong;
+
+    private MetronomeClickerViewModel _metronomeClickerViewModel;
+    private Services.Interfaces.IShellService _shellService;
+    private Services.Interfaces.IDataService _persistence;
+
     public RehearsalViewModel(MetronomeClickerViewModel metronomeClickerViewModel,
-        Services.Interfaces.IShellService shellService,
-        Services.Interfaces.IDataService persistence)
+        Services.Interfaces.IDataService persistence,
+        Services.Interfaces.IShellService shellService)
     {
         _metronomeClickerViewModel = metronomeClickerViewModel;
-        _metronomeClickerViewModel.IsLiveMode = false;
-        _metronomeClickerViewModel.BeatType = ClickerBeatType.Rehearsal;
-        _shellService = shellService;
         _persistence = persistence;
-
-        IsPlaybackMode = true;
+        _shellService = shellService;
     }
 
     public void InitSongs()
     {
-        var songList = _persistence.GetRehearsalSongs().Result;
-        RehearsalSongPlayList = new ObservableCollection<Models.Song>();
-        foreach (var song in songList)
-            RehearsalSongPlayList.Add(song);
+        RehearsalSongPlayList = _persistence.GetRehearsalSongs();
     }
 
     [RelayCommand]
@@ -51,31 +45,31 @@ public partial class RehearsalViewModel : ObservableObject
     private async void AddSongToPlaylist()
     {
         var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
-        addPage.Title = "Add to Live Playlist";
+        addPage.Title = "Add to Rehearsal Playlist";
+        addPage.Disappearing -= (s, e) => AddPageDisappearing(s as Views.LibraryPage);
         addPage.Disappearing += (s, e) => AddPageDisappearing(s as Views.LibraryPage);
-        Shell.SetPresentationMode(addPage, PresentationMode.ModalAnimated);
-        var cancelButton = new ToolbarItem()
-        {
-            Text = "CANCEL",
-            IconImageSource = new FontImageSource()
-            {
-                Glyph = Constants.IconFont.Ban,
-                FontFamily = "FARegular"
-            },
-            Command = CancelCommand
-        };
-        addPage.ToolbarItems.Add(cancelButton);
-        await _shellService.PushModalAsync(addPage);
+
+        var addVm = ServiceHelper.GetService<LibraryViewModel>();
+        addVm.AddToPlaylist = true;
+
+        await _shellService.GoToAsync(RouteNames.LibraryRoute, true);
     }
 
     private void AddPageDisappearing(Views.LibraryPage page)
     {
-        if (Models.Song.Instance != null)
-            RehearsalSongPlayList.Add(Models.Song.Instance);
-        Shell.SetPresentationMode(page, PresentationMode.Animated);
-        page.ToolbarItems.Clear();
         page.Title = "Library";
-        Models.Song.Instance = null;
+        page.Disappearing -= (s, e) => AddPageDisappearing(s as Views.LibraryPage);
+
+        var addVm = ServiceHelper.GetService<LibraryViewModel>();
+        addVm.AddToPlaylist = false;
+
+        if (Song.Instance != null)
+        {
+            Song.Instance.RehearsalSequence = RehearsalSongPlayList.Count;
+            _persistence.SaveSongToLibrary(Song.Instance);
+        }
+        Song.Instance = null;
+        RehearsalSongPlayList = _persistence.GetRehearsalSongs();
     }
 
     [RelayCommand]
@@ -86,6 +80,8 @@ public partial class RehearsalViewModel : ObservableObject
 
         if (IsPlaybackMode)
         {
+            _metronomeClickerViewModel.IsLiveMode = false;
+            _metronomeClickerViewModel.StopCommand.Execute(true);
             _metronomeClickerViewModel.SetSongCommand.Execute(SelectedSong);
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
         }
@@ -95,39 +91,38 @@ public partial class RehearsalViewModel : ObservableObject
             string deleteOption = "Delete from Playlist";
             var result = await _shellService.DisplayActionSheet($"Editing {SelectedSong.Title}", "Cancel", deleteOption, actionSheetOptions);
             if (result == actionSheetOptions[0])
-                await MoveToTop().ConfigureAwait(true);
+                MoveToTop();
             else if (result == actionSheetOptions[1])
-                await MoveToBottom().ConfigureAwait(true);
+                MoveToBottom();
             else if (result == deleteOption)
-                await RemoveFromPlaylist().ConfigureAwait(true);
-
-            SelectedSong = null;
+                RemoveFromPlaylist();
         }
+        SelectedSong = null;
     }
 
-    private async Task MoveToTop()
+    private void MoveToTop()
     {
         RehearsalSongPlayList.Remove(SelectedSong);
         RehearsalSongPlayList.Insert(0, SelectedSong);
-        await SetRehearsalSequence();
+        SetRehearsalSequence();
     }
 
-    private async Task MoveToBottom()
+    private void MoveToBottom()
     {
         RehearsalSongPlayList.Remove(SelectedSong);
         RehearsalSongPlayList.Add(SelectedSong);
-        await SetRehearsalSequence();
+        SetRehearsalSequence();
     }
 
-    private async Task RemoveFromPlaylist()
+    private void RemoveFromPlaylist()
     {
         SelectedSong.RehearsalSequence = null;
-        await _persistence.SaveSongToLibrary(SelectedSong);
+        _persistence.SaveSongToLibrary(SelectedSong);
         RehearsalSongPlayList.Remove(SelectedSong);
-        await SetRehearsalSequence();
+        SetRehearsalSequence();
     }
 
-    private async Task SetRehearsalSequence()
+    private void SetRehearsalSequence()
     {
         if (RehearsalSongPlayList?.Count > 0)
         {
@@ -135,9 +130,9 @@ public partial class RehearsalViewModel : ObservableObject
             {
                 RehearsalSongPlayList[i].RehearsalSequence = i;
             }
-            await _persistence.SaveSongListToLibrary(RehearsalSongPlayList.ToList());
-            //var list = await _persistence.GetLiveSongs();
+            _persistence.SaveSongListToLibrary(RehearsalSongPlayList.ToList());
         }
+        RehearsalSongPlayList = _persistence.GetRehearsalSongs();
     }
 
     [RelayCommand]

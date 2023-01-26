@@ -34,25 +34,24 @@
             <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
             <CollectionView
                 Grid.Row="1"
+                SelectionMode="Single"
                 ItemsSource="{Binding RehearsalSongPlayList}"
                 SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
                 SelectionChangedCommand="{Binding SongSelectedCommand}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Song">
-                        <ViewCell>
-                            <StackLayout Margin="8,0" VerticalOptions="Center">
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="Medium"
-                                    Text="{Binding Title}" />
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Artist}" />
-                                    <Label Text=" / " />
-                                    <Label Text="{Binding BeatsPerMinute}" />
-                                    <Label Text="BPM" />
-                                </StackLayout>
+                        <StackLayout Margin="8,0" VerticalOptions="Center">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                Text="{Binding Title}" />
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Artist}" />
+                                <Label Text=" / " />
+                                <Label Text="{Binding BeatsPerMinute}" />
+                                <Label Text="BPM" />
                             </StackLayout>
-                        </ViewCell>
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

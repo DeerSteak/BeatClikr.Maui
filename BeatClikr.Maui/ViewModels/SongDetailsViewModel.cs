@@ -71,6 +71,21 @@ public partial class SongDetailsViewModel : ObservableObject
     partial void OnSubdivisionChanged(SubdivisionEnum value)
     {
         Song.Subdivision = value;
+        switch (value)
+        {
+            case SubdivisionEnum.Eighth:
+                SelectedSubdivisionIndex = 1;
+                break;
+            case SubdivisionEnum.TripletEighth:
+                SelectedSubdivisionIndex = 2;
+                break;
+            case SubdivisionEnum.Sixteenth:
+                SelectedSubdivisionIndex = 3;
+                break;
+            default:
+                SelectedSubdivisionIndex = 0;
+                break;
+        }
         SyncSongAndMetronome();
     }
 
@@ -83,9 +98,6 @@ public partial class SongDetailsViewModel : ObservableObject
             case 0:
                 Subdivision = SubdivisionEnum.Quarter;
                 break;
-            case 1:
-                Subdivision = SubdivisionEnum.Eighth;
-                break;
             case 2:
                 Subdivision = SubdivisionEnum.TripletEighth;
                 break;
@@ -96,6 +108,7 @@ public partial class SongDetailsViewModel : ObservableObject
                 Subdivision = SubdivisionEnum.Eighth;
                 break;
         }
+        SyncSongAndMetronome();
     }
 
     [ObservableProperty]
@@ -107,7 +120,7 @@ public partial class SongDetailsViewModel : ObservableObject
     {
         if (value != null)
         {
-            Song = _persistence.GetById(value.GetValueOrDefault()).Result;
+            Song = _persistence.GetById(value.GetValueOrDefault());
             BeatsPerMinute = Song.BeatsPerMinute;
             BeatsPerMeasure = Song.BeatsPerMeasure;
             Subdivision = Song.Subdivision;
@@ -172,6 +185,9 @@ public partial class SongDetailsViewModel : ObservableObject
         _metronomeClickerViewModel = metronomeClickerViewModel;
         _metronomeClickerViewModel.IsLiveMode = false;
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
+        Song = new Song();
+        OnSubdivisionChanged(Song.Subdivision);
+        _recordChanged = false;
     }
 
     [RelayCommand]
@@ -195,11 +211,14 @@ public partial class SongDetailsViewModel : ObservableObject
         }
 
         if (_recordChanged)
-            result = await _persistence.SaveSongToLibrary(Song);
+            result = _persistence.SaveSongToLibrary(Song);
         try
         {
             await _shellService.PopAsync();
-
+            if (SongId != null)
+                SongId = null;
+            else
+                Song = new Song();
         }
         catch (Exception ex)
         {

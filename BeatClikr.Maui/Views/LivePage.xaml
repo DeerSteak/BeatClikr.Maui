@@ -33,6 +33,7 @@
             <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
             <CollectionView
                 Grid.Row="1"
+                SelectionMode="Single"
                 ItemsSource="{Binding LiveSongPlaylist}"
                 SelectionChangedCommand="{Binding SongSelectedCommand}"
                 SelectedItem="{Binding SelectedSong, Mode=TwoWay}">

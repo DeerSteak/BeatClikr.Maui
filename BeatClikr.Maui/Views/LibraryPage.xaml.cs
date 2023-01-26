@@ -18,9 +18,4 @@ public partial class LibraryPage : ContentPage
         base.OnAppearing();
         (BindingContext as ViewModels.LibraryViewModel).Init();
     }
-
-    void ListView_ItemSelected(System.Object sender, Microsoft.Maui.Controls.SelectedItemChangedEventArgs e)
-    {
-		(BindingContext as ViewModels.LibraryViewModel).SelectionChangedCommand.Execute(e.SelectedItemIndex);
-    }
 }

@@ -21,10 +21,13 @@ namespace BeatClikr.Maui.ViewModels
 		private List<Models.Song> _filteredSongs = new List<Models.Song>();
 
 		[ObservableProperty]
+		private ImageSource _muteButtonImageSource;
+
+		[ObservableProperty]
 		private string _filter = string.Empty;
 		partial void OnFilterChanged(string value)
 		{
-			var songs = _dataService.GetLibrarySongs(value).Result;
+			var songs = _dataService.GetLibrarySongs(value);
 			FilteredSongs = songs;
         }
 		[ObservableProperty]
@@ -96,8 +99,12 @@ namespace BeatClikr.Maui.ViewModels
 		[RelayCommand]
 		private void Stop()
 		{
-			if (IsPlaybackMode)
-				_metronomeClickerViewModel.StopCommand.Execute(null);
+			_metronomeClickerViewModel.StopCommand.Execute(null);
+		}
+
+		private void MuteToggle()
+		{
+
 		}
 	}
 }
