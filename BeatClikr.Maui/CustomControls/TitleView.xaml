@@ -29,7 +29,7 @@
             Grid.Row="1"
             Grid.Column="1"
             FontAttributes="Bold"
-            FontSize="Medium"
+            FontSize="Small"
             x:Name="TitleLabel" />
 
     </Grid>

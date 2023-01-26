@@ -11,4 +11,5 @@ public static class PreferenceKeys
     public const string UsePersonalizedAds = "UsePersonalizedAds";
     public const string MuteMetronome = "MuteMetronome";
     public const string UseFlashlight = "UseFlashlight";
+    public const string AskFlashlight = "AskFlashlight";
 }

@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Runtime;
 
+[assembly: UsesFeature("android.hardware.camera", Required = false)]
+[assembly: UsesFeature("android.hardware.camera.autofocus", Required = false)]
 namespace BeatClikr.Maui;
 
 [Application]

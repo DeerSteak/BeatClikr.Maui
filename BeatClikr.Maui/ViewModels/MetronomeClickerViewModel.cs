@@ -1,4 +1,5 @@
 ﻿using BeatClikr.Maui.Models;
+using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Audio;
@@ -11,6 +12,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     private System.Timers.Timer _timer;
     private IAudioPlayer _playerBeat;
     private IAudioPlayer _playerRhythm;
+    private IShellService _shellService;
     private int _subdivisionNumber;
     private int _beatsPlayed = 0;
     private readonly ImageSource _bulbDim;
@@ -44,10 +46,13 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    private bool _askFlashlight;
+
+    [ObservableProperty]
     private ClickerBeatType _beatType;
     partial void OnBeatTypeChanged(ClickerBeatType value)
     {
-        SetSounds(FileNames.Set1);
+        SetSoundsAndLight(FileNames.Set1);
     }
 
     [ObservableProperty]
@@ -56,17 +61,17 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSilent;
 
-    public MetronomeClickerViewModel(IAudioManager audioManager, IAppInfo appInfo)
+    public MetronomeClickerViewModel(IAudioManager audioManager, IAppInfo appInfo, IShellService shellService)
     {
         _audioManager = audioManager;
-        
+        _shellService = shellService;
         _onApple = DeviceInfo.Platform == DevicePlatform.iOS
             || DeviceInfo.Platform == DevicePlatform.MacCatalyst;
 
         var currentTheme = appInfo.RequestedTheme;
 
         MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
-
+        AskFlashlight = Preferences.Get(PreferenceKeys.AskFlashlight, true);
         UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, true);
 
         _bulbDim = new FontImageSource()
@@ -135,6 +140,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
         BeatBox = _bulbDim;
         IsPlaying = false;
         IsSilent = false;
+        Flashlight.Default.TurnOffAsync().Wait();
     }
 
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -190,8 +196,29 @@ public partial class MetronomeClickerViewModel : ObservableObject
         _playerBeat.Play();
     }
 
-    private void SetSounds(string set)
+    private async void SetSoundsAndLight(string set)
     {
+        var result = await Permissions.CheckStatusAsync<Permissions.Flashlight>();
+        if (result != PermissionStatus.Granted)
+        {
+            var response = await _shellService.DisplayAlert("Flashlight Permission", "BeatClikr can use the flashlight on your device to show the beat. If you'd like to do this, press OK", "OK", "Cancel");
+            if (response)
+            {
+                result = await Permissions.RequestAsync<Permissions.Flashlight>();
+                if (result != PermissionStatus.Granted)
+                {
+                    await _shellService.DisplayAlert("Flashlight Permission Denied", "BeatClikr will not use the flashlight. If you change your mind, you can enable the flashlight again on the Settings page.", "OK");
+                }
+            }
+            else
+            {
+                AskFlashlight = false;
+                Preferences.Set(PreferenceKeys.AskFlashlight, AskFlashlight);
+            }            
+        }
+
+        UseFlashlight = result == PermissionStatus.Granted;
+
         string rhythm = string.Empty;
         string beat = string.Empty;
 
