@@ -170,7 +170,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
         BeatBox = _bulbDim;
         IsPlaying = false;
         IsSilent = false;
-        Flashlight.Default.TurnOffAsync().Wait();
+        Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
     }
 
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
