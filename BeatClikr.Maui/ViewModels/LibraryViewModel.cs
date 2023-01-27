@@ -50,7 +50,7 @@ public partial class LibraryViewModel : ObservableObject
 			OnFilterChanged(Filter);
             _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
             _metronomeClickerViewModel.IsLiveMode = false;
-            _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
+            _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
         }
 
     [RelayCommand]

@@ -34,7 +34,7 @@ public partial class RehearsalViewModel : ObservableObject
         RehearsalSongPlayList = _persistence.GetRehearsalSongs();
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Rehearsal;
         _metronomeClickerViewModel.IsLiveMode = false;
-        _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
+        _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
     }
 
     [RelayCommand]

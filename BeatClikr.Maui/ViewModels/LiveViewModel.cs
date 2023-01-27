@@ -34,7 +34,7 @@ public partial class LiveViewModel : ObservableObject
         LiveSongPlaylist = _persistence.GetLiveSongs();
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Live;
         _metronomeClickerViewModel.IsLiveMode = false;
-        _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
+        _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
     }
 
     [RelayCommand]

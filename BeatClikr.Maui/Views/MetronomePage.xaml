@@ -50,7 +50,7 @@
                         </StackLayout>
                         <Slider
                             Grid.Row="1"
-                            Maximum="210"
+                            Maximum="240"
                             Minimum="30"
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>

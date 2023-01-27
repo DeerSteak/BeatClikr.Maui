@@ -59,7 +59,7 @@ public partial class MetronomeViewModel : ObservableObject
     {
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
         _metronomeClickerViewModel.IsLiveMode = false;
-        _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
+        _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -80,7 +80,7 @@ public partial class MetronomeViewModel : ObservableObject
             BeatsPerMinute = this.BeatsPerMinute,
             Subdivision = _subdivision
         };
-        _metronomeClickerViewModel.SetSoundsCommand.Execute(FileNames.Set1);
+        _metronomeClickerViewModel.SetSongCommand.Execute(song);
         if (wasPlaying)
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
     }
