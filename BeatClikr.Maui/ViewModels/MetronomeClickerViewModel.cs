@@ -19,6 +19,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     private bool _playSubdivisions;
     private readonly bool _onApple;
     private readonly IAudioManager _audioManager;
+    private IMetronome _metronome;
 
     [ObservableProperty]
     private bool _isPlaying;
@@ -60,12 +61,13 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSilent;
 
-    public MetronomeClickerViewModel(IAudioManager audioManager, IAppInfo appInfo, IShellService shellService)
+    public MetronomeClickerViewModel(IAudioManager audioManager, IAppInfo appInfo, IShellService shellService, IMetronome metronome)
     {
         _audioManager = audioManager;
         _shellService = shellService;
         _onApple = DeviceInfo.Platform == DevicePlatform.iOS
             || DeviceInfo.Platform == DevicePlatform.MacCatalyst;
+        _metronome = metronome;
 
         var currentTheme = appInfo.RequestedTheme;
 
@@ -91,6 +93,23 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
         BeatBox = _bulbDim;
         Song = new Song();
+
+        IMetronome.BeatAction = BeatImage;
+        IMetronome.RhythmAction = RhythmImage;
+    }
+
+    private void BeatImage()
+    {
+        BeatBox = _bulbLit;
+        if (UseFlashlight)
+            Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
+    }
+
+    private void RhythmImage()
+    {
+        BeatBox = _bulbDim;
+        if (UseFlashlight)
+            Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
     }
 
     [RelayCommand]
@@ -109,9 +128,11 @@ public partial class MetronomeClickerViewModel : ObservableObject
     {
         IsPlaying = !IsPlaying;
         if (IsPlaying)
-            PlaySongMetronome();
+            //PlaySongMetronome();
+            _metronome.Play();
         else
-            StopSongMetronome();
+            //StopSongMetronome();
+            _metronome.Stop();
     }
 
     [RelayCommand]
@@ -198,18 +219,15 @@ public partial class MetronomeClickerViewModel : ObservableObject
         {
             _players[i] = _audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(rhythm, FileNames.Set1).Result);
         }
+
+        _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
+
+        _metronome.SetTempo(Song.BeatsPerMinute, numPlayers);
     }
 
     private void PlaySongMetronome()
     {
-        //_beatsPlayed = 0;
-        //IsSilent = MuteOverride;
         float timerInterval = PlaybackUtilities.GetTimerInterval(Song.Subdivision, Song.BeatsPerMinute);
-        //_playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
-        //_subdivisionNumber = 0;
-        //_timer = new System.Timers.Timer(timerInterval) { AutoReset = true };
-        //_timer.Elapsed += OnTimerElapsed;
-        //_timer.Enabled = true;
         Task.Run(() =>
         {
             while (IsPlaying)
@@ -221,10 +239,10 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     private void StopSongMetronome()
-    {
-        //_timer.Enabled = false;
+    {        
         BeatBox = _bulbDim;        
         IsSilent = false;
+        _subdivisionNumber = 0;
         Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
     }
 
@@ -277,6 +295,8 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
     private void PlayBeat()
     {
+        Task.Run(() =>
+            Console.WriteLine($"{DateTime.Now:hh:mm:ss.fff}"));
         Task.Run(() =>
         {
             if (_onApple)

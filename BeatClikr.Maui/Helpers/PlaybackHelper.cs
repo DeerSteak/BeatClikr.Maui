@@ -29,8 +29,13 @@ public static class PlaybackUtilities
 
     public static async Task<Stream> GetStreamFromFile(string filename, string set)
     {
-        var stream = await FileSystem.OpenAppPackageFileAsync($"{set}/{FileNames.Platform}/{filename}.{FileNames.Extension}");
-        return stream;
+        return await FileSystem.OpenAppPackageFileAsync($"{set}/{filename}.wav");
     }
+
+    public static string GetFilePath(string filename, string set)
+    {
+        return $"{set}/{filename}.wav";
+    }
+        
 }
 

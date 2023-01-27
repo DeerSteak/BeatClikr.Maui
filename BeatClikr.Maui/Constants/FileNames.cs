@@ -15,8 +15,8 @@ public static class FileNames
     public const string TomHigh = "tomhi";
     public const string TomLow = "tomlow";
     public const string TomMid = "tommid";
-    public const string Set1 = "Set1";
-    public const string Set2 = "Set2";
-    public static readonly string Platform = DeviceInfo.Platform == DevicePlatform.iOS ? "apple" : "other";
+    public const string Set1 = "set-1";
+    public const string Set2 = "set-2";
+    public static readonly string Platform = DeviceInfo.Platform == DevicePlatform.iOS ? "macios" : "other";
     public static readonly string Extension = DeviceInfo.Platform == DevicePlatform.iOS ? "caf" : "wav";
 }

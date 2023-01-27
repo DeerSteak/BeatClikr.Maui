@@ -50,6 +50,7 @@ public static class MauiProgram
 		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IShellService, Services.ShellService>();
 		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IDataService, Services.DataService>();
 		mauiAppBuilder.Services.AddSingleton<IAudioManager>(AudioManager.Current);
+		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IMetronome, BeatClikr.Maui.Platforms.Metronome>();
 		return mauiAppBuilder;
 	}
 
