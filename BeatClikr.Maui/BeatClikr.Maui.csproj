@@ -65,10 +65,20 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <AndroidResource Remove="Resources\Sounds\**" />
+	  <Compile Remove="bin\**" />
+	  <Compile Remove="obj\**" />
 	  <Compile Remove="Resources\Sounds\**" />
+	  <EmbeddedResource Remove="bin\**" />
+	  <EmbeddedResource Remove="obj\**" />
 	  <EmbeddedResource Remove="Resources\Sounds\**" />
+	  <MauiCss Remove="bin\**" />
+	  <MauiCss Remove="obj\**" />
 	  <MauiCss Remove="Resources\Sounds\**" />
+	  <MauiXaml Remove="bin\**" />
+	  <MauiXaml Remove="obj\**" />
 	  <MauiXaml Remove="Resources\Sounds\**" />
+	  <None Remove="bin\**" />
+	  <None Remove="obj\**" />
 	  <None Remove="Resources\Sounds\**" />
 	  <None Remove="Resources\Raw\SET-1\apple\crashr.caf" />
 	  <None Remove="Resources\Raw\SET-1\apple\ridebell.caf" />
@@ -332,5 +342,9 @@
 	  <BundleResource Include="Resources\Raw\**">
 	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
 	  </BundleResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Remove="bin\**" />
+	  <BundleResource Remove="obj\**" />
 	</ItemGroup>
 </Project>
