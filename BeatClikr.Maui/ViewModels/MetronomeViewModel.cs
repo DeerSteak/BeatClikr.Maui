@@ -47,15 +47,20 @@ public partial class MetronomeViewModel : ObservableObject
 
     public MetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel)
     {
-        _metronomeClickerViewModel = metronomeClickerViewModel;
         _subdivision = SubdivisionEnum.Eighth;
-        _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
-        _metronomeClickerViewModel.IsLiveMode = false;
+        _metronomeClickerViewModel = metronomeClickerViewModel;
 
         BeatsPerMinute = 60;
         SelectedSubdivisionIndex = 1;
 
         SetupMetronome();
+    }
+
+    public void Init()
+    {
+        _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
+        _metronomeClickerViewModel.IsLiveMode = false;
+        _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -67,8 +72,7 @@ public partial class MetronomeViewModel : ObservableObject
     private void SetupMetronome()
     {
         var wasPlaying = _metronomeClickerViewModel.IsPlaying;
-        if (wasPlaying)
-            _metronomeClickerViewModel.StopCommand.Execute(null);
+        _metronomeClickerViewModel.StopCommand.Execute(null);
         var song = new Models.Song()
         {
             Title = "Instant metronome",
@@ -77,7 +81,7 @@ public partial class MetronomeViewModel : ObservableObject
             BeatsPerMinute = this.BeatsPerMinute,
             Subdivision = _subdivision
         };
-        _metronomeClickerViewModel.Song = song;
+        _metronomeClickerViewModel.SetSoundsCommand.Execute(FileNames.Set1);
         if (wasPlaying)
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
     }

@@ -4,6 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    x:DataType="vm:SettingsViewModel"
     Title="SettingsPage">
     <Shell.TitleView>
         <cc:TitleView Title="Settings" />
@@ -14,16 +16,22 @@
                 <StackLayout Padding="16">
                     <Label LineBreakMode="WordWrap" Text="In each area, select the main sound played on each beat and rhythm/groove sound that plays on subdivisions" />
                     <Label Style="{StaticResource LabelHeader}" Text="Instant/Library Metronome" />
-                    <Picker x:Name="InstantBeatPicker" Title="Beat" />
-                    <Picker x:Name="InstantRhythmPicker" Title="Groove" />
+                    <Label Text="Beat" />
+                    <Picker ItemsSource="{Binding BeatInstruments}" SelectedItem="{Binding InstantBeat}" Title="Beat" />
+                    <Label Text="Rhythm" />
+                    <Picker ItemsSource="{Binding RhythmInstruments}" SelectedItem="{Binding InstantRhythm}" Title="Groove" />
 
                     <Label Style="{StaticResource LabelHeader}" Text="Rehearsal Mode" />
-                    <Picker x:Name="RehearsalBeatPicker" Title="Beat" />
-                    <Picker x:Name="RehearsalRhythmPicker" Title="Groove" />
+                    <Label Text="Beat" />
+                    <Picker ItemsSource="{Binding BeatInstruments}" SelectedItem="{Binding RehearsalBeat}" Title="Beat" />
+                    <Label Text="Rhythm" />
+                    <Picker ItemsSource="{Binding RhythmInstruments}" SelectedItem="{Binding RehearsalRhythm}" Title="Groove" />
 
                     <Label Style="{StaticResource LabelHeader}" Text="Live Mode" />
-                    <Picker x:Name="LiveBeatPicker" Title="Beat" />
-                    <Picker x:Name="LiveRhythmPicker" Title="Groove" />
+                    <Label Text="Beat" />
+                    <Picker ItemsSource="{Binding BeatInstruments}" SelectedItem="{Binding LiveBeat}" Title="Beat" />
+                    <Label Text="Rhythm" />
+                    <Picker ItemsSource="{Binding RhythmInstruments}" SelectedItem="{Binding LiveRhythm}" Title="Groove" />
                 </StackLayout>
             </ScrollView>
             <cc:AdMobView Grid.Row="1" />

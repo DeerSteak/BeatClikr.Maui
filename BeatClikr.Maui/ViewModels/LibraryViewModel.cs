@@ -37,23 +37,23 @@ public partial class LibraryViewModel : ObservableObject
     private Services.Interfaces.IShellService _shellService;
     private Services.Interfaces.IDataService _dataService;
 
-    public LibraryViewModel(MetronomeClickerViewModel metronomeClickerViewModel,
-        Services.Interfaces.IShellService shellService,
-        Services.Interfaces.IDataService dataService)
-    {
-        _dataService = dataService;
-        _shellService = shellService;
+		public LibraryViewModel(MetronomeClickerViewModel metronomeClickerViewModel,
+			Services.Interfaces.IShellService shellService,
+			Services.Interfaces.IDataService dataService)
+		{
+            _dataService = dataService;
+            _shellService = shellService;
+			_metronomeClickerViewModel = metronomeClickerViewModel;
+		}
 
-        _metronomeClickerViewModel = metronomeClickerViewModel;
-        _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
-        _metronomeClickerViewModel.IsLiveMode = false;
-    }
-
-    public void Init()
-    {
-        Filter = string.Empty;
-        OnFilterChanged(Filter);
-    }
+		public void Init()
+		{
+			Filter = string.Empty;
+			OnFilterChanged(Filter);
+            _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
+            _metronomeClickerViewModel.IsLiveMode = false;
+            _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
+        }
 
     [RelayCommand]
     private void AddItem()

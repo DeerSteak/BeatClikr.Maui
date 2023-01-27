@@ -2,8 +2,15 @@
 
 public partial class SettingsPage : ContentPage
 {
-	public SettingsPage()
+	public SettingsPage(ViewModels.SettingsViewModel settingsViewModel)
 	{
 		InitializeComponent();
+        BindingContext = settingsViewModel;
 	}
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        (BindingContext as ViewModels.SettingsViewModel).Init();
+    }
 }

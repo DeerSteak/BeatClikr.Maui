@@ -30,9 +30,12 @@ public partial class RehearsalViewModel : ObservableObject
         _shellService = shellService;
     }
 
-    public void InitSongs()
+    public void Init()
     {
         RehearsalSongPlayList = _persistence.GetRehearsalSongs();
+        _metronomeClickerViewModel.BeatType = ClickerBeatType.Rehearsal;
+        _metronomeClickerViewModel.IsLiveMode = false;
+        _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
     }
 
     [RelayCommand]

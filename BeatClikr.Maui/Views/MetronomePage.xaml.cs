@@ -13,7 +13,13 @@ public partial class MetronomePage : ContentPage
 		
 	}
 
-    void Button_Clicked(System.Object sender, System.EventArgs e)
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        (BindingContext as ViewModels.MetronomeViewModel).Init();
+    }
+
+    void Button_Clicked(object sender, EventArgs e)
     {
         (BindingContext as ViewModels.MetronomeViewModel).PlayStopToggledCommand.Execute(null);
     }

@@ -33,7 +33,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	  <CodesignKey>iPhone Developer</CodesignKey>
-	  <CodesignProvision>beatclikr_profile_dev</CodesignProvision>
+	  <CodesignProvision></CodesignProvision>
 	  <CodesignEntitlements></CodesignEntitlements>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">

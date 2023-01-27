@@ -31,9 +31,12 @@ public partial class LiveViewModel : ObservableObject
         _shellService = shellService;
     }
 
-    public void InitSongs()
+    public void Init()
     {
         LiveSongPlaylist = _persistence.GetLiveSongs();
+        _metronomeClickerViewModel.BeatType = ClickerBeatType.Live;
+        _metronomeClickerViewModel.IsLiveMode = false;
+        _metronomeClickerViewModel.SetSoundsCommand.Execute(null);
     }
 
     [RelayCommand]

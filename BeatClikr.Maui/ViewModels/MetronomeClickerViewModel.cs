@@ -94,16 +94,16 @@ public partial class MetronomeClickerViewModel : ObservableObject
         Song = new Song();
     }
 
-    [RelayCommand]
-    private void SetSong(Song song)
-    {
-        var wasPlaying = IsPlaying;
-        if (IsPlaying)
-            StopSongMetronome();
-        this.Song = song;
-        if (wasPlaying)
-            StartStop();
-    }
+        [RelayCommand]
+        private void SetSong(Song song)
+        {
+            var wasPlaying = IsPlaying;
+            Stop();
+            this.Song = song;
+            SetSounds();
+            if (wasPlaying)
+                PlaySongMetronome();
+        }
 
     [RelayCommand]
     private void StartStop()
@@ -115,24 +115,54 @@ public partial class MetronomeClickerViewModel : ObservableObject
             StopSongMetronome();
     }
 
-    [RelayCommand]
-    private void Stop()
-    {
-        if (IsPlaying)
-            StopSongMetronome();
-    }
+        [RelayCommand]
+        private void Stop()
+        {
+            if (IsPlaying)
+                StopSongMetronome();
+        }
 
-    private void PlaySongMetronome()
-    {
-        _beatsPlayed = 0;
-        IsSilent = MuteOverride;
-        float timerInterval = PlaybackUtilities.GetTimerInterval(Song.Subdivision, Song.BeatsPerMinute);
-        _playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
-        _subdivisionNumber = 0;
-        _timer = new System.Timers.Timer(timerInterval) { AutoReset = true };
-        _timer.Elapsed += OnTimerElapsed;
-        _timer.Enabled = true;
-    }
+        [RelayCommand]
+        private void SetSounds()
+        {
+            string rhythm = string.Empty;
+            string beat = string.Empty;
+
+            switch (BeatType)
+            {
+                case ClickerBeatType.Live:
+                    rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
+                    beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.Kick);
+                    break;
+                case ClickerBeatType.Instant:
+                    rhythm = Preferences.Get(PreferenceKeys.InstantRhythm, FileNames.HatClosed);
+                    beat = Preferences.Get(PreferenceKeys.InstantBeat, FileNames.Kick);
+                    break;
+                case ClickerBeatType.Rehearsal:
+                    rhythm = Preferences.Get(PreferenceKeys.RehearsalRhythm, FileNames.HatClosed);
+                    beat = Preferences.Get(PreferenceKeys.RehearsalBeat, FileNames.Kick);
+                    break;
+                default:
+                    rhythm = FileNames.HatClosed;
+                    beat = FileNames.Kick;
+                    break;
+            }
+
+            _playerRhythm = _audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(rhythm, FileNames.Set1).Result);
+            _playerBeat = _audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(beat, FileNames.Set1).Result);
+        }
+
+        private void PlaySongMetronome()
+        {
+            _beatsPlayed = 0;
+            IsSilent = MuteOverride;
+            float timerInterval = PlaybackUtilities.GetTimerInterval(Song.Subdivision, Song.BeatsPerMinute);
+            _playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
+            _subdivisionNumber = 0;
+            _timer = new System.Timers.Timer(timerInterval) { AutoReset = true };
+            _timer.Elapsed += OnTimerElapsed;
+            _timer.Enabled = true;
+        }
 
     private void StopSongMetronome()
     {
