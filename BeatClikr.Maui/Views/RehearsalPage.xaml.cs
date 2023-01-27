@@ -1,10 +1,8 @@
-﻿using BeatClikr.Maui.ViewModels;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class RehearsalPage : ContentPage
 {
-	public RehearsalPage(RehearsalViewModel rehearsalViewModel)
+	public RehearsalPage(ViewModels.RehearsalViewModel rehearsalViewModel)
 	{
 		InitializeComponent();
         rehearsalViewModel.Init();
@@ -13,7 +11,7 @@ public partial class RehearsalPage : ContentPage
         BindingContext = rehearsalViewModel;
     }
 
-    public RehearsalPage() : this(ServiceHelper.GetService<RehearsalViewModel>())
+    public RehearsalPage() : this(ServiceHelper.GetService<ViewModels.RehearsalViewModel>())
     {
 
     }
@@ -21,6 +19,6 @@ public partial class RehearsalPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        (BindingContext as RehearsalViewModel).Init();
+        (BindingContext as ViewModels.RehearsalViewModel).Init();
     }
 }

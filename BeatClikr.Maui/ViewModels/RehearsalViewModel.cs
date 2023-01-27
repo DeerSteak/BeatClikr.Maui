@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using BeatClikr.Maui.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using BeatClikr.Maui.Models;
 
 namespace BeatClikr.Maui.ViewModels;
 

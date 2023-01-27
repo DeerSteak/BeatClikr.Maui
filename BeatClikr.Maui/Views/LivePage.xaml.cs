@@ -1,5 +1,4 @@
-﻿
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class LivePage : ContentPage
 {

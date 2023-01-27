@@ -1,5 +1,4 @@
-﻿using BeatClikr.Maui.Enums;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 
 namespace BeatClikr.Maui.Models;

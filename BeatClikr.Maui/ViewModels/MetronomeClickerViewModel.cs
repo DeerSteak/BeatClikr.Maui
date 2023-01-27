@@ -1,9 +1,9 @@
-﻿using BeatClikr.Maui.Models;
+﻿using System.Timers;
+using BeatClikr.Maui.Models;
 using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Audio;
-using System.Timers;
 
 namespace BeatClikr.Maui.ViewModels;
 

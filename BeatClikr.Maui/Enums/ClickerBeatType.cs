@@ -1,11 +1,9 @@
-﻿using System;
-namespace BeatClikr.Maui.Enums
+﻿namespace BeatClikr.Maui.Enums;
+
+public enum ClickerBeatType
 {
-	public enum ClickerBeatType
-	{
-		Live = 0,
-		Instant = 1,
-		Rehearsal = 2
-	}
+    Live = 0,
+    Instant = 1,
+    Rehearsal = 2
 }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using BeatClikr.Maui.Models;
+﻿using BeatClikr.Maui.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

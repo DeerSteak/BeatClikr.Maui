@@ -1,6 +1,4 @@
-﻿using Plugin.MauiMTAdmob;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class AppShell : Shell
 {
