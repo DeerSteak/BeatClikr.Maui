@@ -10,8 +10,6 @@ namespace BeatClikr.Maui.ViewModels;
 public partial class MetronomeClickerViewModel : ObservableObject
 {
     private System.Timers.Timer _timer;
-    //private IAudioPlayer _playerBeat;
-    //private IAudioPlayer _playerRhythm;
     private IAudioPlayer[] _players;
     private IShellService _shellService;
     private int _subdivisionNumber;
@@ -178,14 +176,18 @@ public partial class MetronomeClickerViewModel : ObservableObject
         {
             case SubdivisionEnum.Eighth:
                 numPlayers = 2;
+                _playSubdivisions = true;
                 break;
             case SubdivisionEnum.TripletEighth:
                 numPlayers = 3;
+                _playSubdivisions = true;
                 break;
             case SubdivisionEnum.Sixteenth:
                 numPlayers = 4;
+                _playSubdivisions = true;
                 break;
             default:
+                _playSubdivisions = false;
                 break;
         }
 
@@ -200,21 +202,28 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
     private void PlaySongMetronome()
     {
-        _beatsPlayed = 0;
-        IsSilent = MuteOverride;
+        //_beatsPlayed = 0;
+        //IsSilent = MuteOverride;
         float timerInterval = PlaybackUtilities.GetTimerInterval(Song.Subdivision, Song.BeatsPerMinute);
-        _playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
-        _subdivisionNumber = 0;
-        _timer = new System.Timers.Timer(timerInterval) { AutoReset = true };
-        _timer.Elapsed += OnTimerElapsed;
-        _timer.Enabled = true;
+        //_playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
+        //_subdivisionNumber = 0;
+        //_timer = new System.Timers.Timer(timerInterval) { AutoReset = true };
+        //_timer.Elapsed += OnTimerElapsed;
+        //_timer.Enabled = true;
+        Task.Run(() =>
+        {
+            while (IsPlaying)
+            {
+                Task.Run(() => OnTimerElapsed(null, null));
+                Thread.Sleep((int)timerInterval);
+            }
+        });
     }
 
     private void StopSongMetronome()
     {
-        _timer.Enabled = false;
-        BeatBox = _bulbDim;
-        IsPlaying = false;
+        //_timer.Enabled = false;
+        BeatBox = _bulbDim;        
         IsSilent = false;
         Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
     }
@@ -255,21 +264,27 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     private void PlayRhythm(int whichPlayer)
-    {        
-        if (_onApple)
-            _players[whichPlayer].Stop();
-        else
-            _players[whichPlayer].Seek(0);
-        _players[whichPlayer].Play();
+    {
+        Task.Run(() =>
+        {
+            if (_onApple)
+                _players[whichPlayer].Stop();
+            else
+                _players[whichPlayer].Seek(0);
+            _players[whichPlayer].Play();
+        });        
     }
 
     private void PlayBeat()
     {
-        if (_onApple)
-            _players[0].Stop();
-        else
-            _players[0].Seek(0);
-        _players[0].Play();
+        Task.Run(() =>
+        {
+            if (_onApple)
+                _players[0].Stop();
+            else
+                _players[0].Seek(0);
+            _players[0].Play();
+        });        
     }    
 }
 

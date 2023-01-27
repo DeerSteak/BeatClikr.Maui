@@ -46,11 +46,11 @@ public partial class MetronomeViewModel : ObservableObject
 
     public MetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel)
     {
-        _subdivision = SubdivisionEnum.Eighth;
+        _subdivision = SubdivisionEnum.Quarter;
         _metronomeClickerViewModel = metronomeClickerViewModel;
 
         BeatsPerMinute = 60;
-        SelectedSubdivisionIndex = 1;
+        SelectedSubdivisionIndex = 0;
 
         SetupMetronome();
     }
