@@ -9,10 +9,7 @@ namespace BeatClikr.Maui.ViewModels;
 
 public partial class MetronomeClickerViewModel : ObservableObject
 {
-    private System.Timers.Timer _timer;
     private IShellService _shellService;
-    private int _subdivisionNumber;
-    private int _beatsPlayed = 0;
     private readonly ImageSource _bulbDim;
     private readonly ImageSource _bulbLit;
     private IMetronomeService _metronome;

@@ -20,7 +20,7 @@
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.0.0</ApplicationDisplayVersion>
-		<ApplicationVersion>2023012701</ApplicationVersion>
+		<ApplicationVersion>2023012801</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
@@ -34,7 +34,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	  <CodesignKey>Apple Development: Benjamin Funk (CYKATTKC8D)</CodesignKey>
-	  <CodesignProvision>iOS Team Provisioning Profile: *</CodesignProvision>
+	  <CodesignProvision>Automatic</CodesignProvision>
 	  <CodesignEntitlements></CodesignEntitlements>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
@@ -110,6 +110,8 @@
 	  <None Remove="Resources\Raw\SET-1\other\snare.wav" />
 	  <None Remove="Resources\Raw\SET-1\other\hatclosed.wav" />
 	  <None Remove="Resources\Raw\SET-1\other\cowbell.wav" />
+	  <MauiXaml Remove="CustomControls\SongListCollectionCell.xaml" />
+	  <MauiXaml Remove="CustomControls\SongCollectionCell.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
@@ -350,5 +352,9 @@
 	<ItemGroup>
 	  <BundleResource Remove="bin\**" />
 	  <BundleResource Remove="obj\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="CustomControls\SongListCollectionCell.xaml" />
+	  <None Include="CustomControls\SongCollectionCell.xaml" />
 	</ItemGroup>
 </Project>

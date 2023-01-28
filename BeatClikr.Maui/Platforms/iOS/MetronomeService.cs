@@ -28,7 +28,6 @@ namespace BeatClikr.Maui.Platforms
         private bool _liveModeStarted = false;
         private int _beatsPlayed = 0;
 
-        private int _currentBeat = 1;
         private int _timerEventCounter = 1;
         private Foundation.NSTimer _timer = null;
         private bool _useFlashlight = true;
