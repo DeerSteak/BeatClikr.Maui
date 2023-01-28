@@ -1,6 +1,5 @@
 ﻿using BeatClikr.Maui.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Plugin.Maui.Audio;
 
 namespace BeatClikr.Maui.ViewModels;
 
@@ -17,7 +16,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnInstantBeatChanged(InstrumentPicker value)
     {
         Preferences.Set(PreferenceKeys.InstantBeat, value.FileName);
-        Play(value.FileName);
     }
 
     [ObservableProperty]
@@ -25,7 +23,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnInstantRhythmChanged(InstrumentPicker value)
     {
         Preferences.Set(PreferenceKeys.InstantRhythm, value.FileName);
-        Play(value.FileName);
     }
 
     [ObservableProperty]
@@ -33,7 +30,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnLiveBeatChanged(InstrumentPicker value)
     {
         Preferences.Set(PreferenceKeys.LiveBeat, value.FileName);
-        Play(value.FileName);
     }
 
     [ObservableProperty]
@@ -41,7 +37,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnLiveRhythmChanged(InstrumentPicker value)
     {        
         Preferences.Set(PreferenceKeys.LiveRhythm, value.FileName);
-        Play(value.FileName);
     }
 
     [ObservableProperty]
@@ -49,7 +44,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnRehearsalBeatChanged(InstrumentPicker value)
     {
         Preferences.Set(PreferenceKeys.RehearsalBeat, value.FileName);
-        Play(value.FileName);
     }
 
     [ObservableProperty]
@@ -57,23 +51,16 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnRehearsalRhythmChanged(InstrumentPicker value)
     {
         Preferences.Set(PreferenceKeys.RehearsalRhythm, value.FileName);
-        Play(value.FileName);
     }
 
-    private IAudioManager _audioManager;
-    private IAudioPlayer _audioPlayer;
-    private bool _shouldPlay;
-
-    public SettingsViewModel(IAudioManager audioManager)
+    public SettingsViewModel()
     {
-        _audioManager = audioManager;
         RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
         BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();
     }
 
     public void Init()
     {
-        _shouldPlay = false;
         var instantBeatName = Preferences.Get(PreferenceKeys.InstantBeat, FileNames.Kick);
         InstantBeat = InstrumentPicker.FromString(instantBeatName);
 
@@ -91,16 +78,6 @@ public partial class SettingsViewModel : ObservableObject
 
         var rehearsalRhythmName = Preferences.Get(PreferenceKeys.RehearsalRhythm, FileNames.HatClosed);
         RehearsalRhythm = InstrumentPicker.FromString(rehearsalRhythmName);
-        _shouldPlay = true;
-    }
-
-    private void Play(string fileName)
-    {
-        if (_shouldPlay)
-        {
-            _audioPlayer = _audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(fileName, FileNames.Set1).Result);
-            _audioPlayer.Play();
-        }
     }
 }
 

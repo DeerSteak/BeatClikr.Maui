@@ -5,7 +5,7 @@ using Java.Text;
 using Java.Util;
 using Org.Apache.Http.Conn;
 
-namespace BeatClikr.Maui.Platforms;
+namespace BeatClikr.Maui.Platforms.Android;
 
 public class MetronomeService : IMetronomeService
 {

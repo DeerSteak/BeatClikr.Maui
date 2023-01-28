@@ -1,11 +1,12 @@
 ﻿global using BeatClikr.Maui.Constants;
 global using BeatClikr.Maui.Enums;
 global using BeatClikr.Maui.Helpers;
-global using BeatClikr.Maui.Services;
-using System.Reflection;
+
+using BeatClikr.Maui.Services;
+using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
-using Plugin.Maui.Audio;
 using Plugin.MauiMTAdmob;
+using System.Reflection;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -45,12 +46,15 @@ public static class MauiProgram
 
 	public static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
 	{
-		mauiAppBuilder.Services.AddSingleton<IDeviceInfo>(DeviceInfo.Current);
-		mauiAppBuilder.Services.AddSingleton<IAppInfo>(AppInfo.Current);
-		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IShellService, Services.ShellService>();
-		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IDataService, Services.DataService>();
-		mauiAppBuilder.Services.AddSingleton<IAudioManager>(AudioManager.Current);
-		mauiAppBuilder.Services.AddSingleton<Services.Interfaces.IMetronomeService, BeatClikr.Maui.Platforms.MetronomeService>();
+		mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);
+		mauiAppBuilder.Services.AddSingleton(AppInfo.Current);
+		mauiAppBuilder.Services.AddSingleton<IShellService, ShellService>();
+		mauiAppBuilder.Services.AddSingleton<IDataService, DataService>();
+#if IOS
+		mauiAppBuilder.Services.AddSingleton<IMetronomeService, BeatClikr.Maui.Platforms.iOS.MetronomeService>();
+#elif ANDROID
+		mauiAppBuilder.Services.AddSingleton<IMetronomeService, BeatClikr.Maui.Platforms.Android.MetronomeService>();
+#endif
 		return mauiAppBuilder;
 	}
 
@@ -66,10 +70,10 @@ public static class MauiProgram
 
 	private static System.Type[] GetTypesForNamespace(string nameSpace)
 	{
-        System.Type[] theList = Assembly.GetExecutingAssembly().GetTypes()
-                                      .Where(x => !string.IsNullOrEmpty(x.Namespace))
-                                      .Where(x => x.IsClass && x.IsPublic)
-                                      .Where(x => x.Namespace.StartsWith(nameSpace)).ToArray();
+		Type[] theList = Assembly.GetExecutingAssembly().GetTypes()
+							.Where(x => !string.IsNullOrEmpty(x.Namespace))
+							.Where(x => x.IsClass && x.IsPublic)
+							.Where(x => x.Namespace.StartsWith(nameSpace)).ToArray();
 
         return theList;
     }

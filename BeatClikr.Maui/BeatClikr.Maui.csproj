@@ -110,9 +110,9 @@
 	  <None Remove="Resources\Raw\SET-1\other\snare.wav" />
 	  <None Remove="Resources\Raw\SET-1\other\hatclosed.wav" />
 	  <None Remove="Resources\Raw\SET-1\other\cowbell.wav" />
+	  <MauiXaml Remove="CustomControls\SongCollectionItemView.xaml" />
 	  <MauiXaml Remove="CustomControls\SongListCollectionCell.xaml" />
 	  <MauiXaml Remove="CustomControls\SongCollectionCell.xaml" />
-	  <MauiXaml Remove="CustomControls\SongCollectionItemView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
@@ -169,7 +169,6 @@
 	  <Folder Include="Services\Interfaces\" />
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Constants\" />
-	  <Folder Include="CustomControls\" />
 	  <Folder Include="Platforms\Android\Resources\mipmap\" />
 	</ItemGroup>
 	<ItemGroup>
@@ -353,7 +352,16 @@
 	  <BundleResource Remove="obj\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <BundleResource Remove="CustomControls\SongCollectionItemView.xaml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="CustomControls\SongCollectionItemView.xaml.cs" />
 	  <Compile Remove="ViewModels\GetStartedViewModel.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="CustomControls\SongCollectionItemView.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="CustomControls\SongListCollectionCell.xaml" />
