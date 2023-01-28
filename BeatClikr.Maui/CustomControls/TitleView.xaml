@@ -19,12 +19,12 @@
             Source="titleicon"
             VerticalOptions="Center"
             WidthRequest="40" />
-        <Label
+        <!--<Label
             Grid.Row="0"
             Grid.Column="1"
             FontAttributes="Bold"
             FontSize="Micro"
-            Text="BeatClikr" />
+            Text="BeatClikr" />-->
         <Label
             Grid.Row="1"
             Grid.Column="1"

@@ -36,10 +36,6 @@ public partial class InstantMetronomeViewModel : ObservableObject
 
     [ObservableProperty]
     private int _beatsPerMinute;
-    partial void OnBeatsPerMinuteChanged(int value)
-    {
-        SetupMetronome();
-    }
 
     [ObservableProperty]
     private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
@@ -55,6 +51,8 @@ public partial class InstantMetronomeViewModel : ObservableObject
         SetupMetronome();
     }
 
+    private bool _wasPlaying;
+
     public void Init()
     {
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
@@ -66,11 +64,27 @@ public partial class InstantMetronomeViewModel : ObservableObject
     private void PlayStopToggled()
     {
         _metronomeClickerViewModel.StartStopCommand.Execute(null);
+        _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+    }
+
+    [RelayCommand]
+    private void SliderDragStarted()
+    {
+        _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+        _metronomeClickerViewModel.StopCommand.Execute(null);
+    }
+
+    [RelayCommand]
+    private void SliderDragCompleted()
+    {
+        SetupMetronome();
+        if (_wasPlaying)
+            _metronomeClickerViewModel.StartStopCommand.Execute(null);
     }
 
     private void SetupMetronome()
     {
-        var wasPlaying = _metronomeClickerViewModel.IsPlaying;
+        _wasPlaying = _metronomeClickerViewModel.IsPlaying;
         _metronomeClickerViewModel.StopCommand.Execute(null);
         var song = new Models.Song()
         {
@@ -81,7 +95,10 @@ public partial class InstantMetronomeViewModel : ObservableObject
             Subdivision = _subdivision
         };
         _metronomeClickerViewModel.SetSongCommand.Execute(song);
-        if (wasPlaying)
+        if (_wasPlaying)
+        {
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
+            _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+        }
     }
 }

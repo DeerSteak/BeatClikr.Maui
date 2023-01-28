@@ -52,6 +52,8 @@
                             Grid.Row="1"
                             Maximum="240"
                             Minimum="30"
+                            DragStartedCommand="{Binding SliderDragStartedCommand}"
+                            DragCompletedCommand="{Binding SliderDragCompletedCommand}"
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
                     <BoxView HeightRequest="30" />
