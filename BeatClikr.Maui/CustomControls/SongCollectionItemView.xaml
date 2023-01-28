@@ -1,10 +1,25 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:m="clr-namespace:BeatClikr.Maui.Models"
              x:Class="BeatClikr.Maui.CustomControls.SongCollectionItemView">
   <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
+        <VerticalStackLayout Margin="8,0" VerticalOptions="Center" x:DataType="m:Song">
+            <Label
+                FontAttributes="Bold"
+                FontSize="Medium"
+                TextColor="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}"
+                x:Name="TitleLabel" />
+            <Grid RowDefinitions="Auto, 1">
+                <HorizontalStackLayout Grid.Row="0" Padding="5">
+                    <Label x:Name="ArtistLabel" TextColor="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                    <Label Text=" / " TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                    <Label x:Name="BpmLabel" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                    <Label Text="BPM" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
+                </HorizontalStackLayout>
+                <BoxView Grid.Row="1" BackgroundColor="{StaticResource Gray500}" HorizontalOptions="FillAndExpand" Margin="10,0" />
+            </Grid>
+            
+        </VerticalStackLayout>
+    </ContentView.Content>
 </ContentView>

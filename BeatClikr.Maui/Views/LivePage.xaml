@@ -39,18 +39,7 @@
                 SelectedItem="{Binding SelectedSong, Mode=TwoWay}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Song">
-                        <StackLayout Margin="8,0" VerticalOptions="Center">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="Medium"
-                                Text="{Binding Title}" />
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding Artist}" />
-                                <Label Text=" / " />
-                                <Label Text="{Binding BeatsPerMinute}" />
-                                <Label Text="BPM" />
-                            </StackLayout>
-                        </StackLayout>
+                        <cc:SongCollectionItemView Title="{Binding Title}" Bpm="{Binding BeatsPerMinute}" Artist="{Binding Artist}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

@@ -38,19 +38,8 @@
                 SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
                 SelectionChangedCommand="{Binding SelectionChangedCommand}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout Margin="8,0" VerticalOptions="Center" x:DataType="m:Song">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="Medium"
-                                Text="{Binding Title}" />
-                            <HorizontalStackLayout>
-                                <Label Text="{Binding Artist}" TextColor="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
-                                <Label Text=" / " TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                <Label Text="{Binding BeatsPerMinute}" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                <Label Text="BPM" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
+                    <DataTemplate x:DataType="m:Song">
+                        <cc:SongCollectionItemView Title="{Binding Title}" Bpm="{Binding BeatsPerMinute}" Artist="{Binding Artist}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

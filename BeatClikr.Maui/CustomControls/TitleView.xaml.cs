@@ -2,7 +2,7 @@
 
 public partial class TitleView : ContentView
 {
-	public BindableProperty TitleProperty = BindableProperty.Create(
+	public static BindableProperty TitleProperty = BindableProperty.Create(
 		nameof(Title),
 		typeof(string),
 		typeof(TitleView),

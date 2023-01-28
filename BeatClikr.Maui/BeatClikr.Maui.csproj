@@ -110,9 +110,6 @@
 	  <None Remove="Resources\Raw\SET-1\other\snare.wav" />
 	  <None Remove="Resources\Raw\SET-1\other\hatclosed.wav" />
 	  <None Remove="Resources\Raw\SET-1\other\cowbell.wav" />
-	  <MauiXaml Remove="CustomControls\SongCollectionItemView.xaml" />
-	  <MauiXaml Remove="CustomControls\SongListCollectionCell.xaml" />
-	  <MauiXaml Remove="CustomControls\SongCollectionCell.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
@@ -162,13 +159,13 @@
 	  <None Remove="Platforms\Android\Resources\mipmap\splash.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Views\" />
 	  <Folder Include="Models\" />
 	  <Folder Include="Enums\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Services\Interfaces\" />
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Constants\" />
+    <Folder Include="CustomControls\" />
 	  <Folder Include="Platforms\Android\Resources\mipmap\" />
 	</ItemGroup>
 	<ItemGroup>
@@ -198,19 +195,7 @@
 	  </MauiXaml>
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\SongDetailsPage.xaml">
 	    <SubType>Designer</SubType>
-	  </MauiXaml>
-	  <MauiXaml Update="CustomControls\MetronomeClickerView.xaml">
-	    <SubType></SubType>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\GetStartedPage.xaml">
-	    <SubType></SubType>
-	  </MauiXaml>
-	  <MauiXaml Update="CustomControls\TitleView.xaml">
-	    <SubType></SubType>
-	  </MauiXaml>
-	  <MauiXaml Update="CustomControls\AdMobView.xaml">
-	    <SubType></SubType>
-	  </MauiXaml>
+	  </MauiXaml>	  
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
@@ -350,22 +335,5 @@
 	<ItemGroup>
 	  <BundleResource Remove="bin\**" />
 	  <BundleResource Remove="obj\**" />
-	</ItemGroup>
-	<ItemGroup>
-	  <BundleResource Remove="CustomControls\SongCollectionItemView.xaml" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Compile Remove="CustomControls\SongCollectionItemView.xaml.cs" />
-	  <Compile Remove="ViewModels\GetStartedViewModel.cs" />
-	</ItemGroup>
-	<ItemGroup>
-	  <EmbeddedResource Include="CustomControls\SongCollectionItemView.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-	  </EmbeddedResource>
-	</ItemGroup>
-	<ItemGroup>
-	  <None Include="CustomControls\SongListCollectionCell.xaml" />
-	  <None Include="CustomControls\SongCollectionCell.xaml" />
-	  <None Include="CustomControls\SongCollectionItemView.xaml" />
 	</ItemGroup>
 </Project>
