@@ -2,9 +2,9 @@
 
 namespace BeatClikr.Maui.Platforms;
 
-public class Metronome : IMetronome
+public class MetronomeService : IMetronomeService
 {
-    public Metronome()
+    public MetronomeService()
     {
     }
 

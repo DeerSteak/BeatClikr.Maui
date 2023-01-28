@@ -1,11 +1,10 @@
-﻿using System;
-using AVFoundation;
+﻿using AVFoundation;
 using BeatClikr.Maui.Services.Interfaces;
 using Foundation;
 
 namespace BeatClikr.Maui.Platforms
 {
-	public class Metronome : IMetronome
+    public class MetronomeService : IMetronomeService
 	{
         private Uri _beatUri;
         private Uri _rhythmUri;
@@ -32,7 +31,7 @@ namespace BeatClikr.Maui.Platforms
         private bool _useFlashlight = true;
         private bool _previouslySetup = false;
 
-		public Metronome()
+		public MetronomeService()
 		{
             _avAudioEngine = new AVAudioEngine();
             SetTempo(_bpm, _subdivisions);
@@ -82,7 +81,7 @@ namespace BeatClikr.Maui.Platforms
                 if (bufferError != null)
                 {
 
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -150,6 +149,9 @@ namespace BeatClikr.Maui.Platforms
 
         public void Play()
         {
+            _timerEventCounter = 1;
+            _playerNode.Stop();
+            _playerNode.Play();
             StartTimer();
         }
 
@@ -160,22 +162,17 @@ namespace BeatClikr.Maui.Platforms
             {
                 if (_timerEventCounter == 1)
                 {
-                    //schedule beat
-                    _playerNode.ScheduleBuffer(_beatBuffer, null, AVAudioPlayerNodeBufferOptions.Interrupts, null);
-                    IMetronome.BeatAction();
-                    Console.WriteLine("Playing beat");
-                    
+                    if (!IMetronomeService.MuteOverride)
+                        _playerNode.ScheduleBuffer(_beatBuffer, null, AVAudioPlayerNodeBufferOptions.Interrupts, null);
+                    IMetronomeService.BeatAction();
+                    Console.WriteLine("Playing beat");                    
                 }
                 else if (_timerEventCounter % 2 == 1)
                 {
-                    //schedule rhythm
-                    _playerNode.ScheduleBuffer(_rhythmBuffer, null, AVAudioPlayerNodeBufferOptions.Interrupts, null);
-                    IMetronome.RhythmAction();
+                    if (!IMetronomeService.MuteOverride)
+                        _playerNode.ScheduleBuffer(_rhythmBuffer, null, AVAudioPlayerNodeBufferOptions.Interrupts, null);
+                    IMetronomeService.RhythmAction();
                     Console.WriteLine("Playing subdivision");
-                }
-                else
-                {
-                    //do something else                    
                 }
 
                 _timerEventCounter++;

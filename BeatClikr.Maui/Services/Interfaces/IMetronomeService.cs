@@ -1,7 +1,7 @@
 ﻿using System;
 namespace BeatClikr.Maui.Services.Interfaces;
 
-public interface IMetronome
+public interface IMetronomeService
 {
     void Play();
     void Stop();
@@ -11,5 +11,7 @@ public interface IMetronome
     void SetupMetronome(string beatFileName, string rhythmFileName, string set);
     static Action BeatAction;
     static Action RhythmAction;
+    static bool LiveMode;
+    static bool MuteOverride;
 }
 
