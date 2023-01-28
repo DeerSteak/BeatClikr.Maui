@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>LSRequiresIPhoneOS</key>
-	<true/>
+	<false/>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -29,12 +29,14 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.bfunkstudios.BeatClikr</string>
+	<string>com.bfunkstudios.beatclikr</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-8377432895177958~7682291854</string>
 	<key>GADIsAdManagerApp</key>
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>ApplicationVersion</key>
+	<string>2.0.0</string>
 </dict>
 </plist>
