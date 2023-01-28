@@ -163,7 +163,6 @@
 	<ItemGroup>
 	  <Folder Include="Views\" />
 	  <Folder Include="Models\" />
-	  <Folder Include="ViewModels\" />
 	  <Folder Include="Enums\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Services\Interfaces\" />
@@ -216,7 +215,6 @@
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-	  <PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.2" />
 	  <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 	  <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.4" />
@@ -352,6 +350,9 @@
 	<ItemGroup>
 	  <BundleResource Remove="bin\**" />
 	  <BundleResource Remove="obj\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="ViewModels\GetStartedViewModel.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="CustomControls\SongListCollectionCell.xaml" />
