@@ -112,6 +112,7 @@
 	  <None Remove="Resources\Raw\SET-1\other\cowbell.wav" />
 	  <MauiXaml Remove="CustomControls\SongListCollectionCell.xaml" />
 	  <MauiXaml Remove="CustomControls\SongCollectionCell.xaml" />
+	  <MauiXaml Remove="CustomControls\SongCollectionItemView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
@@ -357,5 +358,6 @@
 	<ItemGroup>
 	  <None Include="CustomControls\SongListCollectionCell.xaml" />
 	  <None Include="CustomControls\SongCollectionCell.xaml" />
+	  <None Include="CustomControls\SongCollectionItemView.xaml" />
 	</ItemGroup>
 </Project>
