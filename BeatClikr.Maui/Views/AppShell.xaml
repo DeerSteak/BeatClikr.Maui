@@ -65,7 +65,7 @@
                 Color="{AppThemeBinding Light={StaticResource TextLight},
                                         Dark={StaticResource TextDark}}" />
         </FlyoutItem.Icon>
-        <ShellContent ContentTemplate="{DataTemplate v:MetronomePage}" />
+        <ShellContent ContentTemplate="{DataTemplate v:InstantMetronomePage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Library">
@@ -79,17 +79,6 @@
         <ShellContent ContentTemplate="{DataTemplate v:LibraryPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Live Mode">
-        <FlyoutItem.Icon>
-            <FontImageSource
-                FontFamily="FARegular"
-                Glyph="{Static const:IconFont.VolumeHigh}"
-                Color="{AppThemeBinding Light={StaticResource TextLight},
-                                        Dark={StaticResource TextDark}}" />
-        </FlyoutItem.Icon>
-        <ShellContent ContentTemplate="{DataTemplate v:LivePage}" />
-    </FlyoutItem>
-
     <FlyoutItem Title="Rehearsal Mode">
         <FlyoutItem.Icon>
             <FontImageSource
@@ -101,15 +90,15 @@
         <ShellContent ContentTemplate="{DataTemplate v:RehearsalPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Settings">
+    <FlyoutItem Title="Live Mode">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FARegular"
-                Glyph="{Static const:IconFont.Gear}"
+                Glyph="{Static const:IconFont.VolumeHigh}"
                 Color="{AppThemeBinding Light={StaticResource TextLight},
                                         Dark={StaticResource TextDark}}" />
         </FlyoutItem.Icon>
-        <ShellContent ContentTemplate="{DataTemplate v:SettingsPage}" />
+        <ShellContent ContentTemplate="{DataTemplate v:LivePage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Help">
@@ -122,6 +111,17 @@
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate v:HelpPage}" />
     </FlyoutItem>
+
+    <FlyoutItem Title="Settings">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FARegular"
+                Glyph="{Static const:IconFont.Gear}"
+                Color="{AppThemeBinding Light={StaticResource TextLight},
+                                        Dark={StaticResource TextDark}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate v:SettingsPage}" />
+    </FlyoutItem>    
 
     <FlyoutItem Title="About">
         <FlyoutItem.Icon>

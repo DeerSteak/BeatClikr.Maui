@@ -79,6 +79,7 @@ public partial class LibraryViewModel : ObservableObject
         if (IsPlaybackMode && !AddToPlaylist)
         {
             _metronomeClickerViewModel.StopCommand.Execute(null);
+            _metronomeClickerViewModel.IsLiveMode = false;
             _metronomeClickerViewModel.SetSongCommand.Execute(SelectedSong);
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
         }

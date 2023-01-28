@@ -22,6 +22,10 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isLiveMode;
+    partial void OnIsLiveModeChanged(bool value)
+    {
+        IMetronomeService.LiveMode = value;
+    }
 
     [ObservableProperty]
     private ImageSource _beatBox;
@@ -87,18 +91,18 @@ public partial class MetronomeClickerViewModel : ObservableObject
         BeatBox = _bulbDim;
         Song = new Song();
 
-        IMetronomeService.BeatAction = BeatImage;
-        IMetronomeService.RhythmAction = RhythmImage;
+        IMetronomeService.BeatAction = BeatAction;
+        IMetronomeService.RhythmAction = RhythmAction;
     }
 
-    private void BeatImage()
+    private void BeatAction()
     {
         BeatBox = _bulbLit;
         if (UseFlashlight)
             Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
     }
 
-    private void RhythmImage()
+    private void RhythmAction()
     {
         BeatBox = _bulbDim;
         if (UseFlashlight)
@@ -123,14 +127,15 @@ public partial class MetronomeClickerViewModel : ObservableObject
         if (IsPlaying)
             _metronome.Play();
         else
-            _metronome.Stop();
+            Stop();
     }
 
     [RelayCommand]
     private void Stop()
     {
-        if (IsPlaying)
-            _metronome.Stop();
+        IsPlaying = false;
+        _metronome.Stop();
+        RhythmAction();
     }
 
     [RelayCommand]
@@ -192,12 +197,13 @@ public partial class MetronomeClickerViewModel : ObservableObject
                 numSubdivisions = 4;
                 break;
             default:
+                numSubdivisions = 1;
                 break;
         }
 
-        _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
-
         _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
+
+        _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
     }       
 }
 

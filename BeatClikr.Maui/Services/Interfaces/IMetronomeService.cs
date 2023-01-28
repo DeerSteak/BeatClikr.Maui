@@ -13,5 +13,6 @@ public interface IMetronomeService
     static Action RhythmAction;
     static bool LiveMode;
     static bool MuteOverride;
+    static int BeatsPerMeasure = 4;
 }
 

@@ -5,7 +5,7 @@ using Foundation;
 namespace BeatClikr.Maui.Platforms
 {
     public class MetronomeService : IMetronomeService
-	{
+    {
         private Uri _beatUri;
         private Uri _rhythmUri;
         private bool _playSubdivisions;
@@ -24,6 +24,9 @@ namespace BeatClikr.Maui.Platforms
 
         private readonly AVAudioEngine _avAudioEngine;
         private readonly AVAudioPlayerNode _playerNode;
+        
+        private bool _liveModeStarted = false;
+        private int _beatsPlayed = 0;
 
         private int _currentBeat = 1;
         private int _timerEventCounter = 1;
@@ -31,8 +34,8 @@ namespace BeatClikr.Maui.Platforms
         private bool _useFlashlight = true;
         private bool _previouslySetup = false;
 
-		public MetronomeService()
-		{
+        public MetronomeService()
+        {
             _avAudioEngine = new AVAudioEngine();
             SetTempo(_bpm, _subdivisions);
             _playerNode = new AVAudioPlayerNode();
@@ -41,11 +44,12 @@ namespace BeatClikr.Maui.Platforms
 
         public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
         {
-            if (_previouslySetup)
-                return;
             SetBeat(beatFileName, set);
             SetRhythm(rhythmFileName, set);
             SetTempo(_bpm, _subdivisions);
+
+            if (_previouslySetup)
+                return;
             try
             {
                 var format = _beatFile.ProcessingFormat.StreamDescription;
@@ -130,7 +134,7 @@ namespace BeatClikr.Maui.Platforms
 
             switch (subdivisions)
             {
-                case <= 1:
+                case < 1:
                     _subdivisions = 2;
                     _playSubdivisions = false;
                     break;
@@ -150,6 +154,8 @@ namespace BeatClikr.Maui.Platforms
         public void Play()
         {
             _timerEventCounter = 1;
+            _beatsPlayed = 0;
+            _liveModeStarted = false;
             _playerNode.Stop();
             _playerNode.Play();
             StartTimer();
@@ -158,34 +164,46 @@ namespace BeatClikr.Maui.Platforms
         private void StartTimer()
         {
             var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
-            _timer = NSTimer.CreateRepeatingScheduledTimer(TimeSpan.FromSeconds(timerIntervalInSamples), (timer) =>
-            {
-                if (_timerEventCounter == 1)
-                {
-                    if (!IMetronomeService.MuteOverride)
-                        _playerNode.ScheduleBuffer(_beatBuffer, null, AVAudioPlayerNodeBufferOptions.Interrupts, null);
-                    IMetronomeService.BeatAction();
-                    Console.WriteLine("Playing beat");                    
-                }
-                else if (_timerEventCounter % 2 == 1)
-                {
-                    if (!IMetronomeService.MuteOverride)
-                        _playerNode.ScheduleBuffer(_rhythmBuffer, null, AVAudioPlayerNodeBufferOptions.Interrupts, null);
-                    IMetronomeService.RhythmAction();
-                    Console.WriteLine("Playing subdivision");
-                }
-
-                _timerEventCounter++;
-                if (_timerEventCounter > _subdivisions * 2)
-                    _timerEventCounter = 1;
-            });            
+            _timer = NSTimer.CreateRepeatingScheduledTimer(
+                TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());                            
         }
 
+        private void HandleTimer()
+        {
+            if (_timerEventCounter == 1)
+            {
+                if (!IMetronomeService.MuteOverride && !_liveModeStarted)
+                    _playerNode.ScheduleBuffer(_beatBuffer, null);
+                IMetronomeService.BeatAction();
+                Console.WriteLine("Playing beat");
+                if (IMetronomeService.LiveMode && !_liveModeStarted)
+                {
+                    _beatsPlayed++;
+                    if (_beatsPlayed >= IMetronomeService.BeatsPerMeasure)
+                        _liveModeStarted = true;
+                }
+            }
+            else if (_timerEventCounter % 2 == 1)
+            {
+                if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
+                    _playerNode.ScheduleBuffer(_rhythmBuffer, null);
+                Console.WriteLine("Playing subdivision");
+            }
+
+            if (_timerEventCounter == _subdivisions)
+            {
+                IMetronomeService.RhythmAction();
+            }
+
+            _timerEventCounter++;
+            if (_timerEventCounter > _subdivisions * 2)
+                _timerEventCounter = 1;
+        }
 
         public void Stop()
         {
             if (_timer != null)
-                _timer.Invalidate();
+                _timer.Invalidate();            
         }
 
         public void SetFlashlight(bool useFlashlight)

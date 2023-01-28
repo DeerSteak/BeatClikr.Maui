@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace BeatClikr.Maui.ViewModels;
 
-public partial class MetronomeViewModel : ObservableObject
+public partial class InstantMetronomeViewModel : ObservableObject
 {
     private SubdivisionEnum _subdivision;
     private const int _numBeats = 4;
@@ -44,7 +44,7 @@ public partial class MetronomeViewModel : ObservableObject
     [ObservableProperty]
     private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
 
-    public MetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel)
+    public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel)
     {
         _subdivision = SubdivisionEnum.Quarter;
         _metronomeClickerViewModel = metronomeClickerViewModel;
@@ -58,7 +58,7 @@ public partial class MetronomeViewModel : ObservableObject
     public void Init()
     {
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
-        _metronomeClickerViewModel.IsLiveMode = false;
+        _metronomeClickerViewModel.IsLiveMode = false;        
         _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
     }
 

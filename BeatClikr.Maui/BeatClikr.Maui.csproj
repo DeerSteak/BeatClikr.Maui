@@ -38,7 +38,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
-	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignKey>iPhone Distribution</CodesignKey>
 	  <CodesignProvision>Automatic</CodesignProvision>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
