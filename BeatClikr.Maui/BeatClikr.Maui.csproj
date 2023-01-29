@@ -145,7 +145,6 @@
 	  <None Remove="SQLitePCLRaw.provider.e_sqlite3" />
 	  <None Remove="Resources\Raw\Set1\other\" />
 	  <None Remove="Resources\Raw\Set1\apple\" />
-	  <None Remove="Resources\Images\splash.png" />
 	  <None Remove="Platforms\Android\Resources\mipmap\" />
 	  <None Remove="Platforms\Android\Resources\mipmap\splash.png" />
 	</ItemGroup>
@@ -202,12 +201,9 @@
 	  <BundleResource Include="Resources\AppIcon\appicon.png" />
 	  <BundleResource Include="Resources\Images\drag.xml" />
 	  <BundleResource Include="Resources\Images\instant.png" />
-	  <BundleResource Include="Resources\Images\splashbackground.xml" />
-	  <BundleResource Include="Resources\Images\splashimage.png" />
 	  <BundleResource Include="Resources\Images\titleicon.png" />
 	  <BundleResource Include="Resources\Splash\splash.png" />
 	  <BundleResource Include="Resources\Fonts\FontAwesome6Pro-Regular-400.otf" />
-	  <BundleResource Include="Resources\Images\splash.png" />
 	  <BundleResource Include="Platforms\Android\Resources\mipmap\splash.png" />
 	  <BundleResource Include="**/*" />
 	  <BundleResource Include="Resources\Raw\**">
