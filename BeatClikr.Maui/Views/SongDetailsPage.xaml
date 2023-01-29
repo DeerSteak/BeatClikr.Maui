@@ -40,7 +40,7 @@
                     Title="Groove"
                     ItemsSource="{Binding Subdivisions}"
                     SelectedIndex="{Binding SelectedSubdivisionIndex, Mode=TwoWay}" />
-                <BoxView HeightRequest="30" />       
+                <BoxView HeightRequest="30" />
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
                 <Grid>
                     <Grid.ColumnDefinitions>

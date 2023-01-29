@@ -18,8 +18,7 @@
                 Margin="8"
                 HeightRequest="90"
                 HorizontalOptions="Center"
-                Source="{Binding BeatBox}">
-            </Image>
+                Source="{Binding BeatBox}" />
         </Grid>
     </ContentView.Content>
 </ContentView>

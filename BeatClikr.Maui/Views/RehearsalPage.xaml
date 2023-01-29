@@ -4,22 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
     xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     Title="RehearsalPage"
     x:DataType="vm:RehearsalViewModel">
     <Shell.TitleView>
         <cc:TitleView Title="Rehearsal Playlist" />
     </Shell.TitleView>
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding AddSongToPlaylistCommand}"
-            Text="ADD">
+        <ToolbarItem Command="{Binding AddSongToPlaylistCommand}" Text="ADD">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular"
-                                 Glyph="{Static const:IconFont.Plus}"/>
+                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Plus}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -34,13 +31,17 @@
             <cc:MetronomeClickerView x:Name="Clicker" Grid.Row="0" />
             <CollectionView
                 Grid.Row="1"
-                SelectionMode="Single"
+                ItemSizingStrategy="MeasureFirstItem"
                 ItemsSource="{Binding RehearsalSongPlayList}"
                 SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
-                SelectionChangedCommand="{Binding SongSelectedCommand}">
+                SelectionChangedCommand="{Binding SongSelectedCommand}"
+                SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Song">
-                        <cc:SongCollectionItemView Title="{Binding Title}" Bpm="{Binding BeatsPerMinute}" Artist="{Binding Artist}" />
+                        <cc:SongCollectionItemView
+                            Title="{Binding Title}"
+                            Artist="{Binding Artist}"
+                            Bpm="{Binding BeatsPerMinute}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -64,7 +65,7 @@
                     HorizontalOptions="EndAndExpand"
                     Text="STOP" />
             </StackLayout>
-           <cc:AdMobView Grid.Row="3" />
+            <cc:AdMobView Grid.Row="3" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

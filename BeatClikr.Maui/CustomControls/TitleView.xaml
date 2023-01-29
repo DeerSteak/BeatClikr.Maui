@@ -4,20 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <HorizontalStackLayout VerticalOptions="CenterAndExpand">
-        <Image            
-            VerticalOptions="Center"
+        <Image
             Margin="5,0,5,0"
             Aspect="AspectFit"
             HeightRequest="40"
             HorizontalOptions="Start"
-            Source="titleicon"            
-            WidthRequest="40" />
-        <Label            
+            Source="titleicon"
             VerticalOptions="Center"
+            WidthRequest="40" />
+        <Label
+            x:Name="TitleLabel"
             FontAttributes="Bold"
-            HorizontalOptions="StartAndExpand"
             FontSize="Medium"
-            x:Name="TitleLabel" />
+            HorizontalOptions="StartAndExpand"
+            VerticalOptions="Center" />
 
     </HorizontalStackLayout>
 </ContentView>

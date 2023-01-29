@@ -18,9 +18,7 @@
             RowSpacing="0">
             <cc:MetronomeClickerView Grid.Row="0" />
             <ScrollView Grid.Row="1">
-                <StackLayout
-                    Padding="16"
-                    VerticalOptions="StartAndExpand">
+                <StackLayout Padding="16" VerticalOptions="StartAndExpand">
                     <Label Text="Groove" />
                     <Picker
                         Title="Groove"
@@ -50,10 +48,10 @@
                         </StackLayout>
                         <Slider
                             Grid.Row="1"
+                            DragCompletedCommand="{Binding SliderDragCompletedCommand}"
+                            DragStartedCommand="{Binding SliderDragStartedCommand}"
                             Maximum="240"
                             Minimum="30"
-                            DragStartedCommand="{Binding SliderDragStartedCommand}"
-                            DragCompletedCommand="{Binding SliderDragCompletedCommand}"
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
                     <BoxView HeightRequest="30" />

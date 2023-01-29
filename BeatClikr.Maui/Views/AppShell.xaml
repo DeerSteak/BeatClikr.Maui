@@ -121,7 +121,7 @@
                                         Dark={StaticResource TextDark}}" />
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate v:SettingsPage}" />
-    </FlyoutItem>    
+    </FlyoutItem>
 
     <FlyoutItem Title="About">
         <FlyoutItem.Icon>

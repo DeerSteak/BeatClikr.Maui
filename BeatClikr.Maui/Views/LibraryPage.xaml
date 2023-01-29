@@ -33,13 +33,17 @@
             </StackLayout>
             <CollectionView
                 Grid.Row="1"
-                SelectionMode="Single"
+                ItemSizingStrategy="MeasureFirstItem"
                 ItemsSource="{Binding FilteredSongs}"
                 SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
-                SelectionChangedCommand="{Binding SelectionChangedCommand}">
+                SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Song">
-                        <cc:SongCollectionItemView Title="{Binding Title}" Bpm="{Binding BeatsPerMinute}" Artist="{Binding Artist}" />
+                        <cc:SongCollectionItemView
+                            Title="{Binding Title}"
+                            Artist="{Binding Artist}"
+                            Bpm="{Binding BeatsPerMinute}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
