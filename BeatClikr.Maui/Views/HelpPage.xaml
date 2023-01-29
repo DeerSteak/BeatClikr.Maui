@@ -16,19 +16,7 @@
                     FontSize="Large"
                     Text="Modes"
                     TextColor="{StaticResource PrimaryDark}" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
                     <Label
                         Grid.Row="0"
                         Grid.Column="0"
@@ -128,6 +116,5 @@
                 </Grid>
             </StackLayout>
         </ScrollView>
-
     </ContentPage.Content>
 </ContentPage>
