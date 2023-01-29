@@ -2,14 +2,14 @@
 
 public partial class HelpPage : ContentPage
 {
-	public HelpPage(ViewModels.HelpViewModel viewModel)
-	{
-		InitializeComponent();
-		BindingContext = viewModel;
-	}
+    public HelpPage(ViewModels.HelpViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 
-	public HelpPage() : this(ServiceHelper.GetService<ViewModels.HelpViewModel>())
-	{
+    public HelpPage() : this(ServiceHelper.GetService<ViewModels.HelpViewModel>())
+    {
 
-	}
+    }
 }

@@ -1,9 +1,6 @@
-﻿using Android.Bluetooth;
-using BeatClikr.Maui.Services.Interfaces;
-using Java.Nio.Channels;
+﻿using BeatClikr.Maui.Services.Interfaces;
 using Java.Text;
 using Java.Util;
-using Org.Apache.Http.Conn;
 
 namespace BeatClikr.Maui.Platforms.Android;
 
@@ -29,7 +26,7 @@ public class MetronomeService : IMetronomeService
     {
         _timerEventCounter = 1;
         _beatsPlayed = 0;
-        _liveModeStarted = false;        
+        _liveModeStarted = false;
     }
 
     public void SetBeat(string fileName, string set)
@@ -89,8 +86,8 @@ public class MetronomeService : IMetronomeService
     {
         var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
 
-                //_timer = NSTimer.CreateRepeatingScheduledTimer(
-            //TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
+        //_timer = NSTimer.CreateRepeatingScheduledTimer(
+        //TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
     }
     public static Date GetStartTime()
     {

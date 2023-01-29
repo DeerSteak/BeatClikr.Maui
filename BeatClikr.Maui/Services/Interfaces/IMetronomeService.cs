@@ -1,5 +1,4 @@
-﻿using System;
-namespace BeatClikr.Maui.Services.Interfaces;
+﻿namespace BeatClikr.Maui.Services.Interfaces;
 
 public interface IMetronomeService
 {

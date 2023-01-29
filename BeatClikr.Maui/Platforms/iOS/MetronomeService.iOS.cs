@@ -24,7 +24,7 @@ public class MetronomeService : IMetronomeService
 
     private readonly AVAudioEngine _avAudioEngine;
     private readonly AVAudioPlayerNode _playerNode;
-    
+
     private bool _liveModeStarted = false;
     private int _beatsPlayed = 0;
 
@@ -65,13 +65,13 @@ public class MetronomeService : IMetronomeService
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-        }            
+        }
     }
 
     public void SetBeat(string fileName, string set)
     {
         try
-        {                
+        {
             var uris = NSBundle.MainBundle.GetUrlsForResourcesWithExtension($".wav", set);
             _beatUri = uris.FirstOrDefault(x => x.ToString().Contains(fileName));
             _beatFile = new AVAudioFile(_beatUri, out var fileError);
@@ -84,7 +84,7 @@ public class MetronomeService : IMetronomeService
             if (bufferError != null)
             {
 
-            }                
+            }
         }
         catch (Exception ex)
         {
@@ -164,7 +164,7 @@ public class MetronomeService : IMetronomeService
     {
         var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
         _timer = NSTimer.CreateRepeatingScheduledTimer(
-            TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());                            
+            TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
     }
 
     private void HandleTimer()
@@ -202,7 +202,7 @@ public class MetronomeService : IMetronomeService
     public void Stop()
     {
         if (_timer != null)
-            _timer.Invalidate();            
+            _timer.Invalidate();
     }
 
     public void SetFlashlight(bool useFlashlight)

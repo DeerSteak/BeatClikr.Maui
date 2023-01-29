@@ -2,10 +2,10 @@
 
 public partial class AdMobView : ContentView
 {
-	public AdMobView()
-	{
-		InitializeComponent();
-	}
+    public AdMobView()
+    {
+        InitializeComponent();
+    }
 
     public static readonly BindableProperty AdUnitIdProperty = BindableProperty.Create(
                nameof(AdUnitId),

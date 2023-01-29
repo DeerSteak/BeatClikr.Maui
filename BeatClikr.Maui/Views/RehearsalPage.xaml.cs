@@ -2,9 +2,9 @@
 
 public partial class RehearsalPage : ContentPage
 {
-	public RehearsalPage(ViewModels.RehearsalViewModel rehearsalViewModel)
-	{
-		InitializeComponent();
+    public RehearsalPage(ViewModels.RehearsalViewModel rehearsalViewModel)
+    {
+        InitializeComponent();
         rehearsalViewModel.Init();
         Disappearing += (s, e) => rehearsalViewModel.StopCommand.Execute(null);
         Appearing += (s, e) => rehearsalViewModel.Init();

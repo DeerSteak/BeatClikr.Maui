@@ -4,12 +4,12 @@ public partial class AppShell : Shell
 {
     bool askFlashlight;
 
-	public AppShell(ViewModels.AppShellViewModel viewModel)
-	{
+    public AppShell(ViewModels.AppShellViewModel viewModel)
+    {
         InitializeComponent();
         BindingContext = viewModel;
 
-		Routing.RegisterRoute(RouteNames.AboutRoute, typeof(AboutPage));
+        Routing.RegisterRoute(RouteNames.AboutRoute, typeof(AboutPage));
         Routing.RegisterRoute(RouteNames.AppShellRoute, typeof(AppShell));
         Routing.RegisterRoute(RouteNames.HelpRoute, typeof(HelpPage));
         Routing.RegisterRoute(RouteNames.LibraryRoute, typeof(LibraryPage));

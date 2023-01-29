@@ -2,16 +2,16 @@
 
 public partial class InstantMetronomePage : ContentPage
 {
-	public InstantMetronomePage(ViewModels.InstantMetronomeViewModel metronomeViewModel)
-	{
-		BindingContext = metronomeViewModel;
+    public InstantMetronomePage(ViewModels.InstantMetronomeViewModel metronomeViewModel)
+    {
+        BindingContext = metronomeViewModel;
         InitializeComponent();
     }
 
     public InstantMetronomePage() : this(ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>())
-	{
-		
-	}
+    {
+
+    }
 
     protected override void OnAppearing()
     {

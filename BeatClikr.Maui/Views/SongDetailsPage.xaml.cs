@@ -2,9 +2,9 @@
 
 public partial class SongDetailsPage : ContentPage
 {
-	public SongDetailsPage(ViewModels.SongDetailsViewModel songDetailsViewModel)
-	{
-		InitializeComponent();
-		BindingContext = songDetailsViewModel;
-	}
+    public SongDetailsPage(ViewModels.SongDetailsViewModel songDetailsViewModel)
+    {
+        InitializeComponent();
+        BindingContext = songDetailsViewModel;
+    }
 }

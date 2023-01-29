@@ -1,8 +1,8 @@
 ﻿using BeatClikr.Maui.Models;
 namespace BeatClikr.Maui.Services.Interfaces
 {
-	public interface IDataService
-	{
+    public interface IDataService
+    {
         List<Song> GetLibrarySongs();
         List<Song> GetLibrarySongs(string filter);
         int SaveSongToLibrary(Song song);

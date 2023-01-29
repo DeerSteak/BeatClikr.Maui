@@ -2,11 +2,11 @@
 
 public partial class SettingsPage : ContentPage
 {
-	public SettingsPage(ViewModels.SettingsViewModel settingsViewModel)
-	{
-		InitializeComponent();
+    public SettingsPage(ViewModels.SettingsViewModel settingsViewModel)
+    {
+        InitializeComponent();
         BindingContext = settingsViewModel;
-	}
+    }
 
     protected override void OnAppearing()
     {

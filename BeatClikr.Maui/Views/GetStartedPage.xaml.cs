@@ -2,8 +2,15 @@
 
 public partial class GetStartedPage : ContentPage
 {
-	public GetStartedPage()
-	{
-		InitializeComponent();
-	}
+    public GetStartedPage(ViewModels.GetStartedViewModel getStartedViewModel)
+    {
+        InitializeComponent();
+        BindingContext = getStartedViewModel;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        (BindingContext as ViewModels.GetStartedViewModel).SetImageHeight();
+    }
 }

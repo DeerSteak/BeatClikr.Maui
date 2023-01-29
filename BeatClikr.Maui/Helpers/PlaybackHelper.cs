@@ -36,6 +36,6 @@ public static class PlaybackUtilities
     {
         return $"{set}/{filename}.wav";
     }
-        
+
 }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using BeatClikr.Maui.Services.Interfaces;
+﻿using BeatClikr.Maui.Services.Interfaces;
 
 namespace BeatClikr.Maui.Services;
 

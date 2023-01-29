@@ -134,7 +134,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     {
         Task.Run(async () =>
         {
-            await FirstTimeFlashlightQuestion();          
+            await FirstTimeFlashlightQuestion();
         });
 
         string rhythm = string.Empty;
@@ -176,7 +176,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
         _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
 
         _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
-    }      
+    }
 
     private async Task FirstTimeFlashlightQuestion()
     {
@@ -195,7 +195,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
             await SetupFlashlight();
         }
     }
-    
+
     private async Task SetupFlashlight()
     {
         var result = await Permissions.CheckStatusAsync<Permissions.Flashlight>();
@@ -209,7 +209,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
                 {
                     await _shellService.DisplayAlert("Flashlight Permission Denied", "BeatClikr will not use the flashlight. If you change your mind, you can enable the flashlight again on the Settings page.", "OK");
                 }
-            }            
+            }
         }
 
         var pref = result == PermissionStatus.Granted;

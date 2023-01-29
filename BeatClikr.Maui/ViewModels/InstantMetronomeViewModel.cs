@@ -56,7 +56,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
     public void Init()
     {
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
-        _metronomeClickerViewModel.IsLiveMode = false;        
+        _metronomeClickerViewModel.IsLiveMode = false;
         _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
     }
 

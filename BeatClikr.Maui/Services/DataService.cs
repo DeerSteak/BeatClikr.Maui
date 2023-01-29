@@ -1,5 +1,4 @@
-﻿using BeatClikr.Maui.Constants;
-using BeatClikr.Maui.Models;
+﻿using BeatClikr.Maui.Models;
 using BeatClikr.Maui.Services.Interfaces;
 using SQLite;
 

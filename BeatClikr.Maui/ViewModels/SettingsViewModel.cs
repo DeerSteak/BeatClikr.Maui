@@ -49,7 +49,7 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private InstrumentPicker _liveRhythm;
     partial void OnLiveRhythmChanged(InstrumentPicker value)
-    {        
+    {
         Preferences.Set(PreferenceKeys.LiveRhythm, value.FileName);
     }
 
