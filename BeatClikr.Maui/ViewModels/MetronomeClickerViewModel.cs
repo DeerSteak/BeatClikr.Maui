@@ -41,9 +41,6 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _askFlashlight;
-
-    [ObservableProperty]
     private ClickerBeatType _beatType;
     partial void OnBeatTypeChanged(ClickerBeatType value)
     {
@@ -64,7 +61,6 @@ public partial class MetronomeClickerViewModel : ObservableObject
         var currentTheme = appInfo.RequestedTheme;
 
         MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
-        AskFlashlight = Preferences.Get(PreferenceKeys.AskFlashlight, true);
         UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, true);
 
         _bulbDim = new FontImageSource()
@@ -213,12 +209,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
                 {
                     await _shellService.DisplayAlert("Flashlight Permission Denied", "BeatClikr will not use the flashlight. If you change your mind, you can enable the flashlight again on the Settings page.", "OK");
                 }
-            }
-            else
-            {
-                AskFlashlight = false;
-                Preferences.Set(PreferenceKeys.AskFlashlight, AskFlashlight);
-            }
+            }            
         }
 
         var pref = result == PermissionStatus.Granted;

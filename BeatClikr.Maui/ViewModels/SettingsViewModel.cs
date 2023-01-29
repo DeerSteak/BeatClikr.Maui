@@ -6,6 +6,20 @@ namespace BeatClikr.Maui.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
     [ObservableProperty]
+    bool _useFlashlight;
+    partial void OnUseFlashlightChanged(bool value)
+    {
+        Preferences.Set(PreferenceKeys.UseFlashlight, value);
+    }
+
+    [ObservableProperty]
+    bool _globalMute;
+    partial void OnGlobalMuteChanged(bool value)
+    {
+        Preferences.Set(PreferenceKeys.MuteMetronome, value);
+    }
+
+    [ObservableProperty]
     List<InstrumentPicker> _rhythmInstruments;
 
     [ObservableProperty]

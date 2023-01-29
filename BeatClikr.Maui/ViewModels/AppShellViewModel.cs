@@ -7,9 +7,17 @@ public partial class AppShellViewModel : ObservableObject
     [ObservableProperty]
     private string _versionInfo;
 
-    public AppShellViewModel(IDeviceInfo deviceInfo)
+    private MetronomeClickerViewModel _metronomeClickerViewModel;
+
+    public AppShellViewModel(IDeviceInfo deviceInfo, MetronomeClickerViewModel metronomeClickerViewModel)
     {
         VersionInfo = $"Version {deviceInfo.VersionString}";
+        _metronomeClickerViewModel = metronomeClickerViewModel;
+    }
+
+    public void AskFlashlight()
+    {
+
     }
 }
 

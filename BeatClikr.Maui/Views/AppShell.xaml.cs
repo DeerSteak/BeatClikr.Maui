@@ -2,6 +2,8 @@
 
 public partial class AppShell : Shell
 {
+    bool askFlashlight;
+
 	public AppShell(ViewModels.AppShellViewModel viewModel)
 	{
         InitializeComponent();
@@ -22,6 +24,10 @@ public partial class AppShell : Shell
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        if (!Preferences.ContainsKey(PreferenceKeys.AskFlashlight))
+        {
+            askFlashlight = true;
+        }
     }
 }
 

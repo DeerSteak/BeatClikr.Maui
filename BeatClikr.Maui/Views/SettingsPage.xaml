@@ -13,9 +13,34 @@
     <ContentPage.Content>
         <Grid RowDefinitions="*, Auto">
             <ScrollView>
-                <StackLayout Padding="16">
+                <StackLayout Padding="16" Spacing="6">
+                    <Label Style="{StaticResource LabelHeader}" Text="Metronome Playback" />
+                    <Label LineBreakMode="WordWrap" Text="BeatClikr will always animate the bulb icon, and it plays audio by default. Choose other playback settings below." />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="10" />
+                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Use flashlight" />
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            IsChecked="{Binding UseFlashlight}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Always mute metronome" />
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            IsChecked="{Binding GlobalMute}" />
+                    </Grid>
+                    <BoxView BackgroundColor="Transparent" HeightRequest="10" />
+                    <Label Style="{StaticResource LabelHeader}" Text="Playback Instruments" />
                     <Label LineBreakMode="WordWrap" Text="In each area, select the main sound played on each beat and rhythm/groove sound that plays on subdivisions" />
-                    <Label Style="{StaticResource LabelHeader}" Text="Instant/Library Metronome" />
+                    <Label Style="{StaticResource LabelSubHeader}" Text="Instant/Library Metronome" />
                     <Label Text="Beat" />
                     <Picker
                         Title="Beat"
@@ -27,7 +52,7 @@
                         ItemsSource="{Binding RhythmInstruments}"
                         SelectedItem="{Binding InstantRhythm}" />
 
-                    <Label Style="{StaticResource LabelHeader}" Text="Rehearsal Mode" />
+                    <Label Style="{StaticResource LabelSubHeader}" Text="Rehearsal Mode" />
                     <Label Text="Beat" />
                     <Picker
                         Title="Beat"
@@ -39,7 +64,7 @@
                         ItemsSource="{Binding RhythmInstruments}"
                         SelectedItem="{Binding RehearsalRhythm}" />
 
-                    <Label Style="{StaticResource LabelHeader}" Text="Live Mode" />
+                    <Label Style="{StaticResource LabelSubHeader}" Text="Live Mode" />
                     <Label Text="Beat" />
                     <Picker
                         Title="Beat"
