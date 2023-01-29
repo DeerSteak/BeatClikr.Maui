@@ -14,6 +14,8 @@
         Task PushAsync(Page page, bool animated);
         Task<Page> PopModalAsync(bool animated = true);
         Task<Page> PopAsync();
+        Task PopToRootAsync();
+        Task PopToRootAsync(bool animated);
     }
 }
 

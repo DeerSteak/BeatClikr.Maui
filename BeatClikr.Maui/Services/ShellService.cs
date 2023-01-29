@@ -16,11 +16,14 @@ public class ShellService : IShellService
     public async Task PushAsync(Page page) => await _appShell.Navigation.PushAsync(page);
     public async Task PushAsync(Page page, bool animated) => await _appShell.Navigation.PushAsync(page, animated);
     public async Task<Page> PopAsync() => await _appShell.Navigation.PopAsync();
-
+    public async Task PopToRootAsync() => await _appShell.Navigation.PopToRootAsync();
+    public async Task PopToRootAsync(bool animated) => await _appShell.Navigation.PopToRootAsync(animated);
 
     public async Task GoToAsync(ShellNavigationState state) => await _appShell.GoToAsync(state);
     public async Task GoToAsync(ShellNavigationState state, bool animate) => await _appShell.GoToAsync(state, animate);
     public async Task GoToAsync(ShellNavigationState state, IDictionary<string, object> parameters) => await _appShell.GoToAsync(state, parameters);
     public async Task GoToAsync(ShellNavigationState state, bool animate, IDictionary<string, object> parameters) => await _appShell.GoToAsync(state, animate, parameters);
+
+    
 }
 

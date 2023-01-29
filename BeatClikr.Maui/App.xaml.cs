@@ -9,7 +9,12 @@ public partial class App : Application
     {
         InitializeComponent();
         SetupAdmob();
-        MainPage = ServiceHelper.GetService<Views.AppShell>();
+        var onboarded = Preferences.Get(PreferenceKeys.Onboarded, new DateTime(1900, 1, 1));        
+            
+        if (onboarded < new DateTime(2023, 1, 29))
+            MainPage = ServiceHelper.GetService<Views.GetStartedPage>();
+        else
+            MainPage = ServiceHelper.GetService<Views.AppShell>();
     }
 
     protected override void OnStart()

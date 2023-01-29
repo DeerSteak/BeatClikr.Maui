@@ -2,8 +2,6 @@
 
 public partial class AppShell : Shell
 {
-    bool askFlashlight;
-
     public AppShell(ViewModels.AppShellViewModel viewModel)
     {
         InitializeComponent();
@@ -19,15 +17,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(RouteNames.SettingsRoute, typeof(SettingsPage));
         Routing.RegisterRoute(RouteNames.SongDetailsRoute, typeof(SongDetailsPage));
         Routing.RegisterRoute(RouteNames.GetStartedRoute, typeof(GetStartedPage));
-    }
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        if (!Preferences.ContainsKey(PreferenceKeys.AskFlashlight))
-        {
-            askFlashlight = true;
-        }
     }
 }
 

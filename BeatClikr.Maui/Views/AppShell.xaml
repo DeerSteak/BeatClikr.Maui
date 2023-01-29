@@ -133,16 +133,5 @@
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate v:AboutPage}" />
     </FlyoutItem>
-
-    <FlyoutItem Title="Get Started">
-        <FlyoutItem.Icon>
-            <FontImageSource
-                FontFamily="FARegular"
-                Glyph="{Static const:IconFont.CircleInfo}"
-                Color="{AppThemeBinding Light={StaticResource TextLight},
-                                        Dark={StaticResource TextDark}}" />
-        </FlyoutItem.Icon>
-        <ShellContent ContentTemplate="{DataTemplate v:GetStartedPage}" />
-    </FlyoutItem>
 </Shell>
 

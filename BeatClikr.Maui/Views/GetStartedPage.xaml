@@ -7,14 +7,14 @@
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
     Title="GetStartedPage"
-    x:DataType="vm:GetStartedViewModel">
+    x:DataType="vm:GetStartedViewModel"
+    Shell.PresentationMode="ModalAnimated">
     <Shell.TitleView>
         <cc:TitleView Title="Getting Started" />
     </Shell.TitleView>
-    <Grid RowDefinitions="*, Auto, *">
+    <Grid RowDefinitions="*, Auto, Auto, *">
         <CarouselView
             Grid.Row="1"
-            BackgroundColor="Blue"
             HeightRequest="{Binding ImageHeight}"
             ItemsSource="{Binding CarouselViewItems}"
             PeekAreaInsets="25">
@@ -34,11 +34,16 @@
                             Offset="20,20" />
                         <VerticalStackLayout>
                             <Image Aspect="AspectFit" Source="{Binding ImageName}" />
+                            <BoxView BackgroundColor="Transparent" HeightRequest="10" />
                             <Label Text="{Binding Description}" />
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
             </CarouselView.ItemTemplate>
         </CarouselView>
+        <Button
+            Grid.Row="2"
+            Clicked="Button_Clicked"
+            Text="Let's go!" />
     </Grid>
 </ContentPage>
