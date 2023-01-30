@@ -137,6 +137,9 @@ public partial class MetronomeClickerViewModel : ObservableObject
             await FirstTimeFlashlightQuestion();
         });
 
+        var mute = Preferences.Get(PreferenceKeys.MuteMetronome, false);
+        IMetronomeService.MuteOverride = mute;
+
         string rhythm = string.Empty;
         string beat = string.Empty;
 
