@@ -10,6 +10,8 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnUseFlashlightChanged(bool value)
     {
         Preferences.Set(PreferenceKeys.UseFlashlight, value);
+        if (value)
+            Task.Run(async () => await PermissionsHelper.SetupFlashlight());
     }
 
     [ObservableProperty]
@@ -92,6 +94,8 @@ public partial class SettingsViewModel : ObservableObject
 
         var rehearsalRhythmName = Preferences.Get(PreferenceKeys.RehearsalRhythm, FileNames.HatClosed);
         RehearsalRhythm = InstrumentPicker.FromString(rehearsalRhythmName);
+
+        UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
     }
 }
 

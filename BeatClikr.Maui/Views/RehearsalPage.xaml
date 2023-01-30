@@ -16,7 +16,11 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddSongToPlaylistCommand}" Text="ADD">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Plus}" />
+                <FontImageSource
+                    FontFamily="FARegular"
+                    Glyph="{Static const:IconFont.Plus}"
+                    Color="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>

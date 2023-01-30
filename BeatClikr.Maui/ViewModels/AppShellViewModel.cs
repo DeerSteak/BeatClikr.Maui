@@ -9,9 +9,9 @@ public partial class AppShellViewModel : ObservableObject
 
     private MetronomeClickerViewModel _metronomeClickerViewModel;
 
-    public AppShellViewModel(IDeviceInfo deviceInfo, MetronomeClickerViewModel metronomeClickerViewModel)
+    public AppShellViewModel(IAppInfo appInfo, MetronomeClickerViewModel metronomeClickerViewModel)
     {
-        VersionInfo = $"Version {deviceInfo.VersionString}";
+        VersionInfo = $"Version {appInfo.Version}";
         _metronomeClickerViewModel = metronomeClickerViewModel;
     }
 

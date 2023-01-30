@@ -27,7 +27,6 @@ public class DataService : IDataService
     public List<Song> GetLibrarySongs()
     {
         var table = Database.CreateTable<Song>();
-        Console.WriteLine(table.ToString());
         return Database.Table<Song>().OrderBy(x => x.Title).ThenBy(x => x.Artist).ToList();
     }
 

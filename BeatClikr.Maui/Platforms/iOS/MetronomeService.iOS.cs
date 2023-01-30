@@ -45,7 +45,6 @@ public class MetronomeService : IMetronomeService
     {
         SetBeat(beatFileName, set);
         SetRhythm(rhythmFileName, set);
-        SetTempo(_bpm, _subdivisions);
 
         if (_previouslySetup)
             return;
@@ -64,7 +63,7 @@ public class MetronomeService : IMetronomeService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            Console.WriteLine(ex.Message);
         }
     }
 
@@ -120,8 +119,8 @@ public class MetronomeService : IMetronomeService
     {
         switch (bpm)
         {
-            case < 60:
-                _bpm = 60;
+            case < 30:
+                _bpm = 30;
                 break;
             case > 240:
                 _bpm = 240;
@@ -174,7 +173,6 @@ public class MetronomeService : IMetronomeService
             if (!IMetronomeService.MuteOverride && !_liveModeStarted)
                 _playerNode.ScheduleBuffer(_beatBuffer, null);
             IMetronomeService.BeatAction();
-            Console.WriteLine("Playing beat");
             if (IMetronomeService.LiveMode && !_liveModeStarted)
             {
                 _beatsPlayed++;
@@ -186,7 +184,6 @@ public class MetronomeService : IMetronomeService
         {
             if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
                 _playerNode.ScheduleBuffer(_rhythmBuffer, null);
-            Console.WriteLine("Playing subdivision");
         }
 
         if (_timerEventCounter == _subdivisions)

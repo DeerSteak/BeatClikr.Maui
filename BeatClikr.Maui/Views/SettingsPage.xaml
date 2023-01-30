@@ -17,27 +17,34 @@
                     <Label Style="{StaticResource LabelHeader}" Text="Metronome Playback" />
                     <Label LineBreakMode="WordWrap" Text="BeatClikr will always animate the bulb icon, and it plays audio by default. Choose other playback settings below." />
                     <BoxView BackgroundColor="Transparent" HeightRequest="10" />
-                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                    <Grid
+                        ColumnDefinitions="*, Auto"
+                        RowDefinitions="Auto, Auto"
+                        RowSpacing="6">
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
                             HorizontalOptions="FillAndExpand"
-                            Text="Use flashlight" />
-                        <CheckBox
+                            Text="Use flashlight"
+                            VerticalOptions="Center" />
+                        <Switch
                             Grid.Row="0"
                             Grid.Column="1"
-                            IsChecked="{Binding UseFlashlight}" />
+                            IsToggled="{Binding UseFlashlight}" />
                         <Label
                             Grid.Row="1"
                             Grid.Column="0"
                             HorizontalOptions="FillAndExpand"
-                            Text="Always mute metronome" />
-                        <CheckBox
+                            Text="Always mute metronome"
+                            VerticalOptions="Center" />
+                        <Switch
                             Grid.Row="1"
                             Grid.Column="1"
-                            IsChecked="{Binding GlobalMute}" />
+                            IsToggled="{Binding GlobalMute}" />
                     </Grid>
-                    <BoxView BackgroundColor="Transparent" HeightRequest="10" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6"/>
+                    <cc:Separator />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <Label Style="{StaticResource LabelHeader}" Text="Playback Instruments" />
                     <Label LineBreakMode="WordWrap" Text="In each area, select the main sound played on each beat and rhythm/groove sound that plays on subdivisions" />
                     <Label Style="{StaticResource LabelSubHeader}" Text="Instant/Library Metronome" />
@@ -51,7 +58,9 @@
                         Title="Groove"
                         ItemsSource="{Binding RhythmInstruments}"
                         SelectedItem="{Binding InstantRhythm}" />
-
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6"/>
+                    <cc:Separator />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <Label Style="{StaticResource LabelSubHeader}" Text="Rehearsal Mode" />
                     <Label Text="Beat" />
                     <Picker
@@ -63,7 +72,9 @@
                         Title="Groove"
                         ItemsSource="{Binding RhythmInstruments}"
                         SelectedItem="{Binding RehearsalRhythm}" />
-
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6"/>
+                    <cc:Separator />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <Label Style="{StaticResource LabelSubHeader}" Text="Live Mode" />
                     <Label Text="Beat" />
                     <Picker

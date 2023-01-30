@@ -14,12 +14,20 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding CancelCommand}" Text="CANCEL">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Xmark}" />
+                <FontImageSource
+                    FontFamily="FARegular"
+                    Glyph="{Static const:IconFont.Xmark}"
+                    Color="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
         <ToolbarItem Command="{Binding SaveCommand}" Text="SAVE">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Check}" />
+                <FontImageSource
+                    FontFamily="FARegular"
+                    Glyph="{Static const:IconFont.Check}"
+                    Color="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
