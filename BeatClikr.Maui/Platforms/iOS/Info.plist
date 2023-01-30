@@ -38,5 +38,7 @@
 	<false/>
 	<key>ApplicationVersion</key>
 	<string>2.0.0</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
