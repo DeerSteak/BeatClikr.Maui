@@ -9,10 +9,9 @@ public partial class AppShellViewModel : ObservableObject
 
     private MetronomeClickerViewModel _metronomeClickerViewModel;
 
-    public AppShellViewModel(IAppInfo appInfo, MetronomeClickerViewModel metronomeClickerViewModel)
+    public AppShellViewModel(IAppInfo appInfo)
     {
         VersionInfo = $"Version {appInfo.Version}";
-        _metronomeClickerViewModel = metronomeClickerViewModel;
     }
 
     public void AskFlashlight()

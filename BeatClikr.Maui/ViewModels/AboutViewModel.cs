@@ -6,20 +6,18 @@ namespace BeatClikr.Maui.ViewModels;
 
 public partial class AboutViewModel : ObservableObject
 {
-    private IShellService _pageService;
-    public AboutViewModel(IShellService pageService)
+    [ObservableProperty]
+    private string _year;
+
+    private IAppInfo _appInfo;
+
+    private IShellService _shellService;
+    public AboutViewModel(IShellService shellService, IAppInfo appInfo)
     {
-        _pageService = pageService;
+        _shellService = shellService;
+        _appInfo = appInfo;
+        Year = $"\u00a9{DateTime.Now.Year} Ben Funk";
     }
-
-    [RelayCommand]
-    private async void IconAuthorLabel() => await Browser.OpenAsync("https://www.flaticon.com/authors/freepik");
-
-    [RelayCommand]
-    private async void BulbAuthorLabel() => await Browser.OpenAsync("https://www.flaticon.com/authors/good-ware");
-
-    [RelayCommand]
-    private async void SiteLabel() => await Browser.OpenAsync("https://www.flaticon.com/");
 
     [RelayCommand]
     private async void SendFeedback() => await SendEmail();
@@ -27,7 +25,7 @@ public partial class AboutViewModel : ObservableObject
     private async Task SendEmail()
     {
         string subject = "BeatClikr feedback";
-        string body = $"BeatClikr Version: {VersionTracking.CurrentVersion}\n\r\n\r";
+        string body = $"BeatClikr Version: {_appInfo.Version.ToString()}\n\r\n\r";
         List<string> recipients = new List<string>
         {
             "beatclikr@gmail.com"
@@ -44,11 +42,11 @@ public partial class AboutViewModel : ObservableObject
         }
         catch (FeatureNotSupportedException)
         {
-            await _pageService.DisplayAlert("Email not supported", "Email is not supported or correctly configured on this device. You can still contact us at beatclikr@gmail.com.", "OK");
+            await _shellService.DisplayAlert("Email not supported", "Email is not supported or correctly configured on this device. You can still contact us at beatclikr@gmail.com.", "OK");
         }
         catch (Exception)
         {
-            await _pageService.DisplayAlert("Error sending email", "There was an error setting up email. You can still contact us at beatclikr@gmail.com.", "OK");
+            await _shellService.DisplayAlert("Error sending email", "There was an error setting up email. You can still contact us at beatclikr@gmail.com.", "OK");
         }
     }
 }
