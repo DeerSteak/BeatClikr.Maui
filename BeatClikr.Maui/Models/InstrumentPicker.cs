@@ -20,6 +20,8 @@ public class InstrumentPicker
 
     public static readonly List<InstrumentPicker> Instruments = new List<InstrumentPicker>()
     {
+        new InstrumentPicker { Title = "Click High", FileName = FileNames.ClickHi, IsBeat = true, IsRhythm = true },
+        new InstrumentPicker { Title = "Click Low", FileName = FileNames.ClickLo, IsBeat = true, IsRhythm = true },
         new InstrumentPicker { Title = "Cowbell",FileName = FileNames.Cowbell, IsBeat = true, IsRhythm = true },
         new InstrumentPicker { Title = "Crash 1", FileName = FileNames.CrashL, IsBeat = true, IsRhythm = false },
         new InstrumentPicker { Title = "Crash 2", FileName = FileNames.CrashR, IsBeat = true, IsRhythm = false },
@@ -32,7 +34,7 @@ public class InstrumentPicker
         new InstrumentPicker { Title = "Tambourine", FileName = FileNames.Tamb, IsBeat = true, IsRhythm = true },
         new InstrumentPicker { Title = "Tom High", FileName = FileNames.TomHigh, IsBeat = true, IsRhythm = false },
         new InstrumentPicker { Title = "Tom Low", FileName = FileNames.TomLow, IsBeat = true, IsRhythm = false },
-        new InstrumentPicker { Title = "Tom Middle", FileName = FileNames.TomMid, IsBeat = true, IsRhythm = false }
+        new InstrumentPicker { Title = "Tom Middle", FileName = FileNames.TomMid, IsBeat = true, IsRhythm = false }        
     };
 
     public static InstrumentPicker FromString(string fileName)

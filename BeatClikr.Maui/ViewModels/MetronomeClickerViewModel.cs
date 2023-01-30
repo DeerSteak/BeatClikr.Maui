@@ -146,16 +146,16 @@ public partial class MetronomeClickerViewModel : ObservableObject
         switch (BeatType)
         {
             case ClickerBeatType.Live:
-                rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
-                beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.Kick);
+                rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.ClickLo);
+                beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.ClickHi);
                 break;
             case ClickerBeatType.Rehearsal:
-                rhythm = Preferences.Get(PreferenceKeys.RehearsalRhythm, FileNames.HatClosed);
-                beat = Preferences.Get(PreferenceKeys.RehearsalBeat, FileNames.Kick);
+                rhythm = Preferences.Get(PreferenceKeys.RehearsalRhythm, FileNames.ClickLo);
+                beat = Preferences.Get(PreferenceKeys.RehearsalBeat, FileNames.ClickHi);
                 break;
             default:
-                rhythm = Preferences.Get(PreferenceKeys.InstantRhythm, FileNames.HatClosed);
-                beat = Preferences.Get(PreferenceKeys.InstantBeat, FileNames.Kick);
+                rhythm = Preferences.Get(PreferenceKeys.InstantRhythm, FileNames.ClickLo);
+                beat = Preferences.Get(PreferenceKeys.InstantBeat, FileNames.ClickHi);
                 break;
         }
 

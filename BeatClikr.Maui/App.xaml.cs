@@ -17,22 +17,22 @@ public partial class App : Application
         base.OnStart();
 
         if (!Preferences.ContainsKey(PreferenceKeys.InstantBeat))
-            Preferences.Set(PreferenceKeys.InstantBeat, FileNames.Kick);
+            Preferences.Set(PreferenceKeys.InstantBeat, FileNames.ClickHi);
 
         if (!Preferences.ContainsKey(PreferenceKeys.InstantRhythm))
-            Preferences.Set(PreferenceKeys.InstantRhythm, FileNames.HatClosed);
+            Preferences.Set(PreferenceKeys.InstantRhythm, FileNames.ClickLo);
 
         if (!Preferences.ContainsKey(PreferenceKeys.RehearsalBeat))
-            Preferences.Set(PreferenceKeys.RehearsalBeat, FileNames.Kick);
+            Preferences.Set(PreferenceKeys.RehearsalBeat, FileNames.ClickHi);
 
         if (!Preferences.ContainsKey(PreferenceKeys.RehearsalRhythm))
-            Preferences.Set(PreferenceKeys.RehearsalRhythm, FileNames.HatClosed);
+            Preferences.Set(PreferenceKeys.RehearsalRhythm, FileNames.ClickLo);
 
         if (!Preferences.ContainsKey(PreferenceKeys.LiveBeat))
-            Preferences.Set(PreferenceKeys.LiveBeat, FileNames.Kick);
+            Preferences.Set(PreferenceKeys.LiveBeat, FileNames.ClickHi);
 
         if (!Preferences.ContainsKey(PreferenceKeys.LiveRhythm))
-            Preferences.Set(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
+            Preferences.Set(PreferenceKeys.LiveRhythm, FileNames.ClickLo);
 
         if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
             Preferences.Set(PreferenceKeys.UsePersonalizedAds, true);
