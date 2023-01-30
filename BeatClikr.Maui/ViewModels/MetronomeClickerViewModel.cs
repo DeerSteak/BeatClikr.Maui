@@ -168,7 +168,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
             case SubdivisionEnum.Sixteenth:
                 numSubdivisions = 4;
                 break;
-            default:
+            default: //Quarter note default
                 numSubdivisions = 1;
                 break;
         }
@@ -180,40 +180,12 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
     private async Task FirstTimeFlashlightQuestion()
     {
-        if (!Preferences.ContainsKey(PreferenceKeys.UseFlashlight))
-        {
-            var baseText = "BeatClikr can show the beat using your device's flashlight. Do you want to use that feature?";
-            var androidText = baseText + " You will be asked permission to use your device's camera.";
-            var questionText = DeviceInfo.Platform == DevicePlatform.iOS ? baseText : androidText;
-            var questionResponse = await _shellService.DisplayAlert("Use Flashlight?", questionText, "Yes", "No");
-            Preferences.Set(PreferenceKeys.UseFlashlight, questionResponse);
-        }
-
-        var useFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
-        if (useFlashlight)
-        {
-            await SetupFlashlight();
-        }
+        await PermissionsHelper.FirstTimeFlashlightQuestion();
     }
 
     private async Task SetupFlashlight()
     {
-        var result = await Permissions.CheckStatusAsync<Permissions.Flashlight>();
-        if (result != PermissionStatus.Granted)
-        {
-            var response = await _shellService.DisplayAlert("Flashlight Permission", "BeatClikr can use the flashlight on your device to show the beat. If you'd like to do this, press OK", "OK", "Cancel");
-            if (response)
-            {
-                result = await Permissions.RequestAsync<Permissions.Flashlight>();
-                if (result != PermissionStatus.Granted)
-                {
-                    await _shellService.DisplayAlert("Flashlight Permission Denied", "BeatClikr will not use the flashlight. If you change your mind, you can enable the flashlight again on the Settings page.", "OK");
-                }
-            }
-        }
-
-        var pref = result == PermissionStatus.Granted;
-        Preferences.Set(PreferenceKeys.UseFlashlight, pref);
+        await PermissionsHelper.SetupFlashlight();
     }
 }
 

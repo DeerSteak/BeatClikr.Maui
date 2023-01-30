@@ -5,11 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="SettingsPage"
+    Title="Settings"
     x:DataType="vm:SettingsViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Settings" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.Content>
         <Grid RowDefinitions="*, Auto">
             <ScrollView>

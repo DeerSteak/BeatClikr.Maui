@@ -7,11 +7,11 @@
     xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="LibraryPage"
+    Title="Library"
     x:DataType="vm:LibraryViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Library" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddItemCommand}" Text="ADD">
             <ToolbarItem.IconImageSource>

@@ -8,11 +8,11 @@
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
     xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="RehearsalPage"
+    Title="Rehearsal Playlist"
     x:DataType="vm:RehearsalViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Rehearsal Playlist" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddSongToPlaylistCommand}" Text="ADD">
             <ToolbarItem.IconImageSource>

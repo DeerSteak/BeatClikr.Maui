@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using BeatClikr.Maui.Services.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace BeatClikr.Maui.ViewModels;
@@ -40,10 +41,11 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [ObservableProperty]
     private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
 
-    public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel)
+    public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel, IShellService shellService)
     {
         _subdivision = SubdivisionEnum.Quarter;
         _metronomeClickerViewModel = metronomeClickerViewModel;
+        _shellService = shellService;
 
         BeatsPerMinute = 60;
         SelectedSubdivisionIndex = 0;
@@ -52,6 +54,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
     }
 
     private bool _wasPlaying;
+    private readonly IShellService _shellService;
 
     public void Init()
     {

@@ -6,10 +6,11 @@
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
     xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="Song Details"
     x:DataType="vm:SongDetailsViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Song Details" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding CancelCommand}" Text="CANCEL">
             <ToolbarItem.IconImageSource>

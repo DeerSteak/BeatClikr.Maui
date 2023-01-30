@@ -133,7 +133,7 @@ public class MetronomeService : IMetronomeService
 
         switch (subdivisions)
         {
-            case < 1:
+            case <= 1:
                 _subdivisions = 2;
                 _playSubdivisions = false;
                 break;

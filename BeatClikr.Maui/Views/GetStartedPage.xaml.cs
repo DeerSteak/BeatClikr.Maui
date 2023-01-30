@@ -1,4 +1,6 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using BeatClikr.Maui.Services.Interfaces;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class GetStartedPage : ContentPage
 {
@@ -17,6 +19,7 @@ public partial class GetStartedPage : ContentPage
     private async void Button_Clicked(object sender, EventArgs e)
     {
         Preferences.Set(PreferenceKeys.Onboarded, DateTime.Now);
+        await PermissionsHelper.FirstTimeFlashlightQuestion();
 
         //await Navigation.PopAsync();
         await Navigation.PopModalAsync();

@@ -7,11 +7,11 @@
     xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="LivePage"
+    Title="Live Playlist"
     x:DataType="vm:LiveViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Live Playlist" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddSongToPlaylistCommand}" Text="ADD">
             <ToolbarItem.IconImageSource>
