@@ -12,37 +12,46 @@
     <!--<Shell.TitleView>
         <cc:TitleView Title="Getting Started" />
     </Shell.TitleView>-->
-    <Grid RowDefinitions="*, Auto, Auto, *">
+    <Grid RowDefinitions="*, Auto, Auto, *" RowSpacing="8">
         <CarouselView
             Grid.Row="1"
             HeightRequest="{Binding ImageHeight}"
-            ItemsSource="{Binding CarouselViewItems}"
-            PeekAreaInsets="25">
+            ItemsSource="{Binding CarouselViewItems}">
             <CarouselView.ItemTemplate>
                 <DataTemplate x:DataType="m:CarouselViewItem">
-                    <Frame
-                        Margin="20"
-                        BorderColor="DarkGray"
-                        CornerRadius="5"
-                        HasShadow="True"
-                        HorizontalOptions="Center"
-                        VerticalOptions="CenterAndExpand">
-                        <Frame.Shadow
-                            Brush="Black"
-                            Opacity="0.8"
-                            Radius="40"
-                            Offset="20,20" />
-                        <VerticalStackLayout>
-                            <Image Aspect="AspectFit" Source="{Binding ImageName}" />
-                            <BoxView BackgroundColor="Transparent" HeightRequest="10" />
-                            <Label Text="{Binding Description}" />
-                        </VerticalStackLayout>
-                    </Frame>
+                    <ContentView Padding="16" VerticalOptions="FillAndExpand">
+                        <Frame
+                            Margin="10"
+                            Padding="10"
+                            BorderColor="DarkGray"
+                            CornerRadius="5"
+                            HasShadow="True"
+                            HorizontalOptions="Center"
+                            VerticalOptions="FillAndExpand">
+                            <Frame.Shadow
+                                Brush="Gray"
+                                Opacity="0.5"
+                                Radius="40"
+                                Offset="20,20" />
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Image
+                                    VerticalOptions="StartAndExpand"
+                                    Aspect="AspectFit"
+                                    HeightRequest="{Binding HeightRequest}"
+                                    Source="{Binding ImageName}" />
+                                <BoxView BackgroundColor="Transparent" HeightRequest="10" />
+                                <Label Text="{Binding Description}" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </ContentView>
+
                 </DataTemplate>
             </CarouselView.ItemTemplate>
         </CarouselView>
         <Button
             Grid.Row="2"
+            Margin="16"
             Clicked="Button_Clicked"
             Text="Let's go!" />
     </Grid>

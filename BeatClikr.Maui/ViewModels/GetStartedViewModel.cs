@@ -32,7 +32,9 @@ namespace BeatClikr.Maui.ViewModels
 
         public void SetImageHeight()
         {
-            ImageHeight = (int)(_deviceDisplay.MainDisplayInfo.Height / _deviceDisplay.MainDisplayInfo.Density * 0.67);
+            ImageHeight = (int)(_deviceDisplay.MainDisplayInfo.Height / _deviceDisplay.MainDisplayInfo.Density * 0.75);
+            foreach (var item in CarouselViewItems)
+                item.HeightRequest = (int)((double)ImageHeight * 0.67);
         }
     }
 }
