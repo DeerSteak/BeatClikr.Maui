@@ -19,6 +19,14 @@ public partial class InstantMetronomePage : ContentPage
         (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        var vm = BindingContext as ViewModels.InstantMetronomeViewModel;
+        if (vm.WasPlaying)
+            vm.PlayStopToggledCommand.Execute(null);
+    }
+
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
@@ -33,6 +41,7 @@ public partial class InstantMetronomePage : ContentPage
 
     void Button_Clicked(object sender, EventArgs e)
     {
-        (BindingContext as ViewModels.InstantMetronomeViewModel).PlayStopToggledCommand.Execute(null);
+        var vm = BindingContext as ViewModels.InstantMetronomeViewModel;        
+        vm.PlayStopToggledCommand.Execute(null);
     }
 }

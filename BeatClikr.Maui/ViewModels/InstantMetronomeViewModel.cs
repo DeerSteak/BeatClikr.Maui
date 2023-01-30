@@ -53,6 +53,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
         SetupMetronome();
     }
 
+    [ObservableProperty]
     private bool _wasPlaying;
     private readonly IShellService _shellService;
 
@@ -67,13 +68,13 @@ public partial class InstantMetronomeViewModel : ObservableObject
     private void PlayStopToggled()
     {
         _metronomeClickerViewModel.StartStopCommand.Execute(null);
-        _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+        WasPlaying = _metronomeClickerViewModel.IsPlaying;
     }
 
     [RelayCommand]
     private void SliderDragStarted()
     {
-        _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+        WasPlaying = _metronomeClickerViewModel.IsPlaying;
         _metronomeClickerViewModel.StopCommand.Execute(null);
     }
 
@@ -81,13 +82,13 @@ public partial class InstantMetronomeViewModel : ObservableObject
     private void SliderDragCompleted()
     {
         SetupMetronome();
-        if (_wasPlaying)
+        if (WasPlaying)
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
     }
 
     private void SetupMetronome()
     {
-        _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+        WasPlaying = _metronomeClickerViewModel.IsPlaying;
         _metronomeClickerViewModel.StopCommand.Execute(null);
         var song = new Models.Song()
         {
@@ -98,10 +99,10 @@ public partial class InstantMetronomeViewModel : ObservableObject
             Subdivision = _subdivision
         };
         _metronomeClickerViewModel.SetSongCommand.Execute(song);
-        if (_wasPlaying)
+        if (WasPlaying)
         {
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
-            _wasPlaying = _metronomeClickerViewModel.IsPlaying;
+            WasPlaying = _metronomeClickerViewModel.IsPlaying;
         }
     }
 }

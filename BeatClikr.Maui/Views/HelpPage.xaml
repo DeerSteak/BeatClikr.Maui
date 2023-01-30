@@ -12,108 +12,91 @@
         <ScrollView>
             <StackLayout Padding="16">
                 <Label
+                    Margin="0, 10"
+                    Style="{StaticResource LabelHeader}"
+                    Text="Modes"/>
+                <Label
                     FontAttributes="Bold"
-                    FontSize="Large"
-                    Text="Modes"
-                    TextColor="{StaticResource PrimaryDark}" />
-                <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="Instant"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        FontSize="Medium"
-                        LineBreakMode="WordWrap"
-                        Text="Instant Metronome - set BPM and Groove, then press Play. Adjust tempo on the fly. Have fun!"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="Library"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        FontSize="Medium"
-                        LineBreakMode="WordWrap"
-                        Text="Create a library of your favorite songs to play, and play them from here with a tap. Always alphabetical order."
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="Rehearsal"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        FontSize="Medium"
-                        LineBreakMode="WordWrap"
-                        Text="Create a rehearsal set list. Tap an entry to play it, and order them however you like."
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="Live"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        FontSize="Medium"
-                        LineBreakMode="WordWrap"
-                        Text="Create a live set list, where the sound only counts you off, but the light keeps going. Tap an entry to play it, and order them however you like."
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="Help"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        FontSize="Medium"
-                        LineBreakMode="WordWrap"
-                        Text="Info about the app. Submit feedback directly to the developer, too."
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="About"
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                    <Label
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        FontSize="Medium"
-                        LineBreakMode="WordWrap"
-                        Text="This page."
-                        VerticalOptions="Start"
-                        VerticalTextAlignment="Start" />
-                </Grid>
+                    Style="{StaticResource LabelSubHeader}"
+                    Text="Instant"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />                
+                <Label
+                    FontSize="Medium"
+                    LineBreakMode="WordWrap"
+                    Text="Instant Metronome - set BPM and Groove, then press Play. Adjust tempo on the fly. Have fun!"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <cc:Separator Margin="0, 10" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="Library"
+                    Style="{StaticResource LabelSubHeader}"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <Label
+                    FontSize="Medium"
+                    LineBreakMode="WordWrap"
+                    Text="Create a library of your favorite songs to play, and play them from here with a tap. Always alphabetical order."
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <cc:Separator Margin="0, 10" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="Rehearsal"
+                    Style="{StaticResource LabelSubHeader}"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <Label
+                    FontSize="Medium"
+                    LineBreakMode="WordWrap"
+                    Text="Create a rehearsal set list. Tap an entry to play it, and order them however you like."
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <cc:Separator Margin="0, 10" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="Live"
+                    Style="{StaticResource LabelSubHeader}"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <Label
+                    FontSize="Medium"
+                    LineBreakMode="WordWrap"
+                    Text="Create a live set list, where the sound only counts you off, but the light keeps going. Tap an entry to play it, and order them however you like."
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <cc:Separator Margin="0, 10" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="Help"
+                    Style="{StaticResource LabelSubHeader}"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <Label
+                    FontSize="Medium"
+                    LineBreakMode="WordWrap"
+                    Text="Info about the app. Submit feedback directly to the developer, too."
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <cc:Separator Margin="0, 10" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="About"
+                    Style="{StaticResource LabelSubHeader}"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+                <Label
+                    FontSize="Medium"
+                    LineBreakMode="WordWrap"
+                    Text="This page."
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
