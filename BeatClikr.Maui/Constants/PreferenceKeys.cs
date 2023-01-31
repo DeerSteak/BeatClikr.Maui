@@ -13,4 +13,5 @@ public static class PreferenceKeys
     public const string UseFlashlight = "UseFlashlight";
     public const string AskFlashlight = "AskFlashlight";
     public const string Onboarded = "Onboarded";
+    public const string UseHaptic = "UseHaptic";
 }

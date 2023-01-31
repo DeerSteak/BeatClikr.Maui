@@ -49,6 +49,8 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);
         mauiAppBuilder.Services.AddSingleton(AppInfo.Current);
         mauiAppBuilder.Services.AddSingleton(DeviceDisplay.Current);
+        mauiAppBuilder.Services.AddSingleton(Vibration.Default);
+        mauiAppBuilder.Services.AddSingleton(Flashlight.Default);
         mauiAppBuilder.Services.AddSingleton<IShellService, ShellService>();
         mauiAppBuilder.Services.AddSingleton<IDataService, DataService>();
         mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();

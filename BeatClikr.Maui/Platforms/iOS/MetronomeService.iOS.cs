@@ -1,6 +1,7 @@
 ﻿using AVFoundation;
 using BeatClikr.Maui.Services.Interfaces;
 using Foundation;
+using UIKit;
 
 namespace BeatClikr.Maui.Platforms.iOS;
 
@@ -33,6 +34,9 @@ public class MetronomeService : IMetronomeService
     private bool _useFlashlight = true;
     private bool _previouslySetup = false;
 
+    private bool _useHaptic = false;
+    UIImpactFeedbackGenerator _feedbackGenerator;
+
     public MetronomeService()
     {
         _avAudioEngine = new AVAudioEngine();
@@ -45,6 +49,8 @@ public class MetronomeService : IMetronomeService
     {
         SetBeat(beatFileName, set);
         SetRhythm(rhythmFileName, set);
+        SetFlashlight();
+        SetHaptic();
 
         if (_previouslySetup)
             return;
@@ -202,8 +208,21 @@ public class MetronomeService : IMetronomeService
             _timer.Invalidate();
     }
 
-    public void SetFlashlight(bool useFlashlight)
+    void SetFlashlight()
     {
-        _useFlashlight = useFlashlight;
+        _useFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
+    }
+
+    void SetHaptic()
+    {
+        _useHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
+        if (_useHaptic)
+            _feedbackGenerator = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
+    }
+
+    void Vibrate()
+    {
+        if (_feedbackGenerator != null)
+            _feedbackGenerator.ImpactOccurred();
     }
 }
