@@ -22,9 +22,9 @@
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}" />
         <Setter Property="FontFamily" Value="OpenSansRegular" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="FontSize" Value="Medium" />
         <Setter Property="CornerRadius" Value="8" />
-        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Padding" Value="10,6" />
         <Setter Property="MinimumHeightRequest" Value="36" />
         <Setter Property="MinimumWidthRequest" Value="36" />
         <Setter Property="VisualStateManager.VisualStateGroups">

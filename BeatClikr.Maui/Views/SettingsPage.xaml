@@ -19,7 +19,7 @@
                     <BoxView BackgroundColor="Transparent" HeightRequest="10" />
                     <Grid
                         ColumnDefinitions="*, Auto"
-                        RowDefinitions="Auto, Auto"
+                        RowDefinitions="Auto, Auto, Auto"
                         RowSpacing="6">
                         <Label
                             Grid.Row="0"
@@ -30,6 +30,7 @@
                         <Switch
                             Grid.Row="0"
                             Grid.Column="1"
+                            HorizontalOptions="End"
                             IsToggled="{Binding UseFlashlight}" />
                         <Label
                             Grid.Row="1"
@@ -40,9 +41,24 @@
                         <Switch
                             Grid.Row="1"
                             Grid.Column="1"
+                            HorizontalOptions="End"
                             IsToggled="{Binding GlobalMute}" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            IsVisible="{Binding ShowPersonalizedAdButton}"
+                            Text="Use peronalized ads"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Command="{Binding PersonalizedAdsChangedCommand}"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding ShowPersonalizedAdButton}"
+                            Text="Go To Settings" />
                     </Grid>
-                    <BoxView BackgroundColor="Transparent" HeightRequest="6"/>
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <cc:Separator />
                     <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <Label Style="{StaticResource LabelHeader}" Text="Playback Instruments" />
@@ -58,7 +74,7 @@
                         Title="Groove"
                         ItemsSource="{Binding RhythmInstruments}"
                         SelectedItem="{Binding InstantRhythm}" />
-                    <BoxView BackgroundColor="Transparent" HeightRequest="6"/>
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <cc:Separator />
                     <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <Label Style="{StaticResource LabelSubHeader}" Text="Rehearsal Mode" />
@@ -72,7 +88,7 @@
                         Title="Groove"
                         ItemsSource="{Binding RhythmInstruments}"
                         SelectedItem="{Binding RehearsalRhythm}" />
-                    <BoxView BackgroundColor="Transparent" HeightRequest="6"/>
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <cc:Separator />
                     <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                     <Label Style="{StaticResource LabelSubHeader}" Text="Live Mode" />

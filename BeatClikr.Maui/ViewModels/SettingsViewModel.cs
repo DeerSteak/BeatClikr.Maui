@@ -1,6 +1,7 @@
 ﻿using BeatClikr.Maui.Models;
 using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BeatClikr.Maui.ViewModels;
 
@@ -14,6 +15,9 @@ public partial class SettingsViewModel : ObservableObject
         if (value)
             Task.Run(async () => await PermissionsHelper.SetupFlashlight());
     }
+
+    [ObservableProperty]
+    private bool _showPersonalizedAdButton;
 
     [ObservableProperty]
     bool _globalMute;
@@ -105,14 +109,20 @@ public partial class SettingsViewModel : ObservableObject
     private IFlashlight _flashlight;
     private IVibration _vibration;
     private IShellService _shellService;
+    private IDeviceInfo _deviceInfo;
+    private IAppInfo _appInfo;
 
-    public SettingsViewModel(IFlashlight flashlight, IVibration vibration, IShellService shellService)
+    public SettingsViewModel(IFlashlight flashlight, IVibration vibration, IShellService shellService, IDeviceInfo deviceInfo, IAppInfo appInfo)
     {
-        RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
-        BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();
         _flashlight = flashlight;
         _vibration = vibration;
         _shellService = shellService;
+        _deviceInfo = deviceInfo;
+        _appInfo = appInfo;
+
+        RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
+        BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();        
+        ShowPersonalizedAdButton = _deviceInfo.Platform != DevicePlatform.Android;
     }
 
     public void Init()
@@ -137,6 +147,14 @@ public partial class SettingsViewModel : ObservableObject
 
         UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
         ShowHaptic = _vibration.IsSupported;
+
+        App.SetupAdmob();
+    }
+
+    [RelayCommand]
+    void PersonalizedAdsChanged()
+    {
+        _appInfo.ShowSettingsUI();
     }
 }
 

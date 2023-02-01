@@ -33,23 +33,23 @@ public partial class App : Application
 
         if (!Preferences.ContainsKey(PreferenceKeys.LiveRhythm))
             Preferences.Set(PreferenceKeys.LiveRhythm, FileNames.ClickLo);
-
-        if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
-            Preferences.Set(PreferenceKeys.UsePersonalizedAds, true);
     }
 
-    private void SetupAdmob()
+    public static void SetupAdmob()
     {
-        var useAds = Preferences.Get(PreferenceKeys.UsePersonalizedAds, true);
+        var usePersonalizedAds = true;
+#if IOS 
+        var trackingService = ServiceHelper.GetService<Services.Interfaces.IAdTrackingHandlerService>();
+        usePersonalizedAds = trackingService.AskTrackingPermission().Result;
+#endif
+
 #if IOS || ANDROID
-        CrossMauiMTAdmob.Current.UserPersonalizedAds = useAds;
-        if (useAds)
-            CrossMauiMTAdmob.Current.AdsId = DeviceInfo.Platform == DevicePlatform.iOS
-                ? "ca-app-pub-8377432895177958/7490720167"
-                : "ca-app-pub-8377432895177958/9298625858";
+        CrossMauiMTAdmob.Current.UserPersonalizedAds = usePersonalizedAds;        
+        CrossMauiMTAdmob.Current.AdsId = DeviceInfo.Platform == DevicePlatform.iOS
+            ? "ca-app-pub-8377432895177958/7490720167"
+            : "ca-app-pub-8377432895177958/9298625858";
         CrossMauiMTAdmob.Current.ComplyWithFamilyPolicies = true;
         CrossMauiMTAdmob.Current.UseRestrictedDataProcessing = true;
-        CrossMauiMTAdmob.Current.TestDevices = new List<string>() { };
         CrossMauiMTAdmob.Current.TagForChildDirectedTreatment = MTTagForChildDirectedTreatment.TagForChildDirectedTreatmentUnspecified;
         CrossMauiMTAdmob.Current.TagForUnderAgeOfConsent = MTTagForUnderAgeOfConsent.TagForUnderAgeOfConsentUnspecified;
         CrossMauiMTAdmob.Current.MaxAdContentRating = MTMaxAdContentRating.MaxAdContentRatingG;

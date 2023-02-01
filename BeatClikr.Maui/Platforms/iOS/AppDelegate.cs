@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using AppTrackingTransparency;
+using Foundation;
 using Google.MobileAds;
 using UIKit;
 
@@ -12,10 +13,14 @@ public class AppDelegate : MauiUIApplicationDelegate
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
     {
         MobileAds.SharedInstance?.Start(AdsCompletionHandler);
-
+        
         return base.FinishedLaunching(application, launchOptions);
     }
 
-    private void AdsCompletionHandler(InitializationStatus status) { }
+    private void AdsCompletionHandler(InitializationStatus status)
+    {
+        var trackerService = ServiceHelper.GetService<Services.Interfaces.IAdTrackingHandlerService>();
+        Task.Run(async () => await trackerService?.AskTrackingPermission());
+    }
 }
 

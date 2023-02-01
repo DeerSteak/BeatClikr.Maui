@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>This identifier will be used to deliver personalized ads to you.</string>
+	<string>This identifier will be used to deliver personalized ads to you. You can change this later in Settings.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>UIDeviceFamily</key>
