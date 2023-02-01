@@ -56,6 +56,7 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();
 #if IOS
         mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.iOS.MetronomeService>();
+        mauiAppBuilder.Services.AddSingleton<IAdTrackingHandlerService, Platforms.iOS.AdTrackingHandlerService>();
 #elif ANDROID
         mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.Android.MetronomeService>();
 #endif
