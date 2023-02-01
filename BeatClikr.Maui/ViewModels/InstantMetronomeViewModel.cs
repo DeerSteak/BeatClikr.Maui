@@ -1,6 +1,7 @@
 ﻿using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using BeatClikr.Maui.Models;
 
 namespace BeatClikr.Maui.ViewModels;
 
@@ -41,14 +42,38 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [ObservableProperty]
     private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
 
+    [ObservableProperty]
+    List<InstrumentPicker> _rhythmInstruments;
+
+    [ObservableProperty]
+    List<InstrumentPicker> _beatInstruments;
+
+    [ObservableProperty]
+    private InstrumentPicker _instantBeat;
+    partial void OnInstantBeatChanged(InstrumentPicker value)
+    {
+        Preferences.Set(PreferenceKeys.InstantBeat, value.FileName);
+        SetupMetronome();
+    }
+
+    [ObservableProperty]
+    private InstrumentPicker _instantRhythm;
+    partial void OnInstantRhythmChanged(InstrumentPicker value)
+    {
+        Preferences.Set(PreferenceKeys.InstantRhythm, value.FileName);
+        SetupMetronome();
+    }
+
     public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel, IShellService shellService)
     {
         _subdivision = SubdivisionEnum.Quarter;
         _metronomeClickerViewModel = metronomeClickerViewModel;
         _shellService = shellService;
 
-        BeatsPerMinute = 60;
-        SelectedSubdivisionIndex = 0;
+        BeatsPerMinute = Preferences.Get(PreferenceKeys.InstantBpm, 60);
+        SelectedSubdivisionIndex = Preferences.Get(PreferenceKeys.InstantSelectedSubdivisionIndex, 0);
+        RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
+        BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();
 
         SetupMetronome();
     }
@@ -59,6 +84,12 @@ public partial class InstantMetronomeViewModel : ObservableObject
 
     public void Init()
     {
+        var instantBeatName = Preferences.Get(PreferenceKeys.InstantBeat, FileNames.Kick);
+        InstantBeat = InstrumentPicker.FromString(instantBeatName);
+
+        var instantRhythmName = Preferences.Get(PreferenceKeys.InstantRhythm, FileNames.HatClosed);
+        InstantRhythm = InstrumentPicker.FromString(instantRhythmName);
+
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
         _metronomeClickerViewModel.IsLiveMode = false;
         _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
@@ -72,6 +103,13 @@ public partial class InstantMetronomeViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void Stop()
+    {
+        _metronomeClickerViewModel.StopCommand.Execute(null);
+        WasPlaying = false;
+    }
+
+    [RelayCommand]
     private void SliderDragStarted()
     {
         WasPlaying = _metronomeClickerViewModel.IsPlaying;
@@ -81,9 +119,12 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [RelayCommand]
     private void SliderDragCompleted()
     {
+        Preferences.Set(PreferenceKeys.InstantBpm, BeatsPerMinute);
+        var playing = WasPlaying;
         SetupMetronome();
-        if (WasPlaying)
+        if (playing)
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
+        WasPlaying = _metronomeClickerViewModel.IsPlaying;
     }
 
     private void SetupMetronome()

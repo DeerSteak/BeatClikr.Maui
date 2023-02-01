@@ -8,10 +8,7 @@ public partial class InstantMetronomePage : ContentPage
         InitializeComponent();
     }
 
-    public InstantMetronomePage() : this(ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>())
-    {
-
-    }
+    public InstantMetronomePage() : this(ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>()) { }
 
     protected override void OnAppearing()
     {
@@ -24,7 +21,7 @@ public partial class InstantMetronomePage : ContentPage
         base.OnDisappearing();
         var vm = BindingContext as ViewModels.InstantMetronomeViewModel;
         if (vm.WasPlaying)
-            vm.PlayStopToggledCommand.Execute(null);
+            vm.StopCommand.Execute(null);
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -34,14 +31,5 @@ public partial class InstantMetronomePage : ContentPage
         var onboarded = Preferences.Get(PreferenceKeys.Onboarded, new DateTime(1900, 1, 1));
         if (onboarded < new DateTime(2023, 1, 29))
             Shell.Current.Navigation.PushModalAsync(ServiceHelper.GetService<Views.GetStartedPage>());
-        //MainPage = new NavigationPage(ServiceHelper.GetService<Views.GetStartedPage>());
-        //else
-        //    MainPage = ServiceHelper.GetService<Views.AppShell>();
-    }
-
-    void Button_Clicked(object sender, EventArgs e)
-    {
-        var vm = BindingContext as ViewModels.InstantMetronomeViewModel;        
-        vm.PlayStopToggledCommand.Execute(null);
     }
 }

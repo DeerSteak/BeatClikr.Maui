@@ -55,7 +55,21 @@
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
                     <BoxView HeightRequest="30" />
-                    <Button Clicked="Button_Clicked" Text="Play/Pause" />
+                    <Button Command="{Binding PlayStopToggledCommand}" Text="Play/Pause" />
+                    <BoxView HeightRequest="16" BackgroundColor="Transparent"/>
+                    <cc:Separator />
+                    <BoxView HeightRequest="16" BackgroundColor="Transparent"/>
+                    <Label Text="Beat" />
+                    <Picker
+                        Title="Beat"
+                        ItemsSource="{Binding BeatInstruments}"
+                        SelectedItem="{Binding InstantBeat}" />
+                    <Label Text="Rhythm" />
+                    <Picker
+                        Title="Groove"
+                        ItemsSource="{Binding RhythmInstruments}"
+                        SelectedItem="{Binding InstantRhythm}" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                 </StackLayout>
             </ScrollView>
             <cc:AdMobView Grid.Row="2" />
