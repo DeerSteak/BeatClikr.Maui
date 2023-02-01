@@ -1,4 +1,6 @@
-﻿using BeatClikr.Maui.Services.Interfaces;
+﻿using Android.Media;
+using Android.Preferences;
+using BeatClikr.Maui.Services.Interfaces;
 using Java.Text;
 using Java.Util;
 
@@ -12,11 +14,21 @@ public class MetronomeService : IMetronomeService
     private int _subdivisionLengthInSamples;
     private bool _useFlashlight;
     private const int SAMPLE_RATE = 44100;
-    private Java.Util.Timer _timer;
+    private IDispatcherTimer _timer;
     private int _timerEventCounter;
     private int _beatsPlayed;
     private bool _liveModeStarted;
     private bool _previouslySetup = false;
+
+    private byte[] _beatBuffer;
+    private byte[] _rhythmBuffer;
+
+    private string _beatFilename;
+    private string _rhythmFilename;
+
+    private SoundPool _soundPool;
+    private bool _isPlaying;
+    
 
     public MetronomeService()
     {
@@ -27,25 +39,37 @@ public class MetronomeService : IMetronomeService
         _timerEventCounter = 1;
         _beatsPlayed = 0;
         _liveModeStarted = false;
+        StartTimer();
     }
 
     public void SetBeat(string fileName, string set)
     {
-        //get URI of embedded resource file
-        //Load file 
-        //Create buffer from file
+        WriteFileToCache(fileName, set);
+        _beatFilename = fileName;
     }
 
-    public void SetFlashlight(bool useFlashlight)
-    {
-        _useFlashlight = useFlashlight;
-    }
+    //private byte[] SetBuffer(string fileName, string set)
+    //{
+    //    byte[] bytes;
+    //    using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
+    //    using (MemoryStream memoryStream = new MemoryStream())
+    //    {
+    //        fileStream.CopyTo(memoryStream);
+    //        bytes = memoryStream.GetBuffer();
+    //    }
+
+    //    if (bytes == null)
+    //    {
+    //        throw new NullReferenceException($"Could not read {fileName}.wav into buffer.");
+    //    }
+
+    //    return bytes;
+    //}
 
     public void SetRhythm(string fileName, string set)
     {
-        //get URI of embedded resource file
-        //Load file 
-        //Create buffer from file
+        WriteFileToCache(fileName, set);
+        _rhythmFilename = fileName;
     }
 
     public void SetTempo(int bpm, int subdivisions)
@@ -65,7 +89,7 @@ public class MetronomeService : IMetronomeService
 
         switch (subdivisions)
         {
-            case < 1:
+            case <= 1:
                 _subdivisions = 2;
                 _playSubdivisions = false;
                 break;
@@ -85,6 +109,11 @@ public class MetronomeService : IMetronomeService
     private void StartTimer()
     {
         var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
+
+        _timer = Application.Current.Dispatcher.CreateTimer();
+        _timer.Interval = TimeSpan.FromSeconds(timerIntervalInSamples);
+        _timer.Tick += (s, e) => HandleTimer();
+        _timer.Start();
 
         //_timer = NSTimer.CreateRepeatingScheduledTimer(
         //TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
@@ -110,12 +139,25 @@ public class MetronomeService : IMetronomeService
         SetRhythm(rhythmFileName, set);
         SetTempo(_bpm, _subdivisions);
 
-        if (_previouslySetup)
-            return;
+        if (OperatingSystem.IsAndroidVersionAtLeast(23))
+        {
+            _soundPool = new SoundPool.Builder()
+                .SetMaxStreams(_subdivisions * 2)
+                .SetAudioAttributes(new AudioAttributes.Builder()
+                    .SetFlags(AudioFlags.AudibilityEnforced)
+                    .SetUsage(AudioUsageKind.Media)
+                    .SetContentType(AudioContentType.Sonification)
+                    .Build())
+                .Build();
+            var context = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.ApplicationContext;
+            var res = context.Resources;
 
-        //create audio player
-        //prepare player for streaming
-        //start the audio engine
+            _soundPool.Load(Path.Combine(FileSystem.Current.AppDataDirectory, $"{_beatFilename}.wav"), 1);
+            for (int i = 0; i < _subdivisions * 2; i++)
+            {
+                _soundPool.Load(Path.Combine(FileSystem.Current.AppDataDirectory, $"{_rhythmFilename}.wav"), 1);
+            }
+        }
 
         _previouslySetup = true;
     }
@@ -123,7 +165,7 @@ public class MetronomeService : IMetronomeService
     public void Stop()
     {
         if (_timer != null)
-            _timer.Cancel();
+            _timer.Stop();
     }
 
     private void HandleTimer()
@@ -133,8 +175,11 @@ public class MetronomeService : IMetronomeService
             if (!IMetronomeService.MuteOverride && !_liveModeStarted)
             {
                 //_playerNode.ScheduleBuffer(_beatBuffer, null);
+                _soundPool.Play(_timerEventCounter, 1f, 1f, 1, 0, 1);
             }
-            IMetronomeService.BeatAction();
+            //bright bulb icon and light up flashlight
+            MainThread.BeginInvokeOnMainThread(() =>
+                IMetronomeService.BeatAction());
             Console.WriteLine("Playing beat");
             if (IMetronomeService.LiveMode && !_liveModeStarted)
             {
@@ -147,19 +192,39 @@ public class MetronomeService : IMetronomeService
         {
             if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
             {
-                //_playerNode.ScheduleBuffer(_rhythmBuffer, null);
+                _soundPool.Play(_timerEventCounter, 1f, 1f, 1, 0, 1);
             }
             Console.WriteLine("Playing subdivision");
         }
 
-        if (_timerEventCounter == _subdivisions)
+        else if (!_playSubdivisions || _subdivisions == _timerEventCounter)
         {
-            IMetronomeService.RhythmAction();
+            //dim bulb and turn off flashlight, for example
+            MainThread.BeginInvokeOnMainThread(() => 
+                IMetronomeService.RhythmAction());
         }
 
         _timerEventCounter++;
         if (_timerEventCounter > _subdivisions * 2)
             _timerEventCounter = 1;
+    }
+
+    private void WriteFileToCache(string fileName, string set)
+    {
+        string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, $"{fileName}.wav");
+        if (File.Exists(targetFile))
+            return;
+
+        // Read the source file
+        using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
+        using MemoryStream memoryStream = new MemoryStream();
+        fileStream.CopyTo(memoryStream);
+
+        // Write the file content to the app data directory
+        
+        using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
+        memoryStream.WriteTo(outputStream);
+        outputStream.Close();
     }
 }
 
