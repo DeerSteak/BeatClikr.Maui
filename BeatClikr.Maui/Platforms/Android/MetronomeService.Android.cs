@@ -14,7 +14,7 @@ public class MetronomeService : IMetronomeService
     private int _subdivisionLengthInSamples;
     private bool _useFlashlight;
     private const int SAMPLE_RATE = 44100;
-    private IDispatcherTimer _timer;
+    private Java.Util.Timer _nativeTimer;
     private int _timerEventCounter;
     private int _beatsPlayed;
     private bool _liveModeStarted;
@@ -22,21 +22,25 @@ public class MetronomeService : IMetronomeService
 
     private byte[] _beatBuffer;
     private byte[] _rhythmBuffer;
+    private readonly byte[] _silenceBuffer;
+    private readonly int _minBufferSize;
 
     private string _beatFilename;
     private string _rhythmFilename;
 
-    private SoundPool _soundPool;
     private bool _isPlaying;
-    
+    private AudioTrack _audioTrack;
+    double _timerIntervalInMilliseconds;
 
     public MetronomeService()
     {
+        _silenceBuffer = SetSilenceBuffer();
+        _minBufferSize = AudioTrack.GetMinBufferSize(SAMPLE_RATE, ChannelOut.Stereo, Encoding.Pcm16bit);
     }
 
     public void Play()
     {
-        _timerEventCounter = 1;
+        _timerEventCounter = 0;
         _beatsPlayed = 0;
         _liveModeStarted = false;
         StartTimer();
@@ -44,32 +48,44 @@ public class MetronomeService : IMetronomeService
 
     public void SetBeat(string fileName, string set)
     {
-        WriteFileToCache(fileName, set);
-        _beatFilename = fileName;
+        _beatBuffer = SetBuffer(fileName, set);
     }
-
-    //private byte[] SetBuffer(string fileName, string set)
-    //{
-    //    byte[] bytes;
-    //    using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
-    //    using (MemoryStream memoryStream = new MemoryStream())
-    //    {
-    //        fileStream.CopyTo(memoryStream);
-    //        bytes = memoryStream.GetBuffer();
-    //    }
-
-    //    if (bytes == null)
-    //    {
-    //        throw new NullReferenceException($"Could not read {fileName}.wav into buffer.");
-    //    }
-
-    //    return bytes;
-    //}
 
     public void SetRhythm(string fileName, string set)
     {
-        WriteFileToCache(fileName, set);
-        _rhythmFilename = fileName;
+        _rhythmBuffer = SetBuffer(fileName, set);
+    }
+
+    private byte[] SetBuffer(string fileName, string set)
+    {
+        byte[] bytes;
+        using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            fileStream.CopyTo(memoryStream);
+            var buffer = memoryStream.GetBuffer();
+            if (buffer.Length < _silenceBuffer.Length)
+            {
+                bytes = new byte[_silenceBuffer.Length];
+                Buffer.BlockCopy(buffer, 0, bytes, 0, buffer.Length);
+                Buffer.BlockCopy(_silenceBuffer, 0, bytes, buffer.Length, _silenceBuffer.Length - buffer.Length);
+            }
+            else
+                bytes = buffer;
+        }
+
+        return bytes;
+    }
+
+    private byte[] SetSilenceBuffer()
+    {
+        using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{FileNames.Set1}/{FileNames.Silence}.wav").Result;
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            fileStream.CopyTo(memoryStream);
+            var buffer = memoryStream.GetBuffer();
+            return buffer;
+        }
     }
 
     public void SetTempo(int bpm, int subdivisions)
@@ -102,82 +118,91 @@ public class MetronomeService : IMetronomeService
                 _playSubdivisions = true;
                 break;
         }
-
+        _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions * 2);
         _subdivisionLengthInSamples = (int)((60.0 / (_bpm * _subdivisions)) * SAMPLE_RATE);
     }
 
     private void StartTimer()
     {
-        var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
+        var bytesWritten = _audioTrack.Write(_silenceBuffer, 0, _silenceBuffer.Length, WriteMode.NonBlocking);
+        _audioTrack.Play();
+        _audioTrack.SetVolume(.9f);
 
-        _timer = Application.Current.Dispatcher.CreateTimer();
-        _timer.Interval = TimeSpan.FromSeconds(timerIntervalInSamples);
-        _timer.Tick += (s, e) => HandleTimer();
-        _timer.Start();
+        _nativeTimer = new Java.Util.Timer();
+        var task = new MetronomeTimerTask();
+        task.Action = HandleTimer;
+        var startTime = Java.Lang.JavaSystem.CurrentTimeMillis() + 200;
 
-        //_timer = NSTimer.CreateRepeatingScheduledTimer(
-        //TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
-    }
-    public static Date GetStartTime()
-    {
-        try
-        {
-            var oneSecondFromNow = DateTime.Now.AddSeconds(1);
-            var startTime = oneSecondFromNow.ToString("yyyy-MM-dd:hh:mm:ss");
-            return new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss").Parse(startTime);
-        }
-        catch (ParseException e)
-        {
-            Console.WriteLine(e.Message);
-            return null;
-        }
+        _nativeTimer.ScheduleAtFixedRate(task, new Java.Util.Date(startTime), (long)_timerIntervalInMilliseconds);
     }
 
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
     {
         SetBeat(beatFileName, set);
         SetRhythm(rhythmFileName, set);
-        SetTempo(_bpm, _subdivisions);
+        SetTempo(_bpm, _subdivisions);        
+        _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions * 2);
 
         if (OperatingSystem.IsAndroidVersionAtLeast(23))
-        {
-            _soundPool = new SoundPool.Builder()
-                .SetMaxStreams(_subdivisions * 2)
-                .SetAudioAttributes(new AudioAttributes.Builder()
-                    .SetFlags(AudioFlags.AudibilityEnforced)
-                    .SetUsage(AudioUsageKind.Media)
-                    .SetContentType(AudioContentType.Sonification)
+        {            
+            _audioTrack =  new AudioTrack.Builder()
+                .SetAudioAttributes(GetAudioAttributesBuilder().Build())
+                .SetAudioFormat(new AudioFormat.Builder()
+                    .SetChannelMask(ChannelOut.Stereo)
+                    .SetEncoding(Encoding.Pcm16bit)
+                    .SetSampleRate(SAMPLE_RATE)                        
                     .Build())
+                .SetTransferMode(AudioTrackMode.Stream)
+                .SetBufferSizeInBytes(_minBufferSize)
                 .Build();
-            var context = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.ApplicationContext;
-            var res = context.Resources;
-
-            _soundPool.Load(Path.Combine(FileSystem.Current.AppDataDirectory, $"{_beatFilename}.wav"), 1);
-            for (int i = 0; i < _subdivisions * 2; i++)
-            {
-                _soundPool.Load(Path.Combine(FileSystem.Current.AppDataDirectory, $"{_rhythmFilename}.wav"), 1);
-            }
+            _audioTrack.SetVolume(0);
         }
+    }
 
-        _previouslySetup = true;
+    private static AudioAttributes.Builder GetAudioAttributesBuilder()
+    {
+        var audioAttributesBuilder = new AudioAttributes.Builder()
+            .SetContentType(AudioContentType.Music)
+            .SetFlags(AudioFlags.AudibilityEnforced)
+            .SetUsage(AudioUsageKind.Media);
+
+        if (OperatingSystem.IsAndroidVersionAtLeast(29))
+            audioAttributesBuilder = audioAttributesBuilder
+                .SetAllowedCapturePolicy(CapturePolicies.ByAll)
+                .SetHapticChannelsMuted(false);
+
+        if (OperatingSystem.IsAndroidVersionAtLeast(32))
+            audioAttributesBuilder = audioAttributesBuilder
+                .SetIsContentSpatialized(false)
+                .SetSpatializationBehavior((int)AudioSpatializationBehavior.Never);
+
+        return audioAttributesBuilder;
     }
 
     public void Stop()
     {
-        if (_timer != null)
-            _timer.Stop();
+        _nativeTimer?.Cancel();
+
+        if (_audioTrack?.PlayState == PlayState.Playing)
+        {
+            _audioTrack.Pause();
+            _audioTrack.Flush();
+            _audioTrack.Stop();
+        }
     }
 
     private void HandleTimer()
     {
+        _audioTrack.SetVolume(0.9F);
+
+        //do all the beat stuff. 
         if (_timerEventCounter == 1)
         {
-            if (!IMetronomeService.MuteOverride && !_liveModeStarted)
+            if (!IMetronomeService.MuteOverride
+                && !_liveModeStarted)
             {
-                //_playerNode.ScheduleBuffer(_beatBuffer, null);
-                _soundPool.Play(_timerEventCounter, 1f, 1f, 1, 0, 1);
+                _audioTrack.Write(_beatBuffer, 0, _beatBuffer.Length, WriteMode.NonBlocking);
             }
-            //bright bulb icon and light up flashlight
             MainThread.BeginInvokeOnMainThread(() =>
                 IMetronomeService.BeatAction());
             Console.WriteLine("Playing beat");
@@ -188,16 +213,22 @@ public class MetronomeService : IMetronomeService
                     _liveModeStarted = true;
             }
         }
+        //if it's time to play a rhythm sound
         else if (_timerEventCounter % 2 == 1)
         {
-            if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
+            if (!IMetronomeService.MuteOverride
+                && _playSubdivisions
+                && !_liveModeStarted)
             {
-                _soundPool.Play(_timerEventCounter, 1f, 1f, 1, 0, 1);
-            }
-            Console.WriteLine("Playing subdivision");
-        }
+                _audioTrack.Write(_rhythmBuffer, 0, _rhythmBuffer.Length, WriteMode.NonBlocking);
+            }            
 
-        else if (!_playSubdivisions || _subdivisions == _timerEventCounter)
+            Console.WriteLine("Playing subdivision");
+        }        
+
+        //when it's time to put the visual effects to rest
+        if ((!_playSubdivisions && _timerEventCounter > 1)
+            || (_playSubdivisions && _subdivisions + 1 == _timerEventCounter))
         {
             //dim bulb and turn off flashlight, for example
             MainThread.BeginInvokeOnMainThread(() => 
@@ -207,24 +238,15 @@ public class MetronomeService : IMetronomeService
         _timerEventCounter++;
         if (_timerEventCounter > _subdivisions * 2)
             _timerEventCounter = 1;
-    }
+    }    
+}
 
-    private void WriteFileToCache(string fileName, string set)
+public class MetronomeTimerTask : TimerTask
+{
+    public Action Action;
+    public override void Run()
     {
-        string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, $"{fileName}.wav");
-        if (File.Exists(targetFile))
-            return;
-
-        // Read the source file
-        using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
-        using MemoryStream memoryStream = new MemoryStream();
-        fileStream.CopyTo(memoryStream);
-
-        // Write the file content to the app data directory
-        
-        using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
-        memoryStream.WriteTo(outputStream);
-        outputStream.Close();
+        Action();
     }
 }
 

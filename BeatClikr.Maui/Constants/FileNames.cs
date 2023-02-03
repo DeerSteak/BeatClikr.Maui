@@ -12,6 +12,7 @@ public static class FileNames
     public const string Kick = "kick";
     public const string Ride = "ride";
     public const string RideBell = "ridebell";
+    public const string Silence = "silence";
     public const string Snare = "snare";
     public const string Tamb = "tamb";
     public const string TomHigh = "tomhi";
@@ -19,4 +20,5 @@ public static class FileNames
     public const string TomMid = "tommid";
     public const string Set1 = "set-1";
     public const string Set2 = "set-2";
+
 }

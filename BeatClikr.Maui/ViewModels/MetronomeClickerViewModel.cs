@@ -176,9 +176,8 @@ public partial class MetronomeClickerViewModel : ObservableObject
                 break;
         }
 
-        _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
-
         _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
+        _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
     }
 
     private async Task FirstTimeFlashlightQuestion()

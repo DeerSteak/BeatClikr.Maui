@@ -98,6 +98,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [RelayCommand]
     private void PlayStopToggled()
     {
+        SetupMetronome();
         _metronomeClickerViewModel.StartStopCommand.Execute(null);
         WasPlaying = _metronomeClickerViewModel.IsPlaying;
     }
@@ -105,7 +106,8 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [RelayCommand]
     private void Stop()
     {
-        _metronomeClickerViewModel.StopCommand.Execute(null);
+        if (_metronomeClickerViewModel.IsPlaying)
+            _metronomeClickerViewModel.StopCommand.Execute(null);
         WasPlaying = false;
     }
 
@@ -113,7 +115,8 @@ public partial class InstantMetronomeViewModel : ObservableObject
     private void SliderDragStarted()
     {
         WasPlaying = _metronomeClickerViewModel.IsPlaying;
-        _metronomeClickerViewModel.StopCommand.Execute(null);
+        if (_metronomeClickerViewModel.IsPlaying)
+            _metronomeClickerViewModel.StopCommand.Execute(null);
     }
 
     [RelayCommand]
