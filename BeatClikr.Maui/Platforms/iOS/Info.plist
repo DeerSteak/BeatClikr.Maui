@@ -38,8 +38,6 @@
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>ApplicationVersion</key>
-	<string>2.0.0</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>SKAdNetworkItems</key>
