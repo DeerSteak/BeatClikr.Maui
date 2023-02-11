@@ -14,6 +14,7 @@ public class MetronomeService : IMetronomeService
     private int _subdivisionLengthInSamples;
     private bool _useFlashlight;
     private const int SAMPLE_RATE = 44100;
+    private const int WAV_BUFFER_OFFSET = 44;
     private Java.Util.Timer _nativeTimer;
     private int _timerEventCounter;
     private int _beatsPlayed;
@@ -66,12 +67,15 @@ public class MetronomeService : IMetronomeService
             var buffer = memoryStream.GetBuffer();
             if (buffer.Length < _silenceBuffer.Length)
             {
-                bytes = new byte[_silenceBuffer.Length];
-                Buffer.BlockCopy(buffer, 0, bytes, 0, buffer.Length);
-                Buffer.BlockCopy(_silenceBuffer, 0, bytes, buffer.Length, _silenceBuffer.Length - buffer.Length);
+                bytes = new byte[_silenceBuffer.Length - WAV_BUFFER_OFFSET - WAV_BUFFER_OFFSET];
+                Buffer.BlockCopy(buffer, WAV_BUFFER_OFFSET, bytes, 0, buffer.Length - WAV_BUFFER_OFFSET);
+                Buffer.BlockCopy(_silenceBuffer, WAV_BUFFER_OFFSET, bytes, buffer.Length - WAV_BUFFER_OFFSET, _silenceBuffer.Length - buffer.Length - 44);
             }
             else
-                bytes = buffer;
+            {
+                bytes = new byte[buffer.Length - WAV_BUFFER_OFFSET];
+                Buffer.BlockCopy(buffer, WAV_BUFFER_OFFSET, bytes, 0, buffer.Length - WAV_BUFFER_OFFSET);
+            }
         }
 
         return bytes;
