@@ -9,16 +9,17 @@
         <Grid Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Image
-                x:Name="BeatBox"
+            <Label
                 Grid.Column="1"
                 Margin="8"
-                HeightRequest="90"
+                FontSize="90"
+                FontFamily="FARegular"
                 HorizontalOptions="Center"
-                Source="{Binding BeatBox}" />
+                TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                Text="{Binding BeatBox}" />
         </Grid>
     </ContentView.Content>
 </ContentView>

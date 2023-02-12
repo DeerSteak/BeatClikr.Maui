@@ -8,8 +8,8 @@ namespace BeatClikr.Maui.ViewModels;
 public partial class MetronomeClickerViewModel : ObservableObject
 {
     private IShellService _shellService;
-    private readonly ImageSource _bulbDim;
-    private readonly ImageSource _bulbLit;
+    private readonly string _bulbDim;
+    private readonly string _bulbLit;
     private IMetronomeService _metronome;
 
     [ObservableProperty]
@@ -23,7 +23,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ImageSource _beatBox;
+    private string _beatBox;
 
     [ObservableProperty]
     private bool _muteOverride;
@@ -63,21 +63,9 @@ public partial class MetronomeClickerViewModel : ObservableObject
         MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
         UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, true);
 
-        _bulbDim = new FontImageSource()
-        {
-            FontFamily = "FARegular",
-            Glyph = Constants.IconFont.Lightbulb,
-            Color = appInfo.RequestedTheme == AppTheme.Dark ? Color.FromArgb("#FAFAFA") : Color.FromArgb("#212121"),
-            Size = 90
-        };
+        _bulbDim = Constants.IconFont.Lightbulb;
 
-        _bulbLit = new FontImageSource()
-        {
-            FontFamily = "FARegular",
-            Glyph = Constants.IconFont.LightbulbOn,
-            Color = appInfo.RequestedTheme == AppTheme.Dark ? Color.FromArgb("#FAFAFA") : Color.FromArgb("#212121"),
-            Size = 90
-        };
+        _bulbLit = Constants.IconFont.LightbulbOn;
 
         BeatBox = _bulbDim;
         Song = new Song();
