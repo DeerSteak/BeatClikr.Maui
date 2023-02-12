@@ -128,6 +128,7 @@ public class MetronomeService : IMetronomeService
 
     private void StartTimer()
     {
+        _audioTrack.SetVolume(0);
         var bytesWritten = _audioTrack.Write(_silenceBuffer, 0, _silenceBuffer.Length, WriteMode.NonBlocking);
         _audioTrack.Play();
         _audioTrack.SetVolume(.9f);
@@ -137,7 +138,7 @@ public class MetronomeService : IMetronomeService
         task.Action = HandleTimer;
         var startTime = Java.Lang.JavaSystem.CurrentTimeMillis() + 200;
 
-        _nativeTimer.ScheduleAtFixedRate(task, new Java.Util.Date(startTime), (long)_timerIntervalInMilliseconds);
+        _nativeTimer.Schedule(task, 0, (long)_timerIntervalInMilliseconds);
     }
 
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
@@ -189,6 +190,7 @@ public class MetronomeService : IMetronomeService
 
         if (_audioTrack?.PlayState == PlayState.Playing)
         {
+            _audioTrack.SetVolume(0);
             _audioTrack.Pause();
             _audioTrack.Flush();
             _audioTrack.Stop();
@@ -197,8 +199,6 @@ public class MetronomeService : IMetronomeService
 
     private void HandleTimer()
     {
-        _audioTrack.SetVolume(0.9F);
-
         //do all the beat stuff. 
         if (_timerEventCounter == 1)
         {
