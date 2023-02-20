@@ -178,6 +178,8 @@ public class MetronomeService : IMetronomeService
         {
             if (!IMetronomeService.MuteOverride && !_liveModeStarted)
                 _playerNode.ScheduleBuffer(_beatBuffer, null);
+            if (_useHaptic)
+                Vibrate();
             IMetronomeService.BeatAction();
             if (IMetronomeService.LiveMode && !_liveModeStarted)
             {
@@ -186,16 +188,20 @@ public class MetronomeService : IMetronomeService
                     _liveModeStarted = true;
             }
         }
-        else if (_timerEventCounter % 2 == 1)
+        else if (_subdivisions == 2)
+        {
+            //no playing rhythm, but need to turn off light and stuff
+            IMetronomeService.RhythmAction();
+            if (_useHaptic)
+                Vibrate();
+        }
+        else if (_timerEventCounter % 2 == 1) //subdivision
         {
             if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
                 _playerNode.ScheduleBuffer(_rhythmBuffer, null);
-        }
-
-        if (_timerEventCounter == _subdivisions)
-        {
-            IMetronomeService.RhythmAction();
-        }
+            if (_useHaptic)
+                Vibrate();
+        }        
 
         _timerEventCounter++;
         if (_timerEventCounter > _subdivisions * 2)
@@ -224,5 +230,11 @@ public class MetronomeService : IMetronomeService
     {
         if (_feedbackGenerator != null)
             _feedbackGenerator.ImpactOccurred();
+    }
+
+    public void SetVibration(bool enabled)
+    {
+        _useHaptic = enabled;
+        SetHaptic();
     }
 }

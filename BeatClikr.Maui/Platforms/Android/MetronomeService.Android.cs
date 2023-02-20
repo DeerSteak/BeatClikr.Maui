@@ -3,6 +3,7 @@ using Android.Preferences;
 using BeatClikr.Maui.Services.Interfaces;
 using Java.Text;
 using Java.Util;
+using Java.Util.Concurrent;
 
 namespace BeatClikr.Maui.Platforms.Android;
 
@@ -15,7 +16,7 @@ public class MetronomeService : IMetronomeService
     private bool _useFlashlight;
     private const int SAMPLE_RATE = 44100;
     private const int WAV_BUFFER_OFFSET = 44;
-    private Java.Util.Timer _nativeTimer;
+    private ScheduledThreadPoolExecutor _timer;
     private int _timerEventCounter;
     private int _beatsPlayed;
     private bool _liveModeStarted;
@@ -23,7 +24,7 @@ public class MetronomeService : IMetronomeService
 
     private byte[] _beatBuffer;
     private byte[] _rhythmBuffer;
-    private readonly byte[] _silenceBuffer;
+    private readonly static byte[] _silenceBuffer = SetSilenceBuffer();
     private readonly int _minBufferSize;
 
     private string _beatFilename;
@@ -35,7 +36,6 @@ public class MetronomeService : IMetronomeService
 
     public MetronomeService()
     {
-        _silenceBuffer = SetSilenceBuffer();
         _minBufferSize = AudioTrack.GetMinBufferSize(SAMPLE_RATE, ChannelOut.Stereo, Encoding.Pcm16bit);
     }
 
@@ -57,7 +57,7 @@ public class MetronomeService : IMetronomeService
         _rhythmBuffer = SetBuffer(fileName, set);
     }
 
-    private byte[] SetBuffer(string fileName, string set)
+    private static byte[] SetBuffer(string fileName, string set)
     {
         byte[] bytes;
         using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
@@ -81,7 +81,7 @@ public class MetronomeService : IMetronomeService
         return bytes;
     }
 
-    private byte[] SetSilenceBuffer()
+    private static byte[] SetSilenceBuffer()
     {
         using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{FileNames.Set1}/{FileNames.Silence}.wav").Result;
         using (MemoryStream memoryStream = new MemoryStream())
@@ -133,12 +133,11 @@ public class MetronomeService : IMetronomeService
         _audioTrack.Play();
         _audioTrack.SetVolume(.9f);
 
-        _nativeTimer = new Java.Util.Timer();
         var task = new MetronomeTimerTask();
         task.Action = HandleTimer;
-        var startTime = Java.Lang.JavaSystem.CurrentTimeMillis() + 200;
 
-        _nativeTimer.Schedule(task, 0, (long)_timerIntervalInMilliseconds);
+        _timer = new ScheduledThreadPoolExecutor(_subdivisions);
+        _timer.ScheduleAtFixedRate(task, 0, (long)_timerIntervalInMilliseconds, TimeUnit.Milliseconds);        
     }
 
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
@@ -186,7 +185,7 @@ public class MetronomeService : IMetronomeService
 
     public void Stop()
     {
-        _nativeTimer?.Cancel();
+        _timer?.ShutdownNow();
 
         if (_audioTrack?.PlayState == PlayState.Playing)
         {
@@ -242,7 +241,12 @@ public class MetronomeService : IMetronomeService
         _timerEventCounter++;
         if (_timerEventCounter > _subdivisions * 2)
             _timerEventCounter = 1;
-    }    
+    }
+
+    public void SetVibration(bool enabled)
+    {
+        //TODO :
+    }
 }
 
 public class MetronomeTimerTask : TimerTask

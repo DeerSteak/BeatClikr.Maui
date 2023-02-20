@@ -55,6 +55,7 @@ public partial class SettingsViewModel : ObservableObject
 
             UseHaptic = result == PermissionStatus.Granted;
         }
+        Preferences.Set(PreferenceKeys.UseHaptic, value);
     }
 
     [ObservableProperty]
