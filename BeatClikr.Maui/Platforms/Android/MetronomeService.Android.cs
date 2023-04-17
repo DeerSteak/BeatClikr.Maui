@@ -32,7 +32,7 @@ public class MetronomeService : IMetronomeService
 
     private bool _isPlaying;
     private AudioTrack _audioTrack;
-    double _timerIntervalInMilliseconds;
+    double _subdivisionLengthInMilliseconds;
 
     public MetronomeService()
     {
@@ -122,8 +122,8 @@ public class MetronomeService : IMetronomeService
                 _playSubdivisions = true;
                 break;
         }
-        _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions * 2);
-        _subdivisionLengthInSamples = (int)((60.0 / (_bpm * _subdivisions)) * SAMPLE_RATE);
+        _subdivisionLengthInMilliseconds = (60.0 / (_bpm * _subdivisions)) * 1000;
+        _subdivisionLengthInSamples = (int)(_subdivisionLengthInMilliseconds * SAMPLE_RATE / 1000D);
     }
 
     private void StartTimer()
@@ -137,7 +137,7 @@ public class MetronomeService : IMetronomeService
         task.Action = HandleTimer;
 
         _timer = new ScheduledThreadPoolExecutor(_subdivisions);
-        _timer.ScheduleAtFixedRate(task, 0, (long)_timerIntervalInMilliseconds, TimeUnit.Milliseconds);        
+        _timer.ScheduleAtFixedRate(task, 0, (long)(_subdivisionLengthInMilliseconds / 2), TimeUnit.Milliseconds);        
     }
 
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
@@ -145,11 +145,11 @@ public class MetronomeService : IMetronomeService
         SetBeat(beatFileName, set);
         SetRhythm(rhythmFileName, set);
         SetTempo(_bpm, _subdivisions);        
-        _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions * 2);
+        _subdivisionLengthInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
 
         if (OperatingSystem.IsAndroidVersionAtLeast(23))
         {            
-            _audioTrack =  new AudioTrack.Builder()
+            _audioTrack = new AudioTrack.Builder()
                 .SetAudioAttributes(GetAudioAttributesBuilder().Build())
                 .SetAudioFormat(new AudioFormat.Builder()
                     .SetChannelMask(ChannelOut.Stereo)
@@ -246,6 +246,11 @@ public class MetronomeService : IMetronomeService
     public void SetVibration(bool enabled)
     {
         //TODO :
+    }
+
+    public double GetMillisecondsPerBeat()
+    {
+        throw new NotImplementedException();
     }
 }
 

@@ -21,6 +21,7 @@ public class MetronomeService : IMetronomeService
     private int _subdivisions = 1;
 
     private int _subdivisionLengthInSamples;
+    private double _subdivisionLengthInMilliseconds;
     private const double SAMPLE_RATE = 44100;
 
     private readonly AVAudioEngine _avAudioEngine;
@@ -152,7 +153,8 @@ public class MetronomeService : IMetronomeService
                 break;
         }
 
-        _subdivisionLengthInSamples = (int)((60.0 / (_bpm * _subdivisions)) * SAMPLE_RATE);
+        _subdivisionLengthInMilliseconds = (60.0 / (_bpm * _subdivisions)) * 1000;
+        _subdivisionLengthInSamples = (int)(_subdivisionLengthInMilliseconds * SAMPLE_RATE / 1000D);
     }
 
     public void Play()
@@ -167,9 +169,8 @@ public class MetronomeService : IMetronomeService
 
     private void StartTimer()
     {
-        var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
         _timer = NSTimer.CreateRepeatingScheduledTimer(
-            TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
+            TimeSpan.FromMilliseconds(_subdivisionLengthInMilliseconds), (timer) => HandleTimer());
     }
 
     private void HandleTimer()
@@ -188,23 +189,17 @@ public class MetronomeService : IMetronomeService
                     _liveModeStarted = true;
             }
         }
-        else if (_subdivisions == 2)
-        {
-            //no playing rhythm, but need to turn off light and stuff
-            IMetronomeService.RhythmAction();
-            if (_useHaptic)
-                Vibrate();
-        }
-        else if (_timerEventCounter % 2 == 1) //subdivision
+        else 
         {
             if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
                 _playerNode.ScheduleBuffer(_rhythmBuffer, null);
+            IMetronomeService.RhythmAction();
             if (_useHaptic)
                 Vibrate();
         }        
 
         _timerEventCounter++;
-        if (_timerEventCounter > _subdivisions * 2)
+        if (_timerEventCounter > _subdivisions)
             _timerEventCounter = 1;
     }
 
@@ -236,5 +231,15 @@ public class MetronomeService : IMetronomeService
     {
         _useHaptic = enabled;
         SetHaptic();
+    }
+
+    public double GetMillisecondsPerBeat()
+    {
+        return _subdivisionLengthInMilliseconds * _subdivisions;
+    }
+
+    public void Dispose()
+    {
+        throw new NotImplementedException();
     }
 }

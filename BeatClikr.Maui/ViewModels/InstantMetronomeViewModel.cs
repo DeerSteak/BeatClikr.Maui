@@ -114,6 +114,11 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [RelayCommand]
     private void SliderDragStarted()
     {
+        WillChangeBpm();
+    }
+
+    private void WillChangeBpm()
+    {
         WasPlaying = _metronomeClickerViewModel.IsPlaying;
         if (_metronomeClickerViewModel.IsPlaying)
             _metronomeClickerViewModel.StopCommand.Execute(null);
@@ -122,12 +127,30 @@ public partial class InstantMetronomeViewModel : ObservableObject
     [RelayCommand]
     private void SliderDragCompleted()
     {
+        DidChangeBpm();
+    }
+
+    private void DidChangeBpm()
+    {
         Preferences.Set(PreferenceKeys.InstantBpm, BeatsPerMinute);
         var playing = WasPlaying;
         SetupMetronome();
         if (playing)
             _metronomeClickerViewModel.StartStopCommand.Execute(null);
         WasPlaying = _metronomeClickerViewModel.IsPlaying;
+    }
+
+    [RelayCommand]
+    private void BpmPlusOne() => ButtonChanged(+1);
+
+    [RelayCommand]
+    private void BpmMinusOne() => ButtonChanged(-1);
+
+    private void ButtonChanged(int amount)
+    {
+        WillChangeBpm();
+        BeatsPerMinute += amount;
+        DidChangeBpm();
     }
 
     private void SetupMetronome()
