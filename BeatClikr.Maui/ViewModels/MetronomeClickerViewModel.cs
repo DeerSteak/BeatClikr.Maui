@@ -177,5 +177,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     {
         await PermissionsHelper.SetupFlashlight();
     }
+
+    public double GetMillisecondsPerBeat() => _metronome.GetMillisecondsPerBeat();
 }
 
