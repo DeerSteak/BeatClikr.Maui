@@ -13,5 +13,6 @@ public interface IMetronomeService
     static bool LiveMode;
     static bool MuteOverride;
     static int BeatsPerMeasure = 4;
+    double GetMillisecondsPerBeat();
 }
 

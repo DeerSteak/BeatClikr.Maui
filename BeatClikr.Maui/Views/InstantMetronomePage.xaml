@@ -25,40 +25,54 @@
                         ItemsSource="{Binding Subdivisions}"
                         SelectedIndex="{Binding SelectedSubdivisionIndex}" />
                     <BoxView HeightRequest="30" />
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                    <Grid ColumnDefinitions="*,*,2*,*,*" RowDefinitions="Auto,Auto">
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Command="{Binding BpmMinusOneCommand}"
+                            HorizontalOptions="Fill"
+                            Text="-1">
+                        </Button>
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            Command="{Binding BpmPlusOneCommand}"
+                            HorizontalOptions="Fill"
+                            Text="+1">
+                        </Button>
                         <StackLayout
                             Grid.Row="0"
+                            Grid.Column="2"
                             HorizontalOptions="CenterAndExpand"
                             Orientation="Horizontal"
                             Spacing="6">
                             <Label
-                                FontSize="Medium"
+                                FontSize="Large"
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center"
-                                Text="{Binding BeatsPerMinute}" />
+                                Text="{Binding BeatsPerMinute}"
+                                VerticalOptions="Center" />
                             <Label
-                                FontSize="Medium"
+                                FontSize="Large"
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center"
-                                Text="BPM" />
+                                Text="BPM"
+                                VerticalOptions="Center" />
                         </StackLayout>
                         <Slider
                             Grid.Row="1"
+                            Grid.ColumnSpan="5"
                             DragCompletedCommand="{Binding SliderDragCompletedCommand}"
                             DragStartedCommand="{Binding SliderDragStartedCommand}"
-                            Maximum="240"
+                            Maximum="180"
                             Minimum="30"
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
                     <BoxView HeightRequest="30" />
                     <Button Command="{Binding PlayStopToggledCommand}" Text="Play/Pause" />
-                    <BoxView HeightRequest="16" BackgroundColor="Transparent"/>
-                    <cc:Separator />
-                    <BoxView HeightRequest="16" BackgroundColor="Transparent"/>
+                    <BoxView BackgroundColor="Transparent" HeightRequest="16" />
+                    <!--<cc:Separator />-->
+                    <BoxView BackgroundColor="Transparent" HeightRequest="16" />
                     <Label Text="Beat" />
                     <Picker
                         Title="Beat"
