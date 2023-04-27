@@ -20,7 +20,7 @@
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.3.0</ApplicationDisplayVersion>
-		<ApplicationVersion>2023042701</ApplicationVersion>
+		<ApplicationVersion>2023042702</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.4</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
@@ -42,9 +42,6 @@
 	  <CreatePackage>false</CreatePackage>
 	  <ArchiveOnBuild>true</ArchiveOnBuild>
 	  <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-	  <CodesignProvision>Automatic</CodesignProvision>
-	  <CodesignKey>iPhone Distribution</CodesignKey>
-	  <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
