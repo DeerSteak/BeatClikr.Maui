@@ -6,6 +6,7 @@ public partial class SettingsPage : ContentPage
     {
         InitializeComponent();
         BindingContext = settingsViewModel;
+        AdView.AdsId = DeviceInfo.Platform == DevicePlatform.Android ? "ca-app-pub-8377432895177958/3979175164" : "ca-app-pub-8377432895177958/5175872615";
     }
 
     protected override void OnAppearing()

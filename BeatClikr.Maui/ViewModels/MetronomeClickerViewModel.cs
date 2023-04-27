@@ -86,6 +86,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
   private void BeatAction()
   {
+    if (Animate != null)
         Animate();
     BeatBox = _bulbLit;
     if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
@@ -180,7 +181,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
     _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
     if (SetBeatMilliseconds != null)
-      SetBeatMilliseconds((uint)(60000 / Song.BeatsPerMinute));
+      SetBeatMilliseconds((uint)(_metronome.GetMillisecondsPerBeat()));
   }
 }
 

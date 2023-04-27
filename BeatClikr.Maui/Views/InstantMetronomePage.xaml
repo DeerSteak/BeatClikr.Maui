@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
     Title="Instant Metronome"
     x:DataType="vm:InstantMetronomeViewModel">
     <!--<Shell.TitleView>
@@ -86,7 +87,8 @@
                     <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                 </StackLayout>
             </ScrollView>
-            <cc:AdMobView Grid.Row="2" />
+            <!--<cc:AdMobView Grid.Row="2" />-->
+            <mt:MTAdView x:Name="AdView" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

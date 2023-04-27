@@ -6,6 +6,7 @@ public partial class InstantMetronomePage : ContentPage
     {
         BindingContext = metronomeViewModel;
         InitializeComponent();
+        AdView.AdsId = DeviceInfo.Platform == DevicePlatform.Android ? "ca-app-pub-8377432895177958/9298625858" : "ca-app-pub-8377432895177958/7490720167";
     }
 
     public InstantMetronomePage() : this(ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>()) { }

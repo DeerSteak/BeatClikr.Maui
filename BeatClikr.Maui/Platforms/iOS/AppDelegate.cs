@@ -12,8 +12,12 @@ public class AppDelegate : MauiUIApplicationDelegate
 
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
     {
-        MobileAds.SharedInstance?.Start(AdsCompletionHandler);
+        var testId = "F8BB1C28-BAE8-11D6-9C31-00039315CD46";
         
+        MobileAds.SharedInstance.RequestConfiguration.TestDeviceIdentifiers = new string[] { testId };
+
+        MobileAds.SharedInstance.Start(AdsCompletionHandler);
+
         return base.FinishedLaunching(application, launchOptions);
     }
 
