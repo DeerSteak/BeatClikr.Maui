@@ -88,7 +88,7 @@
                 </StackLayout>
             </ScrollView>
             <!--<cc:AdMobView Grid.Row="2" />-->
-            <mt:MTAdView x:Name="AdView" />
+            <mt:MTAdView x:Name="AdView" Grid.Row="2" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>
