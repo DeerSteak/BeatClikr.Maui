@@ -8,7 +8,6 @@ public interface IMetronomeService
     void SetBeat(string fileName, string set);
     void SetRhythm(string fileName, string set);
     void SetupMetronome(string beatFileName, string rhythmFileName, string set);
-    void SetVibration(bool enabled);
     static Action BeatAction;
     static Action RhythmAction;
     static bool LiveMode;

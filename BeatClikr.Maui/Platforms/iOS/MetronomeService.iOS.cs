@@ -35,7 +35,10 @@ public class MetronomeService : IMetronomeService
     private bool _previouslySetup = false;
 
     private bool _useHaptic = false;
-    UIImpactFeedbackGenerator _feedbackGenerator;
+    UIImpactFeedbackGenerator _beatGenerator;
+    UIImpactFeedbackGenerator _rhythmGenerator;
+
+    AVCaptureDevice _device;
 
     public MetronomeService()
     {
@@ -43,13 +46,14 @@ public class MetronomeService : IMetronomeService
         SetTempo(_bpm, _subdivisions);
         _playerNode = new AVAudioPlayerNode();
         _avAudioEngine.AttachNode(_playerNode);
+        _device = AVCaptureDevice.GetDefaultDevice(AVMediaTypes.Video);
     }
 
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
     {
         SetBeat(beatFileName, set);
         SetRhythm(rhythmFileName, set);
-        SetFlashlight();
+        SetUseFlashlight();
         SetHaptic();
 
         if (_previouslySetup)
@@ -167,7 +171,7 @@ public class MetronomeService : IMetronomeService
 
     private void StartTimer()
     {
-        var timerIntervalInSamples = 0.5 * _subdivisionLengthInSamples / SAMPLE_RATE;
+        var timerIntervalInSamples = _subdivisionLengthInSamples / SAMPLE_RATE;
         _timer = NSTimer.CreateRepeatingScheduledTimer(
             TimeSpan.FromSeconds(timerIntervalInSamples), (timer) => HandleTimer());
     }
@@ -179,7 +183,10 @@ public class MetronomeService : IMetronomeService
             if (!IMetronomeService.MuteOverride && !_liveModeStarted)
                 _playerNode.ScheduleBuffer(_beatBuffer, null);
             if (_useHaptic)
-                Vibrate();
+                VibrateBeat();
+            if (_useFlashlight)
+                ToggleFlashlight(true);
+
             IMetronomeService.BeatAction();
             if (IMetronomeService.LiveMode && !_liveModeStarted)
             {
@@ -188,23 +195,24 @@ public class MetronomeService : IMetronomeService
                     _liveModeStarted = true;
             }
         }
-        else if (_subdivisions == 2)
+        else //subdivision
         {
-            //no playing rhythm, but need to turn off light and stuff
+            if (_playSubdivisions)
+            {
+                if (!IMetronomeService.MuteOverride && !_liveModeStarted)
+                    _playerNode.ScheduleBuffer(_rhythmBuffer, null);
+                if (_useHaptic)
+                    VibrateRhythm();
+            }
+
+            if (_useFlashlight)
+                ToggleFlashlight(false);
+
             IMetronomeService.RhythmAction();
-            if (_useHaptic)
-                Vibrate();
         }
-        else if (_timerEventCounter % 2 == 1) //subdivision
-        {
-            if (!IMetronomeService.MuteOverride && _playSubdivisions && !_liveModeStarted)
-                _playerNode.ScheduleBuffer(_rhythmBuffer, null);
-            if (_useHaptic)
-                Vibrate();
-        }        
 
         _timerEventCounter++;
-        if (_timerEventCounter > _subdivisions * 2)
+        if (_timerEventCounter > _subdivisions)
             _timerEventCounter = 1;
     }
 
@@ -212,29 +220,66 @@ public class MetronomeService : IMetronomeService
     {
         if (_timer != null)
             _timer.Invalidate();
+        ToggleFlashlight(false);
     }
 
-    void SetFlashlight()
+    void SetUseFlashlight()
     {
         _useFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
+        if (_device != null && _useFlashlight)
+        {            
+            _useFlashlight = _device.HasTorch;
+        }        
+    }
+
+    void ToggleFlashlight(bool on)
+    {
+        if (_device == null || !(_device.HasFlash || _device.HasTorch))
+            return;
+
+        _device.LockForConfiguration(out var error);
+
+        if (error == null)
+        {
+#pragma warning disable CA1416 // Validate platform compatibility
+#pragma warning disable CA1422 // Validate platform compatibility
+            if (on)
+            {
+                if (_device.HasTorch)
+                    _device.SetTorchModeLevel(AVCaptureDevice.MaxAvailableTorchLevel, out var torchErr);
+                else if (_device.HasFlash)
+                    _device.FlashMode = AVCaptureFlashMode.On;
+            }
+            else
+            {
+                if (_device.HasTorch)
+                    _device.TorchMode = AVCaptureTorchMode.Off;
+                else if (_device.HasFlash)
+                    _device.FlashMode = AVCaptureFlashMode.Off;
+            }
+#pragma warning restore CA1422 // Validate platform compatibility
+#pragma warning restore CA1416 // Validate platform compatibility
+        }
+
+        _device.UnlockForConfiguration();
     }
 
     void SetHaptic()
     {
         _useHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
-        if (_useHaptic)
-            _feedbackGenerator = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
+        _beatGenerator = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Heavy);
+        _rhythmGenerator = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Light);
     }
 
-    void Vibrate()
+    void VibrateBeat()
     {
-        if (_feedbackGenerator != null)
-            _feedbackGenerator.ImpactOccurred();
+        if (_beatGenerator != null)
+            _beatGenerator.ImpactOccurred();
     }
 
-    public void SetVibration(bool enabled)
+    void VibrateRhythm()
     {
-        _useHaptic = enabled;
-        SetHaptic();
+        if (_rhythmGenerator != null)
+            _rhythmGenerator.ImpactOccurred();
     }
 }

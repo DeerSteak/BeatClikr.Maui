@@ -1,4 +1,6 @@
-﻿using Android.Media;
+﻿using Android.Content;
+using Android.Media;
+using Android.OS;
 using Android.Preferences;
 using BeatClikr.Maui.Services.Interfaces;
 using Java.Text;
@@ -6,6 +8,7 @@ using Java.Util;
 using Java.Util.Concurrent;
 
 namespace BeatClikr.Maui.Platforms.Android;
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
 
 public class MetronomeService : IMetronomeService
 {
@@ -33,6 +36,36 @@ public class MetronomeService : IMetronomeService
     private bool _isPlaying;
     private AudioTrack _audioTrack;
     double _timerIntervalInMilliseconds;
+    private bool _useHaptic;
+    private VibrationEffect _beatEffect;
+    private VibrationEffect _rhythmEffect;
+    private bool _canVibrate;
+
+
+    static VibratorManager? VibratorManager =>
+            OperatingSystem.IsAndroidVersionAtLeast(31)
+                ? MainApplication.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager
+                : null;
+
+    static Vibrator VibratorManagerVibrator =>
+        OperatingSystem.IsAndroidVersionAtLeast(31)
+            ? VibratorManager?.DefaultVibrator
+            : null;
+
+    static Vibrator? VibratorServiceVibrator =>
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CA1422 // Validate platform compatibility
+#pragma warning disable CA1416 // Validate platform compatibility
+        MainApplication.Context.GetSystemService(Context.VibratorService) as Vibrator;
+#pragma warning restore CA1422 // Validate platform compatibility
+#pragma warning restore CA1416 // Validate platform compatibility
+#pragma warning restore CS0618 // Type or member is obsolete
+
+    static Vibrator vibrator;
+
+    static Vibrator Vibrator =>
+        vibrator ??= (VibratorManagerVibrator ?? VibratorServiceVibrator);
+
 
     public MetronomeService()
     {
@@ -140,12 +173,24 @@ public class MetronomeService : IMetronomeService
         _timer.ScheduleAtFixedRate(task, 0, (long)_timerIntervalInMilliseconds, TimeUnit.Milliseconds);        
     }
 
+    private void SetupVibrator()
+    {
+        _useHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
+        _canVibrate = OperatingSystem.IsAndroidVersionAtLeast(29);
+        if (_useHaptic && _canVibrate)
+        {
+            _beatEffect = VibrationEffect.CreatePredefined(VibrationEffect.EffectHeavyClick);
+            _rhythmEffect = VibrationEffect.CreatePredefined(VibrationEffect.EffectClick);
+        }
+    }
+
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
     {
         SetBeat(beatFileName, set);
         SetRhythm(rhythmFileName, set);
-        SetTempo(_bpm, _subdivisions);        
-        _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions * 2);
+        SetTempo(_bpm, _subdivisions);
+        
+        _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
 
         if (OperatingSystem.IsAndroidVersionAtLeast(23))
         {            
@@ -208,7 +253,9 @@ public class MetronomeService : IMetronomeService
             }
             MainThread.BeginInvokeOnMainThread(() =>
                 IMetronomeService.BeatAction());
-            Console.WriteLine("Playing beat");
+            if (_useHaptic && _canVibrate)
+                Vibrator?.Vibrate(_beatEffect);
+
             if (IMetronomeService.LiveMode && !_liveModeStarted)
             {
                 _beatsPlayed++;
@@ -216,36 +263,23 @@ public class MetronomeService : IMetronomeService
                     _liveModeStarted = true;
             }
         }
-        //if it's time to play a rhythm sound
-        else if (_timerEventCounter % 2 == 1)
+        else if (!_playSubdivisions)
         {
-            if (!IMetronomeService.MuteOverride
-                && _playSubdivisions
-                && !_liveModeStarted)
-            {
-                _audioTrack.Write(_rhythmBuffer, 0, _rhythmBuffer.Length, WriteMode.NonBlocking);
-            }            
-
-            Console.WriteLine("Playing subdivision");
-        }        
-
-        //when it's time to put the visual effects to rest
-        if ((!_playSubdivisions && _timerEventCounter > 1)
-            || (_playSubdivisions && _subdivisions + 1 == _timerEventCounter))
-        {
-            //dim bulb and turn off flashlight, for example
-            MainThread.BeginInvokeOnMainThread(() => 
+            MainThread.BeginInvokeOnMainThread(() =>
                 IMetronomeService.RhythmAction());
         }
+        //if it's time to play a rhythm sound
+        else
+        {
+            if (!IMetronomeService.MuteOverride && !_liveModeStarted)
+                _audioTrack.Write(_rhythmBuffer, 0, _rhythmBuffer.Length, WriteMode.NonBlocking);
+            if (_useHaptic && _canVibrate)
+                Vibrator?.Vibrate(_rhythmEffect);
+        }        
 
         _timerEventCounter++;
-        if (_timerEventCounter > _subdivisions * 2)
+        if (_timerEventCounter > _subdivisions)
             _timerEventCounter = 1;
-    }
-
-    public void SetVibration(bool enabled)
-    {
-        //TODO :
     }
 }
 

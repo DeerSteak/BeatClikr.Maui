@@ -12,8 +12,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnUseFlashlightChanged(bool value)
     {
         Preferences.Set(PreferenceKeys.UseFlashlight, value);
-        if (value)
-            Task.Run(async () => await PermissionsHelper.SetupFlashlight());
     }
 
     [ObservableProperty]
@@ -148,6 +146,7 @@ public partial class SettingsViewModel : ObservableObject
 
         UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
         ShowHaptic = _vibration.IsSupported;
+        UseHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
 
         App.SetupAdmob();
     }

@@ -11,6 +11,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     private readonly string _bulbDim;
     private readonly string _bulbLit;
     private IMetronomeService _metronome;
+    private IDeviceInfo _deviceInfo;
 
     [ObservableProperty]
     private bool _isPlaying;
@@ -53,11 +54,11 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSilent;
 
-    public MetronomeClickerViewModel(IAppInfo appInfo, IShellService shellService, IMetronomeService metronome)
+    public MetronomeClickerViewModel(IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo)
     {
         _shellService = shellService;
         _metronome = metronome;
-
+        _deviceInfo = deviceInfo;
         var currentTheme = appInfo.RequestedTheme;
 
         MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
@@ -77,14 +78,14 @@ public partial class MetronomeClickerViewModel : ObservableObject
     private void BeatAction()
     {
         BeatBox = _bulbLit;
-        if (UseFlashlight)
+        if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
             Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
     }
 
     private void RhythmAction()
     {
         BeatBox = _bulbDim;
-        if (UseFlashlight)
+        if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
             Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
     }
 
@@ -100,8 +101,13 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void StartStop()
+    private async void StartStop()
     {
+        if (!IsPlaying)
+        {
+            await PermissionsHelper.AskAllPermissions().ConfigureAwait(true);
+            SetupMetronome();
+        }            
         IsPlaying = !IsPlaying;
         if (IsPlaying)
             _metronome.Play();
@@ -120,11 +126,6 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [RelayCommand]
     private void SetupMetronome()
     {
-        Task.Run(async () =>
-        {
-            await FirstTimeFlashlightQuestion();
-        });
-
         var mute = Preferences.Get(PreferenceKeys.MuteMetronome, false);
         IMetronomeService.MuteOverride = mute;
 
@@ -166,16 +167,6 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
         _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
         _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
-    }
-
-    private async Task FirstTimeFlashlightQuestion()
-    {
-        await PermissionsHelper.FirstTimeFlashlightQuestion();
-    }
-
-    private async Task SetupFlashlight()
-    {
-        await PermissionsHelper.SetupFlashlight();
     }
 }
 

@@ -96,7 +96,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void PlayStopToggled()
+    private async void PlayStopToggled()
     {
         SetupMetronome();
         _metronomeClickerViewModel.StartStopCommand.Execute(null);

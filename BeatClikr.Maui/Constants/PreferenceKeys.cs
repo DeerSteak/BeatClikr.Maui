@@ -15,4 +15,6 @@ public static class PreferenceKeys
     public const string UseHaptic = "UseHaptic";
     public const string InstantSelectedSubdivisionIndex = "InstantSelectedSubdivisionIndex";
     public const string InstantBpm = "InstantBpm";
+    public const string HasAskedFlashlight = "HasAskedFlashlight";
+    public const string HasAskedHaptic = "HasAskedHaptic";
 }

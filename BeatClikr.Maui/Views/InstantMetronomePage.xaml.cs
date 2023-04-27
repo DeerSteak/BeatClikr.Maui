@@ -13,7 +13,7 @@ public partial class InstantMetronomePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
+        (BindingContext as ViewModels.InstantMetronomeViewModel).Init();     
     }
 
     protected override void OnDisappearing()

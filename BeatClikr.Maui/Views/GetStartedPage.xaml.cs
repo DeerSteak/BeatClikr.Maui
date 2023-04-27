@@ -19,9 +19,7 @@ public partial class GetStartedPage : ContentPage
     private async void Button_Clicked(object sender, EventArgs e)
     {
         Preferences.Set(PreferenceKeys.Onboarded, DateTime.Now);
-        await PermissionsHelper.FirstTimeFlashlightQuestion();
-
-        //await Navigation.PopAsync();
+        await PermissionsHelper.AskAllPermissions();
         await Navigation.PopModalAsync();
     }
 }
