@@ -54,6 +54,15 @@ public partial class MetronomeClickerViewModel : ObservableObject
   [ObservableProperty]
   private bool _isSilent;
 
+    [ObservableProperty]
+    private Action<uint> _setBeatMilliseconds;
+
+    [ObservableProperty]
+    private Action _animate;
+
+    [ObservableProperty]
+    private Action _resetAnimator;
+
   public MetronomeClickerViewModel(IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo)
   {
     _shellService = shellService;
@@ -77,6 +86,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
   private void BeatAction()
   {
+        Animate();
     BeatBox = _bulbLit;
     if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
       Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
@@ -118,6 +128,8 @@ public partial class MetronomeClickerViewModel : ObservableObject
   [RelayCommand]
   private void Stop()
   {
+    if (ResetAnimator != null)
+        ResetAnimator();
     IsPlaying = false;
     _metronome.Stop();
     RhythmAction();

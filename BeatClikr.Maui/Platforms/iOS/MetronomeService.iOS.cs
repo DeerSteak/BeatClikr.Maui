@@ -285,4 +285,9 @@ public class MetronomeService : IMetronomeService
     if (_rhythmGenerator != null)
       _rhythmGenerator.ImpactOccurred();
   }
+
+    public double GetMillisecondsPerBeat()
+    {
+        return 60000 / _bpm;
+    }
 }
