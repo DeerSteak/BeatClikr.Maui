@@ -20,7 +20,7 @@
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.3.0</ApplicationDisplayVersion>
-		<ApplicationVersion>2023022101</ApplicationVersion>
+		<ApplicationVersion>2023042701</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.4</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
@@ -42,8 +42,8 @@
 	  <CreatePackage>false</CreatePackage>
 	  <ArchiveOnBuild>true</ArchiveOnBuild>
 	  <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-	  <CodesignProvision>beatclikr_profile_distribute</CodesignProvision>
-	  <CodesignKey>Apple Distribution: Benjamin Funk (4C4LJCSB2Q)</CodesignKey>
+	  <CodesignProvision>Automatic</CodesignProvision>
+	  <CodesignKey>iPhone Distribution</CodesignKey>
 	  <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
