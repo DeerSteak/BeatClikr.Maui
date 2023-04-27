@@ -6,20 +6,45 @@
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
     x:DataType="vm:MetronomeClickerViewModel">
     <ContentView.Content>
-        <Grid Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <Grid
+            Margin="10"
+            ColumnDefinitions="*, 250, *"
+            RowDefinitions="Auto, 30">
             <Label
+                Grid.Row="0"
                 Grid.Column="1"
                 Margin="8"
-                FontSize="90"
                 FontFamily="FARegular"
+                FontSize="80"
                 HorizontalOptions="Center"
-                TextColor="{AppThemeBinding Dark=White, Light=Black}"
-                Text="{Binding BeatBox}" />
+                Text="{Binding BeatBox}"
+                TextColor="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
+            <BoxView
+                Grid.Row="1"
+                Grid.Column="0"
+                HeightRequest="30"
+                HorizontalOptions="End"
+                WidthRequest="5"
+                Color="{AppThemeBinding Dark=White,
+                                        Light=Black}" />
+            <BoxView
+                x:Name="BeatBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                HeightRequest="30"
+                HorizontalOptions="Start"
+                WidthRequest="15"
+                Color="{AppThemeBinding Dark={StaticResource Accent},
+                                        Light={StaticResource Accent}}" />
+            <BoxView
+                Grid.Row="1"
+                Grid.Column="2"
+                HeightRequest="30"
+                HorizontalOptions="Start"
+                WidthRequest="5"
+                Color="{AppThemeBinding Dark=White,
+                                        Light=Black}" />
         </Grid>
     </ContentView.Content>
 </ContentView>

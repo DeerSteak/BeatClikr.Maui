@@ -53,6 +53,12 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSilent;
 
+    [ObservableProperty]
+    private Action<uint> _setBeatMilliseconds;
+
+    [ObservableProperty]
+    private Action _animate;
+
     public MetronomeClickerViewModel(IAppInfo appInfo, IShellService shellService, IMetronomeService metronome)
     {
         _shellService = shellService;
@@ -77,6 +83,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     private void BeatAction()
     {
         BeatBox = _bulbLit;
+        Animate();
         if (UseFlashlight)
             Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
     }
@@ -166,6 +173,8 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
         _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
         _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
+        if (SetBeatMilliseconds != null)
+            SetBeatMilliseconds((uint)(60000 / Song.BeatsPerMinute));
     }
 
     private async Task FirstTimeFlashlightQuestion()

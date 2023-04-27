@@ -65,7 +65,7 @@
                             DragCompletedCommand="{Binding SliderDragCompletedCommand}"
                             DragStartedCommand="{Binding SliderDragStartedCommand}"
                             Maximum="180"
-                            Minimum="40"
+                            Minimum="30"
                             Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
                     </Grid>
                     <BoxView HeightRequest="30" />
