@@ -35,7 +35,7 @@ public class MetronomeService : IMetronomeService
 
   private bool _isPlaying;
   private AudioTrack _audioTrack;
-  double _timerIntervalInMilliseconds;
+  double _subdivisionLengthInMilliseconds;
   private bool _useHaptic;
   private VibrationEffect _beatEffect;
   private VibrationEffect _rhythmEffect;
@@ -170,7 +170,7 @@ public class MetronomeService : IMetronomeService
     task.Action = HandleTimer;
 
     _timer = new ScheduledThreadPoolExecutor(_subdivisions);
-    _timer.ScheduleAtFixedRate(task, 0, (long)_timerIntervalInMilliseconds, TimeUnit.Milliseconds);
+    _timer.ScheduleAtFixedRate(task, 0, (long)_subdivisionLengthInMilliseconds, TimeUnit.Milliseconds);
   }
 
   private void SetupVibrator()
@@ -190,7 +190,7 @@ public class MetronomeService : IMetronomeService
     SetRhythm(rhythmFileName, set);
     SetTempo(_bpm, _subdivisions);
 
-    _timerIntervalInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
+    _subdivisionLengthInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
 
     if (OperatingSystem.IsAndroidVersionAtLeast(23))
     {
@@ -280,6 +280,11 @@ public class MetronomeService : IMetronomeService
     _timerEventCounter++;
     if (_timerEventCounter > _subdivisions)
       _timerEventCounter = 1;
+  }
+
+  public double GetMillisecondsPerBeat()
+  {
+    return 60000 / _bpm;
   }
 }
 

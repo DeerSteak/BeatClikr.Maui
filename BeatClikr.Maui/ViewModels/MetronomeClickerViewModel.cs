@@ -12,6 +12,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
   private readonly string _bulbLit;
   private IMetronomeService _metronome;
   private IDeviceInfo _deviceInfo;
+  private IDeviceDisplay _deviceDisplay;
 
   [ObservableProperty]
   private bool _isPlaying;
@@ -54,20 +55,21 @@ public partial class MetronomeClickerViewModel : ObservableObject
   [ObservableProperty]
   private bool _isSilent;
 
-    [ObservableProperty]
-    private Action<uint> _setBeatMilliseconds;
+  [ObservableProperty]
+  private Action<uint> _setBeatMilliseconds;
 
-    [ObservableProperty]
-    private Action _animate;
+  [ObservableProperty]
+  private Action _animate;
 
-    [ObservableProperty]
-    private Action _resetAnimator;
+  [ObservableProperty]
+  private Action _resetAnimator;
 
-  public MetronomeClickerViewModel(IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo)
+  public MetronomeClickerViewModel(IDeviceDisplay deviceDisplay, IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo)
   {
     _shellService = shellService;
     _metronome = metronome;
     _deviceInfo = deviceInfo;
+    _deviceDisplay = deviceDisplay;
     var currentTheme = appInfo.RequestedTheme;
 
     MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
@@ -87,7 +89,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
   private void BeatAction()
   {
     if (Animate != null)
-        Animate();
+      Animate();
     BeatBox = _bulbLit;
     if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
       Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
@@ -121,7 +123,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
     IsPlaying = !IsPlaying;
     if (IsPlaying)
-      _metronome.Play();
+      Start();
     else
       Stop();
   }
@@ -130,10 +132,18 @@ public partial class MetronomeClickerViewModel : ObservableObject
   private void Stop()
   {
     if (ResetAnimator != null)
-        ResetAnimator();
+      ResetAnimator();
     IsPlaying = false;
     _metronome.Stop();
     RhythmAction();
+    _deviceDisplay.KeepScreenOn = false;
+  }
+
+  [RelayCommand]
+  private void Start()
+  {
+    _metronome.Play();
+    _deviceDisplay.KeepScreenOn = true;
   }
 
   [RelayCommand]
