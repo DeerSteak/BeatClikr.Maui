@@ -1,7 +1,4 @@
 ﻿using BeatClikr.Maui.ViewModels;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Analytics;
 using Plugin.MauiMTAdmob;
 using Plugin.MauiMTAdmob.Extra;
 
@@ -18,10 +15,6 @@ public partial class App : Application
 
   protected override void OnStart()
   {
-    //AppCenter.Start("ios=\"fb97bcfa-abf2-4528-adaf-3a84cc92a357\";" +
-    //              "android=\"e2635483-a1e8-47c5-b57f-5ae2c50be4d1\";" +
-    //              typeof(Analytics), typeof(Crashes));
-
     base.OnStart();
 
     if (!Preferences.ContainsKey(PreferenceKeys.InstantBeat))
