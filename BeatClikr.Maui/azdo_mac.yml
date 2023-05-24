@@ -3,15 +3,15 @@ trigger:
 
 variables:
     BuildConfiguration: Release
-    DotNetVersion: 6.0.300
+    DotNetVersion: 7.0.302
 
 stages:
 - stage: BuildMacCatalyst
   jobs:
   - job: BuildMAUIApps
-    displayName: Build Weather21 App
+    displayName: Build BeatClikr App
     pool:
-      vmImage: 'macOS-12'
+      vmImage: 'macOS-latest'
       demands:
       - MSBuild
 
@@ -37,38 +37,36 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          cd 6.0/Apps/WeatherTwentyOne/src/
-          dotnet restore WeatherTwentyOne.sln
+          dotnet restore BeatClikr.sln
 
     # https://docs.microsoft.com/en-us/dotnet/maui/macos/deployment/overview
-    - task: Bash@3
-      displayName: Build MacCatalyst App
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd 6.0/Apps/WeatherTwentyOne/src
-          dotnet build -f net7.0-maccatalyst -c Release -o ./artifacts
-          dotnet publish -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
+    #- task: Bash@3
+    #  displayName: Build MacCatalyst App
+    #  inputs:
+    #    targetType: 'inline'
+    #    script: |
+    #      dotnet build -f net7.0-maccatalyst -c Release -o ./artifacts
+    #      dotnet publish -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
-    - task: CopyFiles@2
-      inputs:
-        Contents: |
-          **/**/6.0/Apps/WeatherTwentyOne/src/artifacts/**/*.pkg
-          6.0/Apps/WeatherTwentyOne/src/artifacts/**/*.pkg
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    #- task: CopyFiles@2
+    #  inputs:
+    #    Contents: |
+    #      **/**/6.0/Apps/WeatherTwentyOne/src/artifacts/**/*.pkg
+    #      6.0/Apps/WeatherTwentyOne/src/artifacts/**/*.pkg
+    #    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop_maccatalyst'
-        publishLocation: 'Container'
+    #- task: PublishBuildArtifacts@1
+    #  inputs:
+    #    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #    ArtifactName: 'drop_maccatalyst'
+    #    publishLocation: 'Container'
 
 - stage: BuildiOS
   jobs:
   - job: BuildMAUIApps
-    displayName: Build Weather21 App
+    displayName: Build BeatClikr App
     pool:
-      vmImage: 'macOS-12'
+      vmImage: 'macOS-latest'
       demands:
       - MSBuild
 
@@ -116,7 +114,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          cd 6.0/Apps/WeatherTwentyOne/src
           dotnet publish -f net7.0-ios -c Release
 
     - task: CopyFiles@2
