@@ -6,7 +6,7 @@
 
 parameters:
   - name: environment
-    displayName: Select an Environment 
+    displayName: Select an Environment
     type: string
     default: 'Staging'
     values:
@@ -15,6 +15,10 @@ parameters:
 
 variables:
   - group: 'App Configuration'
+  - ${{ if eq(parameters.environment, 'Staging') }}:
+    - group: 'Firebase Configuration Staging'
+  - ${{ if eq(parameters.environment, 'Production') }}:
+    - group: 'Firebase Configuration Production'
   - name: ENVIRONMENT
     value: ${{ parameters.environment }}
 
@@ -54,12 +58,24 @@ stages:
         provisioningProfileLocation: 'secureFiles'
         provProfileSecureFile: '$(apple-provisioning-profile-name)'
     
-    # Extract the version of the last tag you pushed to your Git repository, from the branch you selected to build your pipeline.
+     # Extract the version of the last tag you pushed to your Git repository, from the branch you selected to build your pipeline.
     - task: ExtractVersionFromTag@1
       displayName: 'Get git tag version'
       inputs:
         projectFolderPath: '$(Build.SourcesDirectory)'
+    
+    # Download the Google Firebase Configuration from secured files
+    - task: DownloadSecureFile@1
+      name: firebase
+      displayName: Download Firebase Configuration 
+      inputs:
+        secureFile: '$(google-ios-config-file)'
 
+    - script: |
+        echo Downloaded $(firebase.secureFilePath)
+        mv $(firebase.secureFilePath) $(System.DefaultWorkingDirectory)/$(app-path-root)/GoogleService-Info.plist
+      displayName: Move Firebase configuration to Working Directory
+    
     # Install .NET SDKs  
     - task: UseDotNet@2
       displayName: Install .NET SDK
