@@ -4,9 +4,7 @@ trigger:
 variables:
     BuildConfiguration: Release
     DotNetVersion: 7.0.302
-    -group: "BuildVariables"
-    -name: "iOSCertPassword"
-    value: "variables.iOSCertPassword"
+    iOSCertPassword: tatocakes
 
 
 stages:
@@ -54,8 +52,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          cd 6.0/Apps/WeatherTwentyOne/src/
-          dotnet restore WeatherTwentyOne.sln
+          dotnet restore BeatClikr.sln
 
   # https://docs.microsoft.com/en-us/dotnet/maui/ios/deployment/overview
     - task: Bash@3
