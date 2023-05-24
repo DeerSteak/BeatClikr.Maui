@@ -76,14 +76,14 @@ stages:
     # Setup Secret Pipeline Variable or Library Secrets Variable for iOS Certificate Password
     - task: InstallAppleCertificate@2
       inputs:
-        certSecureFile: '<IOS_DEVELOPMENT_CERT_P12>'
+        certSecureFile: 'IOS_DEVELOPMENT_CERT_P12.p12'
         certPwd: '$(iOSCertPassword)'
         keychain: 'temp'
 
     - task: InstallAppleProvisioningProfile@1
       inputs:
         provisioningProfileLocation: 'secureFiles'
-        provProfileSecureFile: '<IOS_PROVISIONING_PROFILE>'
+        provProfileSecureFile: 'IOS_PROVISIONING_PROFILE.mobileprovision'
 
     - task: UseDotNet@2
       displayName: .NET Version
