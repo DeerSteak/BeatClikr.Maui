@@ -6,7 +6,7 @@
 
 parameters:
   - name: environment
-    displayName: Select an Environment
+    displayName: Select an Environment 
     type: string
     default: 'Staging'
     values:
