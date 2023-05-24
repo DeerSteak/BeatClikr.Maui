@@ -12,10 +12,6 @@ parameters:
     values:
     - Production
     - Staging
-  - name: version
-    displayName: Set Version
-    type: string
-    default: '1.0'
 
 variables:
   - group: 'App Configuration'
