@@ -15,10 +15,6 @@ parameters:
 
 variables:
   - group: 'App Configuration'
-  - ${{ if eq(parameters.environment, 'Staging') }}:
-    - group: 'Firebase Configuration Staging'
-  - ${{ if eq(parameters.environment, 'Production') }}:
-    - group: 'Firebase Configuration Production'
   - name: ENVIRONMENT
     value: ${{ parameters.environment }}
 
@@ -63,18 +59,6 @@ stages:
       displayName: 'Get git tag version'
       inputs:
         projectFolderPath: '$(Build.SourcesDirectory)'
-    
-    # Download the Google Firebase Configuration from secured files
-    - task: DownloadSecureFile@1
-      name: firebase
-      displayName: Download Firebase Configuration 
-      inputs:
-        secureFile: '$(google-ios-config-file)'
-
-    - script: |
-        echo Downloaded $(firebase.secureFilePath)
-        mv $(firebase.secureFilePath) $(System.DefaultWorkingDirectory)/$(app-path-root)/GoogleService-Info.plist
-      displayName: Move Firebase configuration to Working Directory
     
     # Install .NET SDKs  
     - task: UseDotNet@2
