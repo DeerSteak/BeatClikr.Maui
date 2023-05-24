@@ -54,12 +54,6 @@ stages:
         provisioningProfileLocation: 'secureFiles'
         provProfileSecureFile: '$(apple-provisioning-profile-name)'
     
-     # Extract the version of the last tag you pushed to your Git repository, from the branch you selected to build your pipeline.
-    - task: ExtractVersionFromTag@1
-      displayName: 'Get git tag version'
-      inputs:
-        projectFolderPath: '$(Build.SourcesDirectory)'
-    
     # Install .NET SDKs  
     - task: UseDotNet@2
       displayName: Install .NET SDK
@@ -77,7 +71,7 @@ stages:
       displayName: 'Build project'
       inputs:
        script: |
-         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(MAJOR).$(MINOR).$(PATCH) /p:ApplicationVersion=$(PRE_RELEASE) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(version-build) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
    
     - task: CopyFiles@2
       displayName: 'Copy files to: $(build.artifactstagingdirectory)'
