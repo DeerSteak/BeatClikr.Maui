@@ -4,6 +4,10 @@ trigger:
 variables:
     BuildConfiguration: Release
     DotNetVersion: 7.0.302
+    -group: "BuildVariables"
+    -name: "iOSCertPassword"
+    value: "variables.iOSCertPassword"
+
 
 stages:
 - stage: BuildiOS
