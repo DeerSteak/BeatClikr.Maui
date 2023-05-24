@@ -1,76 +1,112 @@
-trigger:
-- dev
+# Documentation
+#
+# Set the vX.X.X-X tag (vMAJOR.MINOR.PATCH-BUILD_NUMBER)
+# Install the Mobile Versioning in your Azure workspace https://marketplace.visualstudio.com/items?itemName=DamienAicheh.mobile-versioning-task
+#
+
+parameters:
+  - name: environment
+    displayName: Select an Environment
+    type: string
+    default: 'Staging'
+    values:
+    - Production
+    - Staging
 
 variables:
-    BuildConfiguration: Release
-    DotNetVersion: 7.0.302
-    iOSCertPassword: tatocakes
+  - group: 'App Configuration'
+  - ${{ if eq(parameters.environment, 'Staging') }}:
+    - group: 'Firebase Configuration Staging'
+  - ${{ if eq(parameters.environment, 'Production') }}:
+    - group: 'Firebase Configuration Production'
+  - name: ENVIRONMENT
+    value: ${{ parameters.environment }}
 
+trigger:
+  branches:
+    exclude:
+      - '*'
+  tags:
+    include:
+    - v2.*.*-*
+    - v3.*.*-*
+    - v4.*.*-*
+    - v5.*.*-*
+  paths:
+    exclude:
+    - README.md
 
 stages:
-- stage: BuildiOS
+  # Stage for MAUI iOS
+- stage: build_maui_ios
   jobs:
-  - job: BuildMAUIApps
-    displayName: Build BeatClikr iOS App
+  - job: build_maui_ios_app
+    displayName: Build App for iOS
     pool:
-      vmImage: 'macOS-latest'
-      demands:
-      - MSBuild
-
+      vmImage: macos-latest
+    
     steps:
-
-    # https://docs.microsoft.com/en-us/azure/devops/pipelines/apps/mobile/app-signing?view=azure-devops&tabs=apple-install-during-build#sign-your-apple-ios-macos-tvos-or-watchos-app
-    # Setup Secret Pipeline Variable or Library Secrets Variable for iOS Certificate Password
+    
     - task: InstallAppleCertificate@2
       inputs:
-        certSecureFile: 'IOS_DEVELOPMENT_CERT_P12.p12'
-        certPwd: '$(iOSCertPassword)'
+        certSecureFile: '$(apple-certificate-name)'
+        certPwd: '$(apple-certificate-password)'
         keychain: 'temp'
-
+    
     - task: InstallAppleProvisioningProfile@1
       inputs:
         provisioningProfileLocation: 'secureFiles'
-        provProfileSecureFile: 'IOS_PROVISIONING_PROFILE.mobileprovision'
+        provProfileSecureFile: '$(apple-provisioning-profile-name)'
+    
+     # Extract the version of the last tag you pushed to your Git repository, from the branch you selected to build your pipeline.
+    - task: ExtractVersionFromTag@1
+      displayName: 'Get git tag version'
+      inputs:
+        projectFolderPath: '$(Build.SourcesDirectory)'
+    
+    # Download the Google Firebase Configuration from secured files
+    - task: DownloadSecureFile@1
+      name: firebase
+      displayName: Download Firebase Configuration 
+      inputs:
+        secureFile: '$(google-ios-config-file)'
 
+    - script: |
+        echo Downloaded $(firebase.secureFilePath)
+        mv $(firebase.secureFilePath) $(System.DefaultWorkingDirectory)/$(app-path-root)/GoogleService-Info.plist
+      displayName: Move Firebase configuration to Working Directory
+    
+    # Install .NET SDKs  
     - task: UseDotNet@2
-      displayName: .NET Version
+      displayName: Install .NET SDK
       inputs:
         packageType: 'sdk'
-        version: '$(DotNetVersion)'
-
-    - task: Bash@3
-      displayName: Install MAUI
+        version: '$(dotnet-version)'
+        includePreviewVersions: false
+    
+     # Install all workloads your solution is supported
+    - powershell: dotnet workload install maui-android maui-ios
+      displayName: Install .NET MAUI Workload
+    
+     # build project
+    - task: CmdLine@2
+      displayName: 'Build project'
       inputs:
-        targetType: 'inline'
-        script: |
-          dotnet nuget locals all --clear
-          dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
-          dotnet workload install ios tizen --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
-
-    - task: Bash@3
-      displayName: Restore nuget
-      inputs:
-        targetType: 'inline'
-        script: |
-          dotnet restore BeatClikr.sln
-
-  # https://docs.microsoft.com/en-us/dotnet/maui/ios/deployment/overview
-    - task: Bash@3
-      displayName: Build iOS App
-      inputs:
-        targetType: 'inline'
-        script: |
-          dotnet publish -f net7.0-ios -c Release
-
+       script: |
+         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(MAJOR).$(MINOR).$(PATCH) /p:ApplicationVersion=$(PRE_RELEASE) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+   
     - task: CopyFiles@2
+      displayName: 'Copy files to: $(build.artifactstagingdirectory)'
       inputs:
-        Contents: |
-          **/*.app
-          **/*.ipa
+        SourceFolder: '$(Agent.BuildDirectory)'
+        Contents: '**/*.ipa'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
+        CleanTargetFolder: true
+        flattenFolders: true
+      
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop_ios'
+        ArtifactName: 'drop_maui_ios'
         publishLocation: 'Container'
