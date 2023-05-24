@@ -57,6 +57,12 @@ stages:
       inputs:
         provisioningProfileLocation: 'secureFiles'
         provProfileSecureFile: '$(apple-provisioning-profile-name)'
+    
+    # Extract the version of the last tag you pushed to your Git repository, from the branch you selected to build your pipeline.
+    - task: ExtractVersionFromTag@1
+      displayName: 'Get git tag version'
+      inputs:
+        projectFolderPath: '$(Build.SourcesDirectory)'
 
     # Install .NET SDKs  
     - task: UseDotNet@2
