@@ -61,11 +61,6 @@ stages:
         mv $(keystore.secureFilePath) $(System.DefaultWorkingDirectory)
       displayName: Move Keystore to Working Directory
 
-    - script: |
-        echo Downloaded $(firebase.secureFilePath)
-        mv $(firebase.secureFilePath) $(System.DefaultWorkingDirectory)/$(app-path-root)/google-services.json
-      displayName: Move Firebase configuration to Working Directory
-
     # Install .NET SDKs  
     - task: UseDotNet@2
       displayName: Install .NET SDK
