@@ -52,7 +52,7 @@ stages:
       name: keystore
       displayName: Download keystore 
       inputs:
-        secureFile: '$(keystore-filename)'
+        secureFile: '$(android-keystore-name)'
 
     - script: |
         echo Downloaded $(keystore.secureFilePath)
