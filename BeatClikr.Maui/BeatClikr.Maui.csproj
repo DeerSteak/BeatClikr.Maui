@@ -59,9 +59,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <AndroidKeyStore>True</AndroidKeyStore>
 	  <AndroidSigningKeyStore>/Users/benfunk/Library/Mobile Documents/com~apple~CloudDocs/beatClikr Keys/beatclikr-android-upload-key.jks</AndroidSigningKeyStore>
-	  <AndroidSigningStorePass>tatocakes</AndroidSigningStorePass>
-	  <AndroidSigningKeyAlias>android</AndroidSigningKeyAlias>
-	  <AndroidSigningKeyPass>tatocakes</AndroidSigningKeyPass>
+	  <AndroidSigningStorePass></AndroidSigningStorePass>
+	  <AndroidSigningKeyAlias></AndroidSigningKeyAlias>
+	  <AndroidSigningKeyPass></AndroidSigningKeyPass>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
