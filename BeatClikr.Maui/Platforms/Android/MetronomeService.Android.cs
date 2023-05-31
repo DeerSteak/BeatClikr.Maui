@@ -1,9 +1,7 @@
 ﻿using Android.Content;
 using Android.Media;
 using Android.OS;
-using Android.Preferences;
 using BeatClikr.Maui.Services.Interfaces;
-using Java.Text;
 using Java.Util;
 using Java.Util.Concurrent;
 
@@ -15,25 +13,18 @@ public class MetronomeService : IMetronomeService
   private int _bpm;
   private int _subdivisions;
   private bool _playSubdivisions;
-  private int _subdivisionLengthInSamples;
-  private bool _useFlashlight;
   private const int SAMPLE_RATE = 44100;
   private const int WAV_BUFFER_OFFSET = 44;
   private ScheduledThreadPoolExecutor _timer;
   private int _timerEventCounter;
   private int _beatsPlayed;
   private bool _liveModeStarted;
-  private bool _previouslySetup = false;
 
   private byte[] _beatBuffer;
   private byte[] _rhythmBuffer;
   private readonly static byte[] _silenceBuffer = SetSilenceBuffer();
   private readonly int _minBufferSize;
 
-  private string _beatFilename;
-  private string _rhythmFilename;
-
-  private bool _isPlaying;
   private AudioTrack _audioTrack;
   double _subdivisionLengthInMilliseconds;
   private bool _useHaptic;
@@ -44,7 +35,7 @@ public class MetronomeService : IMetronomeService
 
   static VibratorManager? VibratorManager =>
           OperatingSystem.IsAndroidVersionAtLeast(31)
-              ? MainApplication.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager
+              ? global::Android.App.Application.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager
               : null;
 
   static Vibrator VibratorManagerVibrator =>
@@ -156,7 +147,6 @@ public class MetronomeService : IMetronomeService
         break;
     }
     _subdivisionLengthInMilliseconds = (60.0 / (_bpm * _subdivisions)) * 1000;
-    _subdivisionLengthInSamples = (int)(_subdivisionLengthInMilliseconds * SAMPLE_RATE / 1000D);
   }
 
   private void StartTimer()
