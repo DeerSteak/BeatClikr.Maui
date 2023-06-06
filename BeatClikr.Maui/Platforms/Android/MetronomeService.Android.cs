@@ -157,12 +157,6 @@ public class MetronomeService : IMetronomeService
         break;
     }
     _subdivisionLengthInMilliseconds = (60.0 / (_bpm * _subdivisions)) * 1000;
-    _subdivisionLengthInSamples = (int)(_subdivisionLengthInMilliseconds * SAMPLE_RATE / 1000D);
-  }
-
-  void SetUseFlashlight()
-  {
-    _useFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
   }
 
   private void StartTimer()
@@ -195,7 +189,6 @@ public class MetronomeService : IMetronomeService
     SetBeat(beatFileName, set);
     SetRhythm(rhythmFileName, set);
     SetTempo(_bpm, _subdivisions);
-    SetUseFlashlight();
 
     _subdivisionLengthInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
 
@@ -256,8 +249,6 @@ public class MetronomeService : IMetronomeService
         _audioTrack.Write(_beatBuffer, 0, _beatBuffer.Length, WriteMode.NonBlocking);
       if (_useHaptic && _canVibrate)
         Vibrator?.Vibrate(_beatEffect);
-      if (_useFlashlight)
-        Flashlight.Default.TurnOnAsync();
       MainThread.BeginInvokeOnMainThread(() => IMetronomeService.BeatAction());
 
       if (IMetronomeService.LiveMode && !_liveModeStarted)
@@ -276,8 +267,6 @@ public class MetronomeService : IMetronomeService
         if (_useHaptic && _canVibrate)
           Vibrator?.Vibrate(_rhythmEffect);
       }
-      if (_useFlashlight)
-        Flashlight.Default.TurnOffAsync();
       MainThread.BeginInvokeOnMainThread(() =>
           IMetronomeService.RhythmAction());
     }
