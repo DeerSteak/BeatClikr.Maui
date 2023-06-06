@@ -20,7 +20,7 @@
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.3.1</ApplicationDisplayVersion>
-		<ApplicationVersion>2023050402</ApplicationVersion>
+		<ApplicationVersion>2023050501</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.4</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
@@ -58,10 +58,15 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <AndroidKeyStore>True</AndroidKeyStore>
-	  <AndroidSigningKeyStore>/Users/benfunk/Library/Mobile Documents/com~apple~CloudDocs/beatClikr Keys/beatclikr-android-upload-key.jks</AndroidSigningKeyStore>
+	  <AndroidSigningKeyStore>/Users/bfunk1978/Documents/beatClikr Keys/beatclikr-android-upload-key.jks</AndroidSigningKeyStore>
 	  <AndroidSigningStorePass>tatocakes</AndroidSigningStorePass>
 	  <AndroidSigningKeyAlias>android</AndroidSigningKeyAlias>
 	  <AndroidSigningKeyPass>tatocakes</AndroidSigningKeyPass>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	  <DebugSymbols>true</DebugSymbols>
+	  <WarningLevel>4</WarningLevel>
+	  <PlatformTarget>anycpu</PlatformTarget>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->

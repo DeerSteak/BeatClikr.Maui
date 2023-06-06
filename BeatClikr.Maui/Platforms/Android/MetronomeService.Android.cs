@@ -8,7 +8,6 @@ using Java.Util;
 using Java.Util.Concurrent;
 
 namespace BeatClikr.Maui.Platforms.Android;
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
 
 public class MetronomeService : IMetronomeService
 {
@@ -23,17 +22,12 @@ public class MetronomeService : IMetronomeService
   private int _timerEventCounter;
   private int _beatsPlayed;
   private bool _liveModeStarted;
-  private bool _previouslySetup = false;
 
   private byte[] _beatBuffer;
   private byte[] _rhythmBuffer;
   private readonly static byte[] _silenceBuffer = SetSilenceBuffer();
   private readonly int _minBufferSize;
 
-  private string _beatFilename;
-  private string _rhythmFilename;
-
-  private bool _isPlaying;
   private AudioTrack _audioTrack;
   double _subdivisionLengthInMilliseconds;
   private bool _useHaptic;
@@ -41,31 +35,22 @@ public class MetronomeService : IMetronomeService
   private VibrationEffect _rhythmEffect;
   private bool _canVibrate;
 
-
-  static VibratorManager? VibratorManager =>
-          OperatingSystem.IsAndroidVersionAtLeast(31)
-              ? MainApplication.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager
-              : null;
-
-  static Vibrator VibratorManagerVibrator =>
-      OperatingSystem.IsAndroidVersionAtLeast(31)
-          ? VibratorManager?.DefaultVibrator
-          : null;
-
-  static Vibrator? VibratorServiceVibrator =>
-#pragma warning disable CS0618 // Type or member is obsolete
-#pragma warning disable CA1422 // Validate platform compatibility
-#pragma warning disable CA1416 // Validate platform compatibility
-      MainApplication.Context.GetSystemService(Context.VibratorService) as Vibrator;
-#pragma warning restore CA1422 // Validate platform compatibility
-#pragma warning restore CA1416 // Validate platform compatibility
-#pragma warning restore CS0618 // Type or member is obsolete
-
   static Vibrator vibrator;
 
   static Vibrator Vibrator =>
-      vibrator ??= (VibratorManagerVibrator ?? VibratorServiceVibrator);
+      vibrator ??= GetVibrator();
 
+  //different ways to do this for Android 30 and below, vs. Android 31 and above.
+  private static Vibrator GetVibrator()
+  {
+    if (OperatingSystem.IsAndroidVersionAtLeast(31))
+    {
+      var mgr = MainApplication.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager;
+      return mgr?.DefaultVibrator;
+    }
+    else
+      return MainApplication.Context.GetSystemService(Context.VibratorService) as Vibrator;
+  }
 
   public MetronomeService()
   {
@@ -159,6 +144,11 @@ public class MetronomeService : IMetronomeService
     _subdivisionLengthInSamples = (int)(_subdivisionLengthInMilliseconds * SAMPLE_RATE / 1000D);
   }
 
+  void SetUseFlashlight()
+  {
+    _useFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, false);
+  }
+
   private void StartTimer()
   {
     _audioTrack.SetVolume(0);
@@ -189,6 +179,7 @@ public class MetronomeService : IMetronomeService
     SetBeat(beatFileName, set);
     SetRhythm(rhythmFileName, set);
     SetTempo(_bpm, _subdivisions);
+    SetUseFlashlight();
 
     _subdivisionLengthInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
 
@@ -243,18 +234,15 @@ public class MetronomeService : IMetronomeService
 
   private void HandleTimer()
   {
-    //do all the beat stuff. 
     if (_timerEventCounter == 1)
     {
-      if (!IMetronomeService.MuteOverride
-          && !_liveModeStarted)
-      {
+      if (!IMetronomeService.MuteOverride && !_liveModeStarted)
         _audioTrack.Write(_beatBuffer, 0, _beatBuffer.Length, WriteMode.NonBlocking);
-      }
-      MainThread.BeginInvokeOnMainThread(() =>
-          IMetronomeService.BeatAction());
       if (_useHaptic && _canVibrate)
         Vibrator?.Vibrate(_beatEffect);
+      if (_useFlashlight)
+        Flashlight.Default.TurnOnAsync();
+      MainThread.BeginInvokeOnMainThread(() => IMetronomeService.BeatAction());
 
       if (IMetronomeService.LiveMode && !_liveModeStarted)
       {
@@ -263,18 +251,19 @@ public class MetronomeService : IMetronomeService
           _liveModeStarted = true;
       }
     }
-    else if (!_playSubdivisions)
-    {
-      MainThread.BeginInvokeOnMainThread(() =>
-          IMetronomeService.RhythmAction());
-    }
-    //if it's time to play a rhythm sound
     else
     {
-      if (!IMetronomeService.MuteOverride && !_liveModeStarted)
-        _audioTrack.Write(_rhythmBuffer, 0, _rhythmBuffer.Length, WriteMode.NonBlocking);
-      if (_useHaptic && _canVibrate)
-        Vibrator?.Vibrate(_rhythmEffect);
+      if (_playSubdivisions)
+      {
+        if (!IMetronomeService.MuteOverride && !_liveModeStarted)
+          _audioTrack.Write(_rhythmBuffer, 0, _rhythmBuffer.Length, WriteMode.NonBlocking);
+        if (_useHaptic && _canVibrate)
+          Vibrator?.Vibrate(_rhythmEffect);
+      }
+      if (_useFlashlight)
+        Flashlight.Default.TurnOffAsync();
+      MainThread.BeginInvokeOnMainThread(() =>
+          IMetronomeService.RhythmAction());
     }
 
     _timerEventCounter++;

@@ -91,15 +91,11 @@ public partial class MetronomeClickerViewModel : ObservableObject
     if (Animate != null)
       Animate();
     BeatBox = _bulbLit;
-    if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
-      Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
   }
 
   private void RhythmAction()
   {
     BeatBox = _bulbDim;
-    if (UseFlashlight && _deviceInfo.Platform == DevicePlatform.Android)
-      Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
   }
 
   [RelayCommand]
