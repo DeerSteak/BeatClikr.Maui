@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-ios;net7.0-android</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios;net7.0-android33.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -22,7 +21,7 @@
 		<ApplicationDisplayVersion>2.3.1</ApplicationDisplayVersion>
 		<ApplicationVersion>2023050501</ApplicationVersion>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.4</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">16.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">25.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
@@ -199,13 +198,13 @@
 	  </MauiXaml>	  
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Maui" Version="5.1.0" />
-	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.2" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.4" />
 	  <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-	  <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.4" />
-	  <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.4" />
-	  <PackageReference Include="SQLitePCLRaw.core" Version="2.1.4" />
-	  <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.4" />
+	  <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.5" />
+	  <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.5" />
+	  <PackageReference Include="SQLitePCLRaw.core" Version="2.1.5" />
+	  <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.5" />
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>

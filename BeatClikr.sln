@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
+# Visual Studio Version 17
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatClikr.Maui", "BeatClikr.Maui\BeatClikr.Maui.csproj", "{050ABA84-DE72-438A-9404-3988EE470758}"
@@ -17,6 +17,10 @@ Global
 		{050ABA84-DE72-438A-9404-3988EE470758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{050ABA84-DE72-438A-9404-3988EE470758}.Release|Any CPU.Build.0 = Release|Any CPU
 		{050ABA84-DE72-438A-9404-3988EE470758}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2E9E56C1-E74F-4F84-84CF-6F51018A5BBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9E56C1-E74F-4F84-84CF-6F51018A5BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9E56C1-E74F-4F84-84CF-6F51018A5BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9E56C1-E74F-4F84-84CF-6F51018A5BBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

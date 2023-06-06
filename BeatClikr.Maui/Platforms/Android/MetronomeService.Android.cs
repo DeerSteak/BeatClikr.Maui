@@ -1,9 +1,7 @@
 ﻿using Android.Content;
 using Android.Media;
 using Android.OS;
-using Android.Preferences;
 using BeatClikr.Maui.Services.Interfaces;
-using Java.Text;
 using Java.Util;
 using Java.Util.Concurrent;
 
@@ -14,8 +12,6 @@ public class MetronomeService : IMetronomeService
   private int _bpm;
   private int _subdivisions;
   private bool _playSubdivisions;
-  private int _subdivisionLengthInSamples;
-  private bool _useFlashlight;
   private const int SAMPLE_RATE = 44100;
   private const int WAV_BUFFER_OFFSET = 44;
   private ScheduledThreadPoolExecutor _timer;
@@ -34,6 +30,26 @@ public class MetronomeService : IMetronomeService
   private VibrationEffect _beatEffect;
   private VibrationEffect _rhythmEffect;
   private bool _canVibrate;
+
+
+  static VibratorManager? VibratorManager =>
+          OperatingSystem.IsAndroidVersionAtLeast(31)
+              ? global::Android.App.Application.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager
+              : null;
+
+  static Vibrator VibratorManagerVibrator =>
+      OperatingSystem.IsAndroidVersionAtLeast(31)
+          ? VibratorManager?.DefaultVibrator
+          : null;
+
+  static Vibrator? VibratorServiceVibrator =>
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CA1422 // Validate platform compatibility
+#pragma warning disable CA1416 // Validate platform compatibility
+      MainApplication.Context.GetSystemService(Context.VibratorService) as Vibrator;
+#pragma warning restore CA1422 // Validate platform compatibility
+#pragma warning restore CA1416 // Validate platform compatibility
+#pragma warning restore CS0618 // Type or member is obsolete
 
   static Vibrator vibrator;
 

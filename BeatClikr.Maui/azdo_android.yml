@@ -1,0 +1,106 @@
+# Documentation
+#
+# Set the vX.X.X-X tag (vMAJOR.MINOR.PATCH-BUILD_NUMBER) to trigger the pipeline
+# Install the Mobile Versioning in your Azure workspace https://marketplace.visualstudio.com/items?itemName=DamienAicheh.mobile-versioning-task
+#
+
+parameters:
+  - name: environment
+    displayName: Select an Environment
+    type: string
+    default: 'Staging'
+    values:
+    - Production
+    - Staging
+
+variables:
+  - group: 'App Configuration'
+  - name: ENVIRONMENT
+    value: ${{ parameters.environment }}
+
+# Setting the trigger when a tag has been added to any branch. 
+trigger:
+  branches:
+    exclude:
+      - '*'
+  tags:
+    include:
+    - v1.*.*-*
+    - v2.*.*-*
+    - v3.*.*-*
+    - v4.*.*-*
+    - v5.*.*-*
+  paths:
+    exclude:
+    - README.md
+
+stages:
+  # Stage for MAUI Android
+- stage: build_maui_android
+  jobs:
+  - job: build_maui_android_app
+    displayName: Build App for Android
+    pool:
+      vmImage: 'windows-latest'
+      demands:
+      - MSBuild
+      
+    steps:
+    
+     # Download the keystore from secured files
+    - task: DownloadSecureFile@1
+      name: keystore
+      displayName: Download keystore 
+      inputs:
+        secureFile: '$(keystore-filename)'
+
+    - script: |
+        echo Downloaded $(keystore.secureFilePath)
+        echo Environment $(ENVIRONMENT)
+        echo Working Directory $(System.DefaultWorkingDirectory)\\$(keystore-filename)
+        mv $(keystore.secureFilePath) $(System.DefaultWorkingDirectory)
+      displayName: Move Keystore to Working Directory
+
+    # Install .NET SDKs  
+    - task: UseDotNet@2
+      displayName: Install .NET SDK
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotnet-version)'
+        includePreviewVersions: false
+
+    # Install Java SDK for Android
+    - task: JavaToolInstaller@0
+      displayName: Install Java SDK
+      inputs:
+        versionSpec: '11'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
+
+    # Install all workloads your solution is supported
+    - powershell: dotnet workload install maui-android maui-ios
+      displayName: Install .NET MAUI Workload
+
+    # build project
+    - task: CmdLine@2
+      displayName: 'Build project'
+      inputs:
+        script: |
+          dotnet publish $(app-path-project) -f $(app-target-framework-android) -c Release /p:ApplicationId=$(app-id-android) /p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(version-name)$(version-number) /p:AndroidSigningKeyPass=$(key-password) /p:AndroidSigningStorePass=$(keystore-password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(keystore-filename) /p:AndroidSigningKeyAlias=$(keystore-alias) /p:AndroidKeyStore=true
+    
+    # Copy files to artifact directory  Temporary just to make sure the AAB is generated and signed correctly
+    - task: CopyFiles@2
+      displayName: 'Copy files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: '$(system.defaultworkingdirectory)'
+        Contents: '$(app-path-contents)/$(app-build-configuration)/$(app-target-framework-android)/publish/**'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        CleanTargetFolder: true
+    
+    # Publish artifacts
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+        ArtifactName: 'drop_maui_android'
+        publishLocation: 'Container'  

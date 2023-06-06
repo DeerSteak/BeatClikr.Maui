@@ -1,0 +1,91 @@
+# Documentation
+#
+# Set the vX.X.X-X tag (vMAJOR.MINOR.PATCH-BUILD_NUMBER)
+# Install the Mobile Versioning in your Azure workspace https://marketplace.visualstudio.com/items?itemName=DamienAicheh.mobile-versioning-task
+#
+
+parameters:
+  - name: environment
+    displayName: Select an Environment
+    type: string
+    default: 'Staging'
+    values:
+    - Production
+    - Staging
+
+variables:
+  - group: 'App Configuration'
+  - name: ENVIRONMENT
+    value: ${{ parameters.environment }}
+
+trigger:
+  branches:
+    exclude:
+      - '*'
+  tags:
+    include:
+    - v1.*.*-*
+    - v2.*.*-*
+    - v3.*.*-*
+    - v4.*.*-*
+    - v5.*.*-*
+  paths:
+    exclude:
+    - README.md
+
+stages:
+  # Stage for MAUI iOS
+- stage: build_maui_ios
+  jobs:
+  - job: build_maui_ios_app
+    displayName: Build App for iOS
+    pool:
+      vmImage: macos-latest
+    
+    steps:
+    
+    - task: InstallAppleCertificate@2
+      inputs:
+        certSecureFile: '$(apple-certificate-name)'
+        certPwd: '$(apple-certificate-password)'
+        keychain: 'temp'
+    
+    - task: InstallAppleProvisioningProfile@1
+      inputs:
+        provisioningProfileLocation: 'secureFiles'
+        provProfileSecureFile: '$(apple-provisioning-profile-name)'
+    
+    # Install .NET SDKs  
+    - task: UseDotNet@2
+      displayName: Install .NET SDK
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotnet-version)'
+        includePreviewVersions: false
+    
+     # Install all workloads your solution is supported
+    - powershell: dotnet workload install maui-android maui-ios
+      displayName: Install .NET MAUI Workload
+    
+     # build project
+    - task: CmdLine@2
+      displayName: 'Build project'
+      inputs:
+       script: |
+         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(version-build) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+   
+    - task: CopyFiles@2
+      displayName: 'Copy files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: '$(Agent.BuildDirectory)'
+        Contents: '**/*.ipa'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        CleanTargetFolder: true
+        flattenFolders: true
+      
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop_maui_ios'
+        publishLocation: 'Container'
