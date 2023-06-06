@@ -104,3 +104,14 @@ stages:
         PathtoPublish: '$(build.artifactstagingdirectory)'
         ArtifactName: 'drop_maui_android'
         publishLocation: 'Container'  
+        
+    - task: AppCenterDistribute@3
+      inputs:
+        serverEndpoint: 'AppCenter Connection'
+        appSlug: 'ben.funk/BeatClikr'
+        appFile: '$(build.artifactstagingdirectory)'
+        symbolsOption: 'Android'
+        releaseNotesOption: 'file'
+        releaseNotesFile: 'releasenotes.txt'
+        destinationType: 'groups'
+        distributionGroupId: 'Testers'
