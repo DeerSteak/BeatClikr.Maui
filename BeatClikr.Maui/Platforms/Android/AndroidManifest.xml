@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.bfunkstudios.beatclikr" android:versionCode="2023050501" android:versionName="2.3.1">
 	<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8377432895177958/9298625858" />
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:label="BeatClikr">
+	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:label="BeatClikr">
 		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8377432895177958~1803279218" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
