@@ -112,6 +112,6 @@ stages:
         appFile: '$(build.artifactstagingdirectory)/$(app-id-android).aab'
         symbolsOption: 'Android'
         releaseNotesOption: 'file'
-        releaseNotesFile: 'releasenotes.txt'
+        releaseNotesFile: '$(app-path-root)/releasenotes.txt'
         destinationType: 'groups'
         distributionGroupId: 'Testers'
