@@ -72,7 +72,7 @@ stages:
       displayName: 'Build project'
       inputs:
        script: |
-         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(version-build) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(version-build) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
    
     - task: CopyFiles@2
       displayName: 'Copy files to: $(build.artifactstagingdirectory)'
@@ -89,3 +89,11 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop_maui_ios'
         publishLocation: 'Container'
+    - task: AppCenterDistribute@3
+      inputs:
+        serverEndpoint: 'AppCenter Connection'
+        appSlug: 'ben.funk/BeatClikr.iOS'
+        appFile: '$(Build.ArtifactStagingDirectory)/$(app-id-ios).ipa'
+        releaseNotesOption: 'file'
+        releaseNotesFile: '$(app-path-root)/readme.txt'
+        destinationType: 'groups' 
