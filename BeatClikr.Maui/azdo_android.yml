@@ -114,4 +114,3 @@ stages:
         releaseNotesOption: 'file'
         releaseNotesFile: '$(app-path-root)/releasenotes.txt'
         destinationType: 'groups'
-        distributionGroupId: 'Testers'
