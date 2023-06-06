@@ -90,7 +90,12 @@ stages:
         ArtifactName: 'drop_maui_ios'
         publishLocation: 'Container'
     
-    
+    - task: CmdLine@2
+      inputs:
+        script: |
+          ls $(app-path-root)
+          ls $(Build.ArtifactStagingDirectory)
+
     - task: AppCenterDistribute@3
       inputs:
         serverEndpoint: 'AppCenter Connection'
