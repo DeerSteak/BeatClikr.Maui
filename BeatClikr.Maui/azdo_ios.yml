@@ -95,5 +95,5 @@ stages:
         appSlug: 'ben.funk/BeatClikr.iOS'
         appFile: '$(Build.ArtifactStagingDirectory)/$(app-id-ios).ipa'
         releaseNotesOption: 'file'
-        releaseNotesFile: '$(app-path-root)/readme.txt'
+        releaseNotesFile: '$(app-path-root)/releasenotes.txt'
         destinationType: 'groups' 
