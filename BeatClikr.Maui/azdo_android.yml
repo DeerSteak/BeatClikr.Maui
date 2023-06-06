@@ -109,7 +109,7 @@ stages:
       inputs:
         serverEndpoint: 'AppCenter Connection'
         appSlug: 'ben.funk/BeatClikr'
-        appFile: '$(build.artifactstagingdirectory)'
+        appFile: '$(build.artifactstagingdirectory)/$(app-id-android).aab'
         symbolsOption: 'Android'
         releaseNotesOption: 'file'
         releaseNotesFile: 'releasenotes.txt'
