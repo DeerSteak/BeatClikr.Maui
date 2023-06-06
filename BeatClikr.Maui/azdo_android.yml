@@ -90,26 +90,32 @@ stages:
     
     # Copy files to artifact directory  Temporary just to make sure the AAB is generated and signed correctly
     - task: CopyFiles@2
-      displayName: 'Copy files to: $(build.artifactstagingdirectory)'
+      displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
       inputs:
         SourceFolder: '$(system.defaultworkingdirectory)'
         Contents: '$(app-path-contents)/$(app-build-configuration)/$(app-target-framework-android)/publish/**'
-        TargetFolder: '$(build.artifactstagingdirectory)'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
         CleanTargetFolder: true
     
     # Publish artifacts
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifacts'
       inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop_maui_android'
         publishLocation: 'Container'  
+    
+    - task: CmdLine@2
+      inputs:
+        script: |
+          ls $(app-path-root)
+          ls $(Build.ArtifactStagingDirectory)
         
     - task: AppCenterDistribute@3
       inputs:
         serverEndpoint: 'AppCenter Connection'
         appSlug: 'ben.funk/BeatClikr'
-        appFile: '$(build.artifactstagingdirectory)/$(app-id-android).aab'
+        appFile: '$(Build.ArtifactStagingDirectory)/$(app-id-android).aab'
         symbolsOption: 'Android'
         releaseNotesOption: 'file'
         releaseNotesFile: '$(app-path-root)/releasenotes.txt'
