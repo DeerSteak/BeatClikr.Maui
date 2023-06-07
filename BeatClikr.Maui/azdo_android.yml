@@ -115,7 +115,7 @@ stages:
       inputs:
         serverEndpoint: 'AppCenter Connection'
         appSlug: 'ben.funk/BeatClikr'
-        appFile: '$(Build.ArtifactStagingDirectory)/$(app-id-android).aab'
+        appFile: 'D:\a\1\a\BeatClikr.Maui\bin\Release\net7.0-android33.0\publish\com.bfunkstudios.beatclikr-Signed.aab'
         symbolsOption: 'Android'
         releaseNotesOption: 'file'
         releaseNotesFile: '$(app-path-root)/releasenotes.txt'
