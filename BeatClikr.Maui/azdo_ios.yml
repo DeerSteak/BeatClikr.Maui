@@ -20,7 +20,7 @@ parameters:
   - name: version-number
     displayName: Enter build number
     type: string
-    default: $(Date:yyyyMMdd)
+    default: $(SDate)
 
 
 trigger:
