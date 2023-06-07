@@ -6,10 +6,10 @@ variables:
     value: $[format('{0:yy}.{0:MM}.{0:dd}', pipeline.startTime)]
 
 parameters:
-  - name: version-name
-    displayName: Enter Display Version (not used)
+  - name: build-tag
+    displayName: Enter build number rev (usually 01)
     type: string
-    default: '2.x.x'
+    default: '01'
 
 # Setting the trigger when a tag has been added to any branch. 
 trigger:
@@ -79,7 +79,7 @@ stages:
       displayName: 'Build project'
       inputs:
         script: |
-          dotnet publish $(app-path-project) -f $(app-target-framework-android) -c Release /p:ApplicationId=$(app-id-android) /p:ApplicationDisplayVersion=$(SDateName) /p:ApplicationVersion=$(SDate)01 /p:AndroidSigningKeyPass=$(key-password) /p:AndroidSigningStorePass=$(keystore-password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(keystore-filename) /p:AndroidSigningKeyAlias=$(keystore-alias) /p:AndroidKeyStore=true
+          dotnet publish $(app-path-project) -f $(app-target-framework-android) -c Release /p:ApplicationId=$(app-id-android) /p:ApplicationDisplayVersion=$(SDateName) /p:ApplicationVersion=$(SDate)$(build-tag) /p:AndroidSigningKeyPass=$(key-password) /p:AndroidSigningStorePass=$(keystore-password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(keystore-filename) /p:AndroidSigningKeyAlias=$(keystore-alias) /p:AndroidKeyStore=true
     
     # Copy files to artifact directory  Temporary just to make sure the AAB is generated and signed correctly
     - task: CopyFiles@2
