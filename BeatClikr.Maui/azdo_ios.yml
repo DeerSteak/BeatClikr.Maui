@@ -3,7 +3,7 @@ variables:
   - name: ENVIRONMENT
     value: ${{ parameters.environment }}
   - name: SDate
-    value: $[format('{0:yyyy}/{0:MM}/{0:dd}/{0:HH}{0:mm}{0:ss}', pipeline.startTime)]
+    value: $[format('{0:yyyy}{0:MM}{0:dd}', pipeline.startTime)]
 
 parameters:
   - name: environment
@@ -77,7 +77,7 @@ stages:
       displayName: 'Build project'
       inputs:
        script: |
-         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(Date:yyyyMMdd)$(Rev:rr) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(SDate)$(Rev:rr) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
    
     - task: CopyFiles@2
       displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
