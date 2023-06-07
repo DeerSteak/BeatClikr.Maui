@@ -11,22 +11,6 @@ parameters:
     type: string
     default: '01'
 
-
-trigger:
-  branches:
-    exclude:
-      - '*'
-  tags:
-    include:
-    - v1.*.*-*
-    - v2.*.*-*
-    - v3.*.*-*
-    - v4.*.*-*
-    - v5.*.*-*
-  paths:
-    exclude:
-    - README.md
-
 stages:
   # Stage for MAUI iOS
 - stage: build_maui_ios
