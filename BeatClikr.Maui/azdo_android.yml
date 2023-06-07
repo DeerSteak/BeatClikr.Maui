@@ -50,6 +50,7 @@ stages:
         secureFile: '$(keystore-filename)'
 
     - script: |
+        echo $(name)
         echo Downloaded $(keystore.secureFilePath)
         echo Environment $(ENVIRONMENT)
         echo Working Directory $(System.DefaultWorkingDirectory)\\$(keystore-filename)
