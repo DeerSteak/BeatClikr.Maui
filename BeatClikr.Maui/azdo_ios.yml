@@ -12,6 +12,14 @@ parameters:
     values:
     - Production
     - Staging
+  - name: version-name
+    displayName: Enter Display Version
+    type: string
+    default: ''
+  - name: version-number
+    displayName: Enter build number
+    type: string
+    default: '$(Date:yyyyMMdd)'
 
 variables:
   - group: 'App Configuration'
