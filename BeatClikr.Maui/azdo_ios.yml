@@ -75,7 +75,7 @@ stages:
          dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(version-name) /p:ApplicationVersion=$(version-build) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
    
     - task: CopyFiles@2
-      displayName: 'Copy files to: $(build.artifactstagingdirectory)'
+      displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
       inputs:
         SourceFolder: '$(Agent.BuildDirectory)'
         Contents: '**/*.ipa'
@@ -89,12 +89,6 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop_maui_ios'
         publishLocation: 'Container'
-    
-    - task: CmdLine@2
-      inputs:
-        script: |
-          ls $(app-path-root)
-          ls $(Build.ArtifactStagingDirectory)
 
     - task: AppCenterDistribute@3
       inputs:
