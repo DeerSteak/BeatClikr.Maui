@@ -1,8 +1,9 @@
-# Documentation
-#
-# Set the vX.X.X-X tag (vMAJOR.MINOR.PATCH-BUILD_NUMBER)
-# Install the Mobile Versioning in your Azure workspace https://marketplace.visualstudio.com/items?itemName=DamienAicheh.mobile-versioning-task
-#
+variables:
+  - group: 'App Configuration'
+  - name: ENVIRONMENT
+    value: ${{ parameters.environment }}
+  - name: SDate
+    value: $[format('{0:yyyy}/{0:MM}/{0:dd}/{0:HH}{0:mm}{0:ss}', pipeline.startTime)]
 
 parameters:
   - name: environment
@@ -19,12 +20,8 @@ parameters:
   - name: version-number
     displayName: Enter build number
     type: string
-    default: '$(Date:yyyyMMdd)'
+    default: $(Date:yyyyMMdd)
 
-variables:
-  - group: 'App Configuration'
-  - name: ENVIRONMENT
-    value: ${{ parameters.environment }}
 
 trigger:
   branches:
