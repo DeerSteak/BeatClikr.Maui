@@ -1,18 +1,9 @@
 variables:
   - group: 'App Configuration'
-  - name: ENVIRONMENT
-    value: ${{ parameters.environment }}
   - name: SDate
     value: $[format('{0:yyyy}{0:MM}{0:dd}', pipeline.startTime)]
 
 parameters:
-  - name: environment
-    displayName: Select an Environment
-    type: string
-    default: 'Staging'
-    values:
-    - Production
-    - Staging
   - name: version-name
     displayName: Enter Display Version
     type: string
