@@ -1,8 +1,9 @@
-# Documentation
-#
-# Set the vX.X.X-X tag (vMAJOR.MINOR.PATCH-BUILD_NUMBER) to trigger the pipeline
-# Install the Mobile Versioning in your Azure workspace https://marketplace.visualstudio.com/items?itemName=DamienAicheh.mobile-versioning-task
-#
+variables:
+  - group: 'App Configuration'
+  - name: ENVIRONMENT
+    value: ${{ parameters.environment }}
+  - name: SDate
+    value: $[format('{0:yyyy}{0:MM}{0:dd}', pipeline.startTime)]
 
 parameters:
   - name: environment
@@ -12,11 +13,14 @@ parameters:
     values:
     - Production
     - Staging
-
-variables:
-  - group: 'App Configuration'
-  - name: ENVIRONMENT
-    value: ${{ parameters.environment }}
+  - name: version-name
+    displayName: Enter Display Version
+    type: string
+    default: ''
+  - name: version-number
+    displayName: Enter build number
+    type: string
+    default: $(SDate)
 
 # Setting the trigger when a tag has been added to any branch. 
 trigger:
