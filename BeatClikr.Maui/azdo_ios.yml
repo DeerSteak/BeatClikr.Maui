@@ -100,7 +100,7 @@ stages:
       inputs:
         serverEndpoint: 'AppCenter Connection'
         appSlug: 'ben.funk/BeatClikr.iOS'
-        appFile: '$(Build.ArtifactStagingDirectory)/$(app-id-ios).ipa'
+        appFile: '/Users/runner/work/1/a/BeatClikr.Maui.ipa'
         releaseNotesOption: 'file'
         releaseNotesFile: '$(app-path-root)/releasenotes.txt'
         destinationType: 'groups' 
