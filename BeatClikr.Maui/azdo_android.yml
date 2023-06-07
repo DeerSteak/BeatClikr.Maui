@@ -1,5 +1,3 @@
-name: $(Date:yyyyMMdd)$(Rev:r)
-
 variables:
   - group: 'App Configuration'
   - name: SDate
@@ -50,7 +48,6 @@ stages:
         secureFile: '$(keystore-filename)'
 
     - script: |
-        echo $(name)
         echo Downloaded $(keystore.secureFilePath)
         echo Environment $(ENVIRONMENT)
         echo Working Directory $(System.DefaultWorkingDirectory)\\$(keystore-filename)
