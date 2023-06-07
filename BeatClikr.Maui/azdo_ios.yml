@@ -99,8 +99,8 @@ stages:
     - task: AppCenterDistribute@3
       inputs:
         serverEndpoint: 'AppCenter Connection'
-        appSlug: 'ben.funk/BeatClikr.iOS'
-        appFile: '/Users/runner/work/1/a/BeatClikr.Maui.ipa'
+        appSlug: '$(app-slug-ios)'
+        appFile: '$(app-file-ios)'
         releaseNotesOption: 'file'
         releaseNotesFile: '$(app-path-root)/releasenotes.txt'
         destinationType: 'groups' 
