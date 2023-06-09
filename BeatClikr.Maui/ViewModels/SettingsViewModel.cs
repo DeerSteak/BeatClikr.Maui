@@ -134,7 +134,6 @@ public partial class SettingsViewModel : ObservableObject
     private IShellService _shellService;
     private IDeviceInfo _deviceInfo;
     private IAppInfo _appInfo;
-    private IToast _toast;
 
     public SettingsViewModel(IFlashlight flashlight, IVibration vibration, IShellService shellService, IDeviceInfo deviceInfo, IAppInfo appInfo)
     {
