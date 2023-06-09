@@ -1,3 +1,5 @@
+name: $(Date:yyyyMMdd)$(Rev:rr)
+
 variables:
   - group: 'App Configuration'
   - name: SDate
@@ -32,8 +34,8 @@ stages:
         echo Build info
         echo target framework $(app-target-framework-ios)
         echo target display version $(SDateName)
-        echo target version number $(SDate)$(Build.BuildId.Rev:rr)
-        echo tag $(build-tag)
+        echo target build number $(Build.BuildNumber)
+        echo tag $(parameters.build-tag)
     
     - task: InstallAppleCertificate@2
       inputs:
