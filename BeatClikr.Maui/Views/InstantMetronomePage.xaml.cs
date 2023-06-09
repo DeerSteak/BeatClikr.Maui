@@ -1,4 +1,6 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using Microsoft.AppCenter.Analytics;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class InstantMetronomePage : ContentPage
 {
@@ -14,7 +16,8 @@ public partial class InstantMetronomePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        (BindingContext as ViewModels.InstantMetronomeViewModel).Init();     
+        (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
+        Analytics.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
@@ -23,6 +26,7 @@ public partial class InstantMetronomePage : ContentPage
         var vm = BindingContext as ViewModels.InstantMetronomeViewModel;
         if (vm.WasPlaying)
             vm.StopCommand.Execute(null);
+        Analytics.TrackEvent($"{GetType()} disappearing");
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)

@@ -1,4 +1,7 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using Microsoft.AppCenter.Analytics;
+using System.Runtime.CompilerServices;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class SongDetailsPage : ContentPage
 {
@@ -6,5 +9,17 @@ public partial class SongDetailsPage : ContentPage
     {
         InitializeComponent();
         BindingContext = songDetailsViewModel;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();        
+        Analytics.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        Analytics.TrackEvent($"{GetType()} disappearing");
     }
 }

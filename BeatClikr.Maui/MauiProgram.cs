@@ -7,6 +7,9 @@ using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
 using Plugin.MauiMTAdmob;
 using System.Reflection;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Analytics;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -17,6 +20,12 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
+        AppCenter.Start(
+            "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
+            "ios=fb97bcfa-abf2-4528-adaf-3a84cc92a357", 
+            typeof(Crashes), typeof(Analytics));
+
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()

@@ -1,4 +1,6 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using Microsoft.AppCenter.Analytics;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class RehearsalPage : ContentPage
 {
@@ -21,5 +23,12 @@ public partial class RehearsalPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.RehearsalViewModel).Init();
+        Analytics.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        Analytics.TrackEvent($"{GetType()} disappearing");
     }
 }

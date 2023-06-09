@@ -96,7 +96,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
         _metronomeClickerViewModel.IsLiveMode = false;
         _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
-        
+
     }
 
     [RelayCommand]

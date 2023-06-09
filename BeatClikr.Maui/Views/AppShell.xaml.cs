@@ -1,4 +1,6 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using Microsoft.AppCenter.Analytics;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class AppShell : Shell
 {
@@ -17,6 +19,18 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(RouteNames.SettingsRoute, typeof(SettingsPage));
         Routing.RegisterRoute(RouteNames.SongDetailsRoute, typeof(SongDetailsPage));
         Routing.RegisterRoute(RouteNames.GetStartedRoute, typeof(GetStartedPage));
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        Analytics.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        Analytics.TrackEvent($"{GetType()} disappearing");
     }
 }
 
