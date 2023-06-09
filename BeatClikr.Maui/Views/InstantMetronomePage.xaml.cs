@@ -1,27 +1,27 @@
 ﻿using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.Extensions.Logging;
 
 namespace BeatClikr.Maui.Views;
 
 public partial class InstantMetronomePage : ContentPage
 {
-    public InstantMetronomePage(ViewModels.InstantMetronomeViewModel metronomeViewModel)
+    private ILogger _logger;
+    public InstantMetronomePage(ViewModels.InstantMetronomeViewModel metronomeViewModel, ILogger<InstantMetronomePage> logger)
     {
         BindingContext = metronomeViewModel;
+        _logger = logger;
         InitializeComponent();
         AdView.AdsId = DeviceInfo.Platform == DevicePlatform.Android ? "ca-app-pub-8377432895177958/9298625858" : "ca-app-pub-8377432895177958/7490720167";
     }
 
-    public InstantMetronomePage() : this(ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>()) { }
+    public InstantMetronomePage() : this(ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>(), ServiceHelper.GetService<ILogger<InstantMetronomePage>>()) { }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
         (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
         Analytics.TrackEvent($"{GetType()} appearing");
-
-        //fake error
-        //Crashes.GenerateTestCrash();
     }
 
     protected override void OnDisappearing()

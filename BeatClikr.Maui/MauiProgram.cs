@@ -12,6 +12,7 @@ using Microsoft.AppCenter.Crashes;
 using Plugin.MauiMTAdmob;
 using System.Reflection;
 using MetroLog.MicrosoftExtensions;
+using MetroLog.Operators;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -30,7 +31,7 @@ public static class MauiProgram
             options.FolderPath = Path.Combine(
                 FileSystem.CacheDirectory,
                 "BeatClikrLog");
-        });       
+        });
 
         AppCenter.Start(
             "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
@@ -66,7 +67,8 @@ public static class MauiProgram
 
     public static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
     {
-        mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);
+        mauiAppBuilder.Services.AddSingleton(LogOperatorRetriever.Instance);
+        mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);        
         mauiAppBuilder.Services.AddSingleton(AppInfo.Current);
         mauiAppBuilder.Services.AddSingleton(DeviceDisplay.Current);
         mauiAppBuilder.Services.AddSingleton(Vibration.Default);
