@@ -29,10 +29,6 @@ public partial class SettingsViewModel : ObservableObject
 
         var snackBar = Snackbar.Make(msg, null, "OK", TimeSpan.FromSeconds(5), snackbarOptions);
         snackBar.Show();
-
-
-        //var toast = Toast.Make(msg, ToastDuration.Long);
-        //toast.Show();
     }
 
     [ObservableProperty]
