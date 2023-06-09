@@ -11,6 +11,8 @@ parameters:
     type: string
     default: '01'
 
+trigger: none
+
 stages:
   # Stage for MAUI iOS
 - stage: build_maui_ios
