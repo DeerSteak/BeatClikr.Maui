@@ -1,7 +1,9 @@
 ﻿using BeatClikr.Maui.ViewModels;
+using MetroLog;
 using Microsoft.AppCenter.Crashes;
 using Plugin.MauiMTAdmob;
 using Plugin.MauiMTAdmob.Extra;
+using System.Text;
 
 namespace BeatClikr.Maui;
 
@@ -17,12 +19,22 @@ public partial class App : Application
     protected override void OnStart()
     {
         base.OnStart();
-
-        if (Crashes.HasCrashedInLastSessionAsync().Result)
+        Crashes.GetErrorAttachments = (ErrorReport report) =>
         {
-            //MainPage.DisplayAlert("Crashed", "There was a crash last time", "OK");
-            
-        }
+            var path = Path.Combine(
+                FileSystem.CacheDirectory,
+                "BeatClikrLog");
+            if (File.Exists(path))
+            {
+                var text = File.ReadAllText(path);
+
+                return new ErrorAttachmentLog[]
+                {
+                ErrorAttachmentLog.AttachmentWithText(text, "error.log"),
+                };
+            }
+            return new ErrorAttachmentLog[0];
+        };
 
         if (!Preferences.ContainsKey(PreferenceKeys.InstantBeat))
             Preferences.Set(PreferenceKeys.InstantBeat, FileNames.ClickHi);

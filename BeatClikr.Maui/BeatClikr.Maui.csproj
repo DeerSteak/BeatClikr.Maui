@@ -53,6 +53,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+	  <PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 	  <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.2" />
 	  <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" />
 	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.4" />

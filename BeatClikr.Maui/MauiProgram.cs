@@ -4,11 +4,14 @@ global using BeatClikr.Maui.Helpers;
 using BeatClikr.Maui.Services;
 using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
+using MetroLog.Targets;
+using MetroLog;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Plugin.MauiMTAdmob;
 using System.Reflection;
+using MetroLog.MicrosoftExtensions;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -19,6 +22,15 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+        builder.Logging.AddStreamingFileLogger(options =>
+        {
+            options.MinLevel = Microsoft.Extensions.Logging.LogLevel.Error;
+            options.MaxLevel = Microsoft.Extensions.Logging.LogLevel.Critical;
+            options.RetainDays = 2;
+            options.FolderPath = Path.Combine(
+                FileSystem.CacheDirectory,
+                "BeatClikrLog");
+        });       
 
         AppCenter.Start(
             "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
