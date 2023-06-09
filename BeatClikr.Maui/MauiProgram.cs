@@ -1,15 +1,14 @@
 ﻿global using BeatClikr.Maui.Constants;
 global using BeatClikr.Maui.Enums;
 global using BeatClikr.Maui.Helpers;
-
 using BeatClikr.Maui.Services;
 using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Plugin.MauiMTAdmob;
 using System.Reflection;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Analytics;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 

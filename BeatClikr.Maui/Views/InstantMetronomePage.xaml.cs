@@ -1,4 +1,5 @@
 ﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace BeatClikr.Maui.Views;
 
@@ -18,6 +19,9 @@ public partial class InstantMetronomePage : ContentPage
         base.OnAppearing();
         (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
         Analytics.TrackEvent($"{GetType()} appearing");
+
+        //fake error
+        //Crashes.GenerateTestCrash();
     }
 
     protected override void OnDisappearing()

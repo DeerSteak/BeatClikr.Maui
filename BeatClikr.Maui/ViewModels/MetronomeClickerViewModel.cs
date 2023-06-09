@@ -89,8 +89,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
     private void BeatAction()
     {
-        if (Animate != null)
-            Animate();
+        Animate?.Invoke();
         BeatBox = _bulbLit;
     }
 
@@ -128,8 +127,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [RelayCommand]
     private void Stop()
     {
-        if (ResetAnimator != null)
-            ResetAnimator();
+        ResetAnimator?.Invoke();
         IsPlaying = false;
         _metronome.Stop();
         RhythmAction();
@@ -172,27 +170,17 @@ public partial class MetronomeClickerViewModel : ObservableObject
                 break;
         }
 
-        int numSubdivisions;
-        switch (Song.Subdivision)
+        var numSubdivisions = Song.Subdivision switch
         {
-            case SubdivisionEnum.Eighth:
-                numSubdivisions = 2;
-                break;
-            case SubdivisionEnum.TripletEighth:
-                numSubdivisions = 3;
-                break;
-            case SubdivisionEnum.Sixteenth:
-                numSubdivisions = 4;
-                break;
-            default: //Quarter note default
-                numSubdivisions = 1;
-                break;
-        }
-
+            SubdivisionEnum.Eighth => 2,
+            SubdivisionEnum.TripletEighth => 3,
+            SubdivisionEnum.Sixteenth => 4,
+            SubdivisionEnum.Quarter => 1,
+            _ => 1,
+        };
         _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
         _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
-        if (SetBeatMilliseconds != null)
-            SetBeatMilliseconds((uint)(_metronome.GetMillisecondsPerBeat()));
+        SetBeatMilliseconds?.Invoke((uint)(_metronome.GetMillisecondsPerBeat()));
     }
 }
 
