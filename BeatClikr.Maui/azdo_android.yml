@@ -1,15 +1,15 @@
-variables:
-  - group: 'App Configuration'
-  - name: SDate
-    value: $[format('{0:yyyy}{0:MM}{0:dd}', pipeline.startTime)]
-  - name: SDateName
-    value: $[format('{0:yy}.{0:MM}.{0:dd}', pipeline.startTime)]
+name: $(Date:yyyyMMdd)$(Rev:rr)
 
 parameters:
-  - name: build-tag
-    displayName: Enter build number rev (usually 01)
+  - name: displayVersion
+    displayName: Enter the display version
     type: string
-    default: '01'
+    default: '2.3.2'
+
+variables:
+  - group: 'App Configuration'
+  - name: displayVersion
+    value: ${{ parameters.displayVersion }}
 
 trigger: none
 
@@ -65,7 +65,7 @@ stages:
       displayName: 'Build project'
       inputs:
         script: |
-          dotnet publish $(app-path-project) -f $(app-target-framework-android) -c Release /p:ApplicationId=$(app-id-android) /p:ApplicationDisplayVersion=$(SDateName) /p:ApplicationVersion=$(SDate)$(build-tag) /p:AndroidSigningKeyPass=$(key-password) /p:AndroidSigningStorePass=$(keystore-password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(keystore-filename) /p:AndroidSigningKeyAlias=$(keystore-alias) /p:AndroidKeyStore=true
+          dotnet publish $(app-path-project) -f $(app-target-framework-android) -c Release /p:ApplicationId=$(app-id-android) /p:ApplicationDisplayVersion=$(displayVersion) /p:ApplicationVersion=$(Build.BuildNumber) /p:AndroidSigningKeyPass=$(key-password) /p:AndroidSigningStorePass=$(keystore-password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(keystore-filename) /p:AndroidSigningKeyAlias=$(keystore-alias) /p:AndroidKeyStore=true
     
     # Copy files to artifact directory  Temporary just to make sure the AAB is generated and signed correctly
     - task: CopyFiles@2
