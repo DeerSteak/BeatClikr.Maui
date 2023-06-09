@@ -50,7 +50,10 @@ stages:
       displayName: 'Build project'
       inputs:
        script: |
-         dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(SDateName) /p:ApplicationVersion=$(SDate)$(build-tag) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+        echo $(app-target-framework-ios)
+        echo $(SDateName)
+        echo $(SDate)$(build-tag)
+        dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(SDateName) /p:ApplicationVersion=$(SDate)$(build-tag) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
    
     - task: CopyFiles@2
       displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
