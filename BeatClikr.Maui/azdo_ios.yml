@@ -38,7 +38,6 @@ stages:
       inputs:
         certSecureFile: '$(apple-certificate-name)'
         certPwd: '$(apple-certificate-password)'
-        keychain: 'temp'
     
     - task: InstallAppleProvisioningProfile@1
       inputs:
@@ -62,7 +61,7 @@ stages:
       displayName: 'Build project'
       inputs:
        script: |
-        dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(displayVersion) /p:ApplicationVersion=$(Build.BuildNumber) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false /p:RuntimeIdentifier=ios-arm64
+        dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=$(app-id-ios) /p:ApplicationDisplayVersion=$(displayVersion) /p:ApplicationVersion=$(Build.BuildNumber) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false /p:RuntimeIdentifier=ios-arm64 /p:CodesignKey="$(apple-codesign-key)"
    
     - task: CopyFiles@2
       displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
