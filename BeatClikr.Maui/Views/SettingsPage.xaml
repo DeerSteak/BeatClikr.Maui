@@ -8,16 +8,27 @@
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
     Title="Settings"
     x:DataType="vm:SettingsViewModel">
-    <!--<Shell.TitleView>
-        <cc:TitleView Title="Settings" />
-    </Shell.TitleView>-->
     <ContentPage.Content>
         <Grid RowDefinitions="*, Auto">
             <ScrollView>
                 <StackLayout Padding="16" Spacing="6">
+                    <Label Style="{StaticResource LabelHeader}" Text="Practice Reminders" />
+                    <Label LineBreakMode="WordWrap" Text="BeatClikr can send you daily reminders to pick up your instrument and play." />
+                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Send practice reminders (starting this time tomorrow)" />
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            IsToggled="{Binding SendReminders}" />
+                    </Grid>
+
+                    <cc:Separator />
                     <Label Style="{StaticResource LabelHeader}" Text="Metronome Playback" />
                     <Label LineBreakMode="WordWrap" Text="BeatClikr will always animate the bulb icon, and it plays audio by default. Choose other playback settings below." />
-                    <BoxView BackgroundColor="Transparent" HeightRequest="10" />
+
                     <Grid
                         ColumnDefinitions="*, Auto"
                         RowDefinitions="Auto, Auto, Auto, Auto"

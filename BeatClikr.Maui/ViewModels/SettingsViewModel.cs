@@ -1,18 +1,46 @@
 ﻿using BeatClikr.Maui.Models;
 using BeatClikr.Maui.Services.Interfaces;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Resources;
 
 namespace BeatClikr.Maui.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
     [ObservableProperty]
+    bool _sendReminders;
+    partial void OnSendRemindersChanged(bool value)
+    {
+        Preferences.Set(PreferenceKeys.PracticeReminders, value);
+        string msg;
+        if (value) msg = "You will receive reminders daily, starting this time tomorrow";
+        else msg = "Previously-scheduled notifications canceled.";
+        
+        var snackbarOptions = new SnackbarOptions
+        { 
+            BackgroundColor = Color.FromArgb("#408CC4"),
+            TextColor = Colors.White,
+            ActionButtonTextColor = Colors.Black,
+            CornerRadius = new CornerRadius(5)
+        };
+
+        var snackBar = Snackbar.Make(msg, null, "OK", TimeSpan.FromSeconds(5), snackbarOptions);
+        snackBar.Show();
+
+
+        //var toast = Toast.Make(msg, ToastDuration.Long);
+        //toast.Show();
+    }
+
+    [ObservableProperty]
     bool _useFlashlight;
     partial void OnUseFlashlightChanged(bool value)
     {
         Preferences.Set(PreferenceKeys.UseFlashlight, value);
-    }
+    }    
 
     [ObservableProperty]
     private bool _showPersonalizedAdButton;
@@ -110,6 +138,7 @@ public partial class SettingsViewModel : ObservableObject
     private IShellService _shellService;
     private IDeviceInfo _deviceInfo;
     private IAppInfo _appInfo;
+    private IToast _toast;
 
     public SettingsViewModel(IFlashlight flashlight, IVibration vibration, IShellService shellService, IDeviceInfo deviceInfo, IAppInfo appInfo)
     {
@@ -122,6 +151,7 @@ public partial class SettingsViewModel : ObservableObject
         RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
         BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();        
         ShowPersonalizedAdButton = _deviceInfo.Platform != DevicePlatform.Android;
+        SendReminders = Preferences.Get(PreferenceKeys.PracticeReminders, false);
     }
 
     public void Init()
