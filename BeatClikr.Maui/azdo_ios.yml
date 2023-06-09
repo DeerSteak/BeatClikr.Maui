@@ -28,7 +28,7 @@ stages:
 
     # build project
     - task: CmdLine@2
-      displayName: 'build number params'
+      displayName: 'Show Version and Build Number'
       inputs:
        script: |
         echo Build info
