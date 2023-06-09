@@ -1,7 +1,7 @@
 name: $(Date:yyyyMMdd)$(Rev:rr)
 
 parameters:
-  - name: displayVersion
+  - name: displayVersionEntry
     displayName: Enter the display version
     type: string
     default: '2.3.2'
@@ -9,7 +9,7 @@ parameters:
 variables:
   - group: 'App Configuration'
   - name: displayVersion
-    value: ${{ parameters.displayVersion }}
+    value: ${{ parameters.displayVersionEntry }}
 
 trigger: none
 
