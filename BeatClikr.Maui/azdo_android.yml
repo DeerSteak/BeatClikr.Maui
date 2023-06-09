@@ -11,22 +11,6 @@ parameters:
     type: string
     default: '01'
 
-# Setting the trigger when a tag has been added to any branch. 
-trigger:
-  branches:
-    exclude:
-      - '*'
-  tags:
-    include:
-    - v1.*.*-*
-    - v2.*.*-*
-    - v3.*.*-*
-    - v4.*.*-*
-    - v5.*.*-*
-  paths:
-    exclude:
-    - README.md
-
 stages:
   # Stage for MAUI Android
 - stage: build_maui_android
