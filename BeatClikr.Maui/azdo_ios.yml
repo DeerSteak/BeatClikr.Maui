@@ -1,17 +1,17 @@
 name: $(Date:yyyyMMdd)$(Rev:rr)
 
-variables:
-  - group: 'App Configuration'
-  - name: SDate
-    value: $[format('{0:yyyy}{0:MM}{0:dd}', pipeline.startTime)]
-  - name: SDateName
-    value: $[format('{0:yy}.{0:MM}.{0:dd}', pipeline.startTime)]
+
 
 parameters:
-  - name: build-tag
-    displayName: Enter build number rev (usually 01)
+  - name: displayVersion
+    displayName: Enter the display version
     type: string
-    default: '01'
+    default: '2.3.2'
+
+variables:
+  - group: 'App Configuration'
+  - name: displayVersion
+    value: ${{ parameters.displayVersion }}
 
 trigger: none
 
@@ -28,14 +28,13 @@ stages:
 
     # build project
     - task: CmdLine@2
-      displayName: 'Build project'
+      displayName: 'build number params'
       inputs:
        script: |
         echo Build info
         echo target framework $(app-target-framework-ios)
-        echo target display version $(SDateName)
         echo target build number $(Build.BuildNumber)
-        echo tag $(parameters.build-tag)
+        echo displayVersion $(displayVersion)
     
     - task: InstallAppleCertificate@2
       inputs:
@@ -65,7 +64,7 @@ stages:
       displayName: 'Build project'
       inputs:
        script: |
-        dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=$(SDateName) /p:ApplicationVersion=$(SDate)$(build-tag) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false /p:RuntimeIdentifier=ios-arm64
+        dotnet publish $(app-path-project) -f $(app-target-framework-ios) -c Release /p:ApplicationId=/p:ApplicationDisplayVersion=${{ parameters.displayVersion }} /p:ApplicationVersion=$(Build.BuildNumber) /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false /p:RuntimeIdentifier=ios-arm64
    
     - task: CopyFiles@2
       displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
