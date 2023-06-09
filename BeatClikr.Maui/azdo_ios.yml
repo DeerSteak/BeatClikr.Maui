@@ -1,7 +1,5 @@
 name: $(Date:yyyyMMdd)$(Rev:rr)
 
-
-
 parameters:
   - name: displayVersion
     displayName: Enter the display version
