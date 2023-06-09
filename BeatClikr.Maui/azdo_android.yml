@@ -11,6 +11,8 @@ parameters:
     type: string
     default: '01'
 
+trigger: none
+
 stages:
   # Stage for MAUI Android
 - stage: build_maui_android
