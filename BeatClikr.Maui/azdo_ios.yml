@@ -38,7 +38,6 @@ stages:
       inputs:
         certSecureFile: '$(apple-certificate-name)'
         certPwd: '$(apple-certificate-password)'
-        keychain: 'temp'
     
     - task: InstallAppleProvisioningProfile@1
       inputs:
