@@ -26,26 +26,31 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder.Logging.AddStreamingFileLogger(options =>
-        {
-            options.MinLevel = Microsoft.Extensions.Logging.LogLevel.Error;
-            options.MaxLevel = Microsoft.Extensions.Logging.LogLevel.Critical;
-            options.RetainDays = 2;
-            options.FolderPath = Path.Combine(
-                FileSystem.CacheDirectory,
-                "BeatClikrLog");
-        });
 
-        AppCenter.Start(
-            "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
-            "ios=fb97bcfa-abf2-4528-adaf-3a84cc92a357", 
-            typeof(Crashes), typeof(Analytics));
+        if (AnalyticsHelper.CanTrack)
+        {
+            builder.Logging.AddStreamingFileLogger(options =>
+            {
+                options.MinLevel = Microsoft.Extensions.Logging.LogLevel.Error;
+                options.MaxLevel = Microsoft.Extensions.Logging.LogLevel.Critical;
+                options.RetainDays = 2;
+                options.FolderPath = Path.Combine(
+                    FileSystem.CacheDirectory,
+                    "BeatClikrLog");
+            });
+
+            AppCenter.Start(
+                "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
+                "ios=fb97bcfa-abf2-4528-adaf-3a84cc92a357",
+                typeof(Crashes), typeof(Analytics));
+        }
 
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .RegisterAppServices()
             .RegisterViewModels()
+            .UseLocalNotification()
             .RegisterViews()
             .UseMauiMTAdmob()
             .ConfigureFonts(fonts =>

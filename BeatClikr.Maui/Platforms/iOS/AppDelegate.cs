@@ -8,12 +8,8 @@ namespace BeatClikr.Maui;
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-
-    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    protected override MauiApp CreateMauiApp()
     {
-        MobileAds.SharedInstance.Start(CompletionHandler);
-        
         if (OperatingSystem.IsIOSVersionAtLeast(14))
         {
             ATTrackingManagerAuthorizationStatus status = ATTrackingManager.TrackingAuthorizationStatus;
@@ -30,6 +26,15 @@ public class AppDelegate : MauiUIApplicationDelegate
         {
             AnalyticsHelper.CanTrack = true;
         }
+
+        return MauiProgram.CreateMauiApp();
+    }
+
+    
+
+    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    {
+        MobileAds.SharedInstance.Start(CompletionHandler);        
 
         return base.FinishedLaunching(application, launchOptions);
     }
