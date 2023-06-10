@@ -45,7 +45,7 @@ namespace BeatClikr.Maui.Helpers
                 success = true;
             }
 
-            await DoSnackbar(success);
+            DoSnackbar(success);
 
             return success;
 		}
@@ -54,10 +54,10 @@ namespace BeatClikr.Maui.Helpers
         {
             var center = ServiceHelper.GetService<INotificationService>();
             center.Clear(REMINDER_ID);
-            Task.Run(async () => await DoSnackbar(false));
+            DoSnackbar(false);
         }
 
-        private static async Task DoSnackbar(bool isRegistered)
+        private static void DoSnackbar(bool isRegistered)
         {
             var msg = isRegistered
                 ? "You will receive reminders daily, starting this time tomorrow"
