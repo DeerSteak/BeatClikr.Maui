@@ -22,7 +22,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $data = Get-Content $(app-path-root)\cluster_txt.txt
+          $data = Get-Content $(app-path-root)\version.txt
           Write-Output $data
           Write-Host "##vso[task.setvariable variable=displayVersion;]$data"
     
