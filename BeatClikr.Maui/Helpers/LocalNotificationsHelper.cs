@@ -1,4 +1,6 @@
-﻿using Plugin.LocalNotification;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using Plugin.LocalNotification;
 
 namespace BeatClikr.Maui.Helpers
 {
@@ -40,7 +42,10 @@ namespace BeatClikr.Maui.Helpers
                 };
 
                 await center.Show(req);
+                success = true;
             }
+
+            await DoSnackbar(success);
 
             return success;
 		}
@@ -49,6 +54,28 @@ namespace BeatClikr.Maui.Helpers
         {
             var center = ServiceHelper.GetService<INotificationService>();
             center.Clear(REMINDER_ID);
+            Task.Run(async () => await DoSnackbar(false));
+        }
+
+        private static async Task DoSnackbar(bool isRegistered)
+        {
+            var msg = isRegistered
+                ? "You will receive reminders daily, starting this time tomorrow"
+            : "Previously-scheduled notifications canceled.";
+
+            var snackbarOptions = new SnackbarOptions
+            {
+                BackgroundColor = Color.FromArgb("#408CC4"),
+                TextColor = Colors.White,
+                ActionButtonTextColor = Colors.Black,
+                CornerRadius = new CornerRadius(5)
+            };
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                var snackBar = Snackbar.Make(msg, null, "OK", TimeSpan.FromSeconds(5), snackbarOptions);
+                await snackBar.Show();
+            });            
         }
     }    
 }

@@ -10,39 +10,28 @@ namespace BeatClikr.Maui.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
+    private bool _isBootstrapping = true;
     [ObservableProperty]
     bool _sendReminders;
     partial void OnSendRemindersChanged(bool value)
     {
+        if (_isBootstrapping)
+            return;
+
         Preferences.Set(PreferenceKeys.PracticeReminders, value);
-        string msg;
         if (value)
         {
-            msg = "You will receive reminders daily, starting this time tomorrow";
-
-            var success = LocalNotificationsHelper.RegisterForNotifications().Result;
-            if (!success)
+            var success = LocalNotificationsHelper
+                .RegisterForNotifications()
+                .ContinueWith(async (result) =>
             {
-                SendReminders = false;
-                return;
-            }
+                SendReminders = await result;
+            });            
         }
         else
         {            
-            msg = "Previously-scheduled notifications canceled.";
             LocalNotificationsHelper.ClearReminderNotifications();
         }
-        
-        var snackbarOptions = new SnackbarOptions
-        { 
-            BackgroundColor = Color.FromArgb("#408CC4"),
-            TextColor = Colors.White,
-            ActionButtonTextColor = Colors.Black,
-            CornerRadius = new CornerRadius(5)
-        };
-
-        var snackBar = Snackbar.Make(msg, null, "OK", TimeSpan.FromSeconds(5), snackbarOptions);
-        snackBar.Show();
     }
 
     [ObservableProperty]
@@ -188,6 +177,8 @@ public partial class SettingsViewModel : ObservableObject
         UseHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
 
         App.SetupAdmob();
+
+        _isBootstrapping = false;
     }
 
     [RelayCommand]
