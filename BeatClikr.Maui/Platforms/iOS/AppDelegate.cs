@@ -13,9 +13,32 @@ public class AppDelegate : MauiUIApplicationDelegate
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
     {
         MobileAds.SharedInstance.Start(CompletionHandler);
+        
+        if (OperatingSystem.IsIOSVersionAtLeast(14))
+        {
+            ATTrackingManagerAuthorizationStatus status = ATTrackingManager.TrackingAuthorizationStatus;
+            if (status == ATTrackingManagerAuthorizationStatus.NotDetermined || status == ATTrackingManagerAuthorizationStatus.Restricted)
+            {
+                ATTrackingManager.RequestTrackingAuthorization(TrackingCompletionHandler);
+            }
+            else
+            {
+                TrackingCompletionHandler(status);
+            }
+        }
+        else
+        {
+            AnalyticsHelper.CanTrack = true;
+        }
+
         return base.FinishedLaunching(application, launchOptions);
     }
 
     private void CompletionHandler(InitializationStatus status) { }
+
+    private void TrackingCompletionHandler(ATTrackingManagerAuthorizationStatus status)
+    {
+        AnalyticsHelper.CanTrack = status == ATTrackingManagerAuthorizationStatus.Authorized;
+    }
 }
 

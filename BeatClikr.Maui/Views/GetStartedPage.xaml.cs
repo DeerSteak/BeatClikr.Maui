@@ -1,7 +1,4 @@
-﻿using BeatClikr.Maui.Services.Interfaces;
-using Microsoft.AppCenter.Analytics;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class GetStartedPage : ContentPage
 {
@@ -15,13 +12,13 @@ public partial class GetStartedPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.GetStartedViewModel).SetImageHeight();
-        Analytics.TrackEvent($"{GetType()} appearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        Analytics.TrackEvent($"{GetType()} disappearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 
     private async void Button_Clicked(object sender, EventArgs e)

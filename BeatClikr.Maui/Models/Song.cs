@@ -15,7 +15,7 @@ public partial class Song : ObservableObject
     private int beatsPerMinute;
 
     [ObservableProperty]
-    private SubdivisionEnum subdivision;
+    private Subdivisions subdivision;
 
     [ObservableProperty]
     private int beatsPerMeasure;
@@ -35,7 +35,7 @@ public partial class Song : ObservableObject
         Artist = string.Empty;
         BeatsPerMinute = 60;
         BeatsPerMeasure = 4;
-        Subdivision = SubdivisionEnum.Eighth;
+        Subdivision = Subdivisions.Eighth;
         LiveSequence = null;
         RehearsalSequence = null;
     }

@@ -1,6 +1,6 @@
 ﻿namespace BeatClikr.Maui.Enums;
 
-public enum SubdivisionEnum
+public enum Subdivisions
 {
     Quarter = 0,
     Eighth = 1,

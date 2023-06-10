@@ -7,7 +7,7 @@ namespace BeatClikr.Maui.ViewModels;
 
 public partial class InstantMetronomeViewModel : ObservableObject
 {
-    private SubdivisionEnum _subdivision;
+    private Subdivisions _subdivision;
     private const int _numBeats = 4;
     private MetronomeClickerViewModel _metronomeClickerViewModel;
 
@@ -21,19 +21,19 @@ public partial class InstantMetronomeViewModel : ObservableObject
         switch (value)
         {
             case 0:
-                _subdivision = SubdivisionEnum.Quarter;
+                _subdivision = Enums.Subdivisions.Quarter;
                 break;
             case 1:
-                _subdivision = SubdivisionEnum.Eighth;
+                _subdivision = Enums.Subdivisions.Eighth;
                 break;
             case 2:
-                _subdivision = SubdivisionEnum.TripletEighth;
+                _subdivision = Enums.Subdivisions.TripletEighth;
                 break;
             case 3:
-                _subdivision = SubdivisionEnum.Sixteenth;
+                _subdivision = Enums.Subdivisions.Sixteenth;
                 break;
             default:
-                _subdivision = SubdivisionEnum.Eighth;
+                _subdivision = Enums.Subdivisions.Eighth;
                 break;
         }
         SetupMetronome();
@@ -69,7 +69,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
 
     public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel, IShellService shellService)
     {
-        _subdivision = SubdivisionEnum.Quarter;
+        _subdivision = Enums.Subdivisions.Quarter;
         _metronomeClickerViewModel = metronomeClickerViewModel;
         _shellService = shellService;
 

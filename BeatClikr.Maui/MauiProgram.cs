@@ -15,6 +15,7 @@ using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
+using Plugin.LocalNotification;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -77,7 +78,8 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton(Flashlight.Default);
         mauiAppBuilder.Services.AddSingleton<IShellService, ShellService>();
         mauiAppBuilder.Services.AddSingleton<IDataService, DataService>();
-        mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();        
+        mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();
+        mauiAppBuilder.Services.AddSingleton<INotificationService>(LocalNotificationCenter.Current);
 #if IOS
         mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.iOS.MetronomeService>();
         mauiAppBuilder.Services.AddSingleton<IAdTrackingHandlerService, Platforms.iOS.AdTrackingHandlerService>();

@@ -4,7 +4,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Resources;
+using Plugin.LocalNotification;
 
 namespace BeatClikr.Maui.ViewModels;
 
@@ -16,8 +16,22 @@ public partial class SettingsViewModel : ObservableObject
     {
         Preferences.Set(PreferenceKeys.PracticeReminders, value);
         string msg;
-        if (value) msg = "You will receive reminders daily, starting this time tomorrow";
-        else msg = "Previously-scheduled notifications canceled.";
+        if (value)
+        {
+            msg = "You will receive reminders daily, starting this time tomorrow";
+
+            var success = LocalNotificationsHelper.RegisterForNotifications().Result;
+            if (!success)
+            {
+                SendReminders = false;
+                return;
+            }
+        }
+        else
+        {            
+            msg = "Previously-scheduled notifications canceled.";
+            LocalNotificationsHelper.ClearReminderNotifications();
+        }
         
         var snackbarOptions = new SnackbarOptions
         { 

@@ -66,19 +66,19 @@ public partial class SongDetailsViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private SubdivisionEnum _subdivision;
-    partial void OnSubdivisionChanged(SubdivisionEnum value)
+    private Subdivisions _subdivision;
+    partial void OnSubdivisionChanged(Subdivisions value)
     {
         Song.Subdivision = value;
         switch (value)
         {
-            case SubdivisionEnum.Eighth:
+            case Enums.Subdivisions.Eighth:
                 SelectedSubdivisionIndex = 1;
                 break;
-            case SubdivisionEnum.TripletEighth:
+            case Enums.Subdivisions.TripletEighth:
                 SelectedSubdivisionIndex = 2;
                 break;
-            case SubdivisionEnum.Sixteenth:
+            case Enums.Subdivisions.Sixteenth:
                 SelectedSubdivisionIndex = 3;
                 break;
             default:
@@ -95,16 +95,16 @@ public partial class SongDetailsViewModel : ObservableObject
         switch (value)
         {
             case 0:
-                Subdivision = SubdivisionEnum.Quarter;
+                Subdivision = Enums.Subdivisions.Quarter;
                 break;
             case 2:
-                Subdivision = SubdivisionEnum.TripletEighth;
+                Subdivision = Enums.Subdivisions.TripletEighth;
                 break;
             case 3:
-                Subdivision = SubdivisionEnum.Sixteenth;
+                Subdivision = Enums.Subdivisions.Sixteenth;
                 break;
             default:
-                Subdivision = SubdivisionEnum.Eighth;
+                Subdivision = Enums.Subdivisions.Eighth;
                 break;
         }
         SyncSongAndMetronome();
@@ -125,13 +125,13 @@ public partial class SongDetailsViewModel : ObservableObject
             Subdivision = Song.Subdivision;
             switch (Subdivision)
             {
-                case SubdivisionEnum.Quarter:
+                case Enums.Subdivisions.Quarter:
                     SelectedSubdivisionIndex = 0;
                     break;
-                case SubdivisionEnum.TripletEighth:
+                case Enums.Subdivisions.TripletEighth:
                     SelectedSubdivisionIndex = 2;
                     break;
-                case SubdivisionEnum.Sixteenth:
+                case Enums.Subdivisions.Sixteenth:
                     SelectedSubdivisionIndex = 3;
                     break;
                 default: //Eighth or anything else I forgot to add
@@ -147,7 +147,7 @@ public partial class SongDetailsViewModel : ObservableObject
             {
                 BeatsPerMeasure = 4,
                 BeatsPerMinute = 60,
-                Subdivision = SubdivisionEnum.Eighth
+                Subdivision = Enums.Subdivisions.Eighth
             };
             SelectedSubdivisionIndex = 2;
             BeatsPerMinute = Song.BeatsPerMinute;

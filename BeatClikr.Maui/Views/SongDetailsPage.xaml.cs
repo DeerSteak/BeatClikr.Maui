@@ -13,13 +13,13 @@ public partial class SongDetailsPage : ContentPage
 
     protected override void OnAppearing()
     {
-        base.OnAppearing();        
-        Analytics.TrackEvent($"{GetType()} appearing");
+        base.OnAppearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        Analytics.TrackEvent($"{GetType()} disappearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

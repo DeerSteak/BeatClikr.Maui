@@ -20,6 +20,26 @@ public class MainActivity : MauiAppCompatActivity
     {
         base.OnCreate(savedInstanceState);
         MobileAds.Initialize(this);
+        if (OperatingSystem.IsAndroidVersionAtLeast(8))
+        {
+            SetupNotificationChannels();
+        }
+
+        AnalyticsHelper.CanTrack = true;
+    }
+
+    private void SetupNotificationChannels()
+    {
+        var reminderChannelId = "beatClikrReminders";
+        var reminderChannelName = "Practice Reminders";
+        var reminderChannelDescription = "Daily practice reminder notifications to get you to pick up your instrument (set up in the app)";
+        var defaultImportance = Android.App.NotificationImportance.Default;
+        var reminderChannel = new NotificationChannel(reminderChannelId, reminderChannelName, defaultImportance);
+        reminderChannel.Description = reminderChannelDescription;
+
+        var notificationManager = GetSystemService(NotificationService) as NotificationManager;
+        if (notificationManager != null)
+            notificationManager.CreateNotificationChannel(reminderChannel);
     }
 }
 

@@ -2,24 +2,24 @@
 
 public static class PlaybackUtilities
 {
-    public static int GetSubdivisionsPerBeat(SubdivisionEnum sub)
+    public static int GetSubdivisionsPerBeat(Subdivisions sub)
     {
         switch (sub)
         {
-            case SubdivisionEnum.Quarter:
+            case Subdivisions.Quarter:
                 return 2; // this is required to get the light to turn off while blinking
-            case SubdivisionEnum.Eighth:
+            case Subdivisions.Eighth:
                 return 2;
-            case SubdivisionEnum.TripletEighth:
+            case Subdivisions.TripletEighth:
                 return 3;
-            case SubdivisionEnum.Sixteenth:
+            case Subdivisions.Sixteenth:
                 return 4;
             default: // should never happen (?!)
                 return 2;
         }
     }
 
-    public static float GetTimerInterval(SubdivisionEnum sub, int bpm)
+    public static float GetTimerInterval(Subdivisions sub, int bpm)
     {
         var subdivisionsPerBeat = GetSubdivisionsPerBeat(sub);
         var baseInterval = (1000F / (float)bpm) * 60;

@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter.Analytics;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class HelpPage : ContentPage
 {
@@ -18,12 +16,12 @@ public partial class HelpPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        Analytics.TrackEvent($"{GetType()} appearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        Analytics.TrackEvent($"{GetType()} disappearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

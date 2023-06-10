@@ -133,7 +133,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
         RhythmAction();
         _deviceDisplay.KeepScreenOn = false;
 
-        Analytics.TrackEvent($"Metronome stopped");
+        AnalyticsHelper.TrackEvent($"Metronome stopped");
 
     }
 
@@ -143,7 +143,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
         _metronome.Play();
         _deviceDisplay.KeepScreenOn = true;
 
-        Analytics.TrackEvent($"Metronome started");
+        AnalyticsHelper.TrackEvent($"Metronome started");
     }
 
     [RelayCommand]
@@ -172,10 +172,10 @@ public partial class MetronomeClickerViewModel : ObservableObject
 
         var numSubdivisions = Song.Subdivision switch
         {
-            SubdivisionEnum.Eighth => 2,
-            SubdivisionEnum.TripletEighth => 3,
-            SubdivisionEnum.Sixteenth => 4,
-            SubdivisionEnum.Quarter => 1,
+            Subdivisions.Eighth => 2,
+            Subdivisions.TripletEighth => 3,
+            Subdivisions.Sixteenth => 4,
+            Subdivisions.Quarter => 1,
             _ => 1,
         };
         _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);

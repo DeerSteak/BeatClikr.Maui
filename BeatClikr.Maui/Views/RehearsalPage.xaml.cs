@@ -23,12 +23,12 @@ public partial class RehearsalPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.RehearsalViewModel).Init();
-        Analytics.TrackEvent($"{GetType()} appearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        Analytics.TrackEvent($"{GetType()} disappearing");
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }
