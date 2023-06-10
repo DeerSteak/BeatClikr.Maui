@@ -1,15 +1,7 @@
 name: $(Date:yyyyMMdd)$(Rev:rr)
 
-parameters:
-  - name: displayVersion
-    displayName: Enter the display version
-    type: string
-    default: '2.3.2'
-
 variables:
   - group: 'App Configuration'
-  - name: displayVersion
-    value: ${{ parameters.displayVersion }}
 
 trigger: none
 
@@ -25,14 +17,6 @@ stages:
     steps:
 
     # build project
-    - task: CmdLine@2
-      displayName: 'Show Version and Build Number'
-      inputs:
-       script: |
-        echo Build info
-        echo target framework $(app-target-framework-ios)
-        echo target build number $(Build.BuildNumber)
-        echo displayVersion $(displayVersion)
     
     - task: InstallAppleCertificate@2
       inputs:
@@ -44,6 +28,16 @@ stages:
         provisioningProfileLocation: 'secureFiles'
         provProfileSecureFile: '$(apple-provisioning-profile-name)'
     
+    # Read version number from text file
+    - task: PowerShell@2
+      displayName: Set Display Version from version.txt
+      inputs:        
+        targetType: 'inline'
+        script: |
+          $data = Get-Content $(app-path-root)\version.txt
+          Write-Output $data
+          Write-Host "##vso[task.setvariable variable=displayVersion;]$data"
+
     # Install .NET SDKs  
     - task: UseDotNet@2
       displayName: Install .NET SDK
