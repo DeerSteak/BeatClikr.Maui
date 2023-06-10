@@ -1,15 +1,7 @@
 name: $(Date:yyyyMMdd)$(Rev:rr)
 
-parameters:
-  - name: displayVersionEntry
-    displayName: Enter the display version
-    type: string
-    default: '2.3.2'
-
 variables:
   - group: 'App Configuration'
-  - name: displayVersion
-    value: ${{ parameters.displayVersionEntry }}
 
 trigger: none
 
@@ -25,6 +17,14 @@ stages:
       - MSBuild
       
     steps:
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $data = Get-Content $(app-path-root)\cluster_txt.txt
+          Write-Output $data
+          Write-Host "##vso[task.setvariable variable=displayVersion;]$data"
     
      # Download the keystore from secured files
     - task: DownloadSecureFile@1
