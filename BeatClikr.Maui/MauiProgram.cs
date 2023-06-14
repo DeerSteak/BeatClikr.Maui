@@ -85,6 +85,8 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton<IDataService, DataService>();
         mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();
         mauiAppBuilder.Services.AddSingleton<INotificationService>(LocalNotificationCenter.Current);
+        mauiAppBuilder.Services.AddSingleton<ILocalNotificationService, LocalNotificationService>();
+        mauiAppBuilder.Services.AddSingleton<IPermissionService, PermissionService>();
 #if IOS
         mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.iOS.MetronomeService>();
         mauiAppBuilder.Services.AddSingleton<IAdTrackingHandlerService, Platforms.iOS.AdTrackingHandlerService>();

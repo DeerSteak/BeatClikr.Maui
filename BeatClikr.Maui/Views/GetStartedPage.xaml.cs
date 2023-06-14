@@ -1,11 +1,15 @@
-﻿namespace BeatClikr.Maui.Views;
+﻿using BeatClikr.Maui.Services.Interfaces;
+
+namespace BeatClikr.Maui.Views;
 
 public partial class GetStartedPage : ContentPage
 {
-    public GetStartedPage(ViewModels.GetStartedViewModel getStartedViewModel)
+    private IPermissionService _permissionService;
+    public GetStartedPage(ViewModels.GetStartedViewModel getStartedViewModel, IPermissionService permissionService)
     {
         InitializeComponent();
         BindingContext = getStartedViewModel;
+        _permissionService = permissionService;
     }
 
     protected override void OnAppearing()
@@ -19,12 +23,5 @@ public partial class GetStartedPage : ContentPage
     {
         base.OnDisappearing();
         AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
-    }
-
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        Preferences.Set(PreferenceKeys.Onboarded, DateTime.Now);
-        await PermissionsHelper.AskAllPermissions();
-        await Navigation.PopModalAsync();
     }
 }

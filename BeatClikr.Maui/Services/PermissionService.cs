@@ -3,9 +3,9 @@ using BeatClikr.Maui.Services.Interfaces;
 
 namespace BeatClikr.Maui.Helpers
 {
-	public static class PermissionsHelper
+	public class PermissionService : IPermissionService
 	{
-		private static async Task SetupFlashlight()
+		public async Task SetupFlashlight()
 		{
             var result = await Permissions.CheckStatusAsync<Permissions.Flashlight>();
             if (result == PermissionStatus.Granted)
@@ -26,7 +26,7 @@ namespace BeatClikr.Maui.Helpers
             Preferences.Set(PreferenceKeys.UseFlashlight, pref);
         }
 
-        private static async Task SetupHaptic()
+        public async Task SetupHaptic()
         {
             var result = await Permissions.CheckStatusAsync<Permissions.Vibrate>();
             if (result == PermissionStatus.Granted)
@@ -47,7 +47,7 @@ namespace BeatClikr.Maui.Helpers
             Preferences.Set(PreferenceKeys.UseHaptic, pref);
         }
 
-        private static async Task FirstTimeFlashlightQuestion()
+        public async Task FirstTimeFlashlightQuestion()
         {
             if (!Preferences.ContainsKey(PreferenceKeys.UseFlashlight))
             {
@@ -61,7 +61,7 @@ namespace BeatClikr.Maui.Helpers
             await SetupFlashlight();
         }
 
-        private static async Task FirstTimeHapticQuestion()
+        public async Task FirstTimeHapticQuestion()
         {
             if (!Preferences.ContainsKey(PreferenceKeys.UseHaptic))
             {
@@ -75,7 +75,7 @@ namespace BeatClikr.Maui.Helpers
             await SetupHaptic();
         }
 
-        public static async Task AskAllPermissions()
+        public async Task AskAllPermissions()
         {
             if (!Preferences.ContainsKey(PreferenceKeys.HasAskedFlashlight))
             {

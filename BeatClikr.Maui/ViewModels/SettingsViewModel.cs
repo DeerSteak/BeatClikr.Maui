@@ -11,6 +11,8 @@ namespace BeatClikr.Maui.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
     private bool _isBootstrapping = true;
+    private ILocalNotificationService _localNotificationService;
+
     [ObservableProperty]
     bool _sendReminders;
     partial void OnSendRemindersChanged(bool value)
@@ -21,7 +23,7 @@ public partial class SettingsViewModel : ObservableObject
         Preferences.Set(PreferenceKeys.PracticeReminders, value);
         if (value)
         {
-            var success = LocalNotificationsHelper
+            var success = _localNotificationService
                 .RegisterForNotifications()
                 .ContinueWith(async (result) =>
             {
@@ -30,7 +32,7 @@ public partial class SettingsViewModel : ObservableObject
         }
         else
         {            
-            LocalNotificationsHelper.ClearReminderNotifications();
+            _localNotificationService.ClearReminderNotifications();
         }
     }
 
@@ -138,13 +140,14 @@ public partial class SettingsViewModel : ObservableObject
     private IDeviceInfo _deviceInfo;
     private IAppInfo _appInfo;
 
-    public SettingsViewModel(IFlashlight flashlight, IVibration vibration, IShellService shellService, IDeviceInfo deviceInfo, IAppInfo appInfo)
+    public SettingsViewModel(IFlashlight flashlight, IVibration vibration, IShellService shellService, IDeviceInfo deviceInfo, IAppInfo appInfo, ILocalNotificationService localNotificationService)
     {
         _flashlight = flashlight;
         _vibration = vibration;
         _shellService = shellService;
         _deviceInfo = deviceInfo;
         _appInfo = appInfo;
+        _localNotificationService = localNotificationService;
 
         RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
         BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();        

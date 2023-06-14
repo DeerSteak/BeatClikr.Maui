@@ -8,6 +8,8 @@ namespace BeatClikr.Maui.ViewModels
     public partial class GetStartedViewModel : ObservableObject
     {
         private IDeviceDisplay _deviceDisplay;
+        private IPermissionService _permissionService;
+        private INonShellNavProvider _nonShellNavProvider;
 
         [ObservableProperty]
         private int _imageHeight;
@@ -15,13 +17,23 @@ namespace BeatClikr.Maui.ViewModels
         [ObservableProperty]
         private List<CarouselViewItem> _carouselViewItems;
 
+        [RelayCommand]
+        private async Task GetStarted()
+        {
+            Preferences.Set(PreferenceKeys.Onboarded, DateTime.Now);
+            await _permissionService.AskAllPermissions();
+            await _nonShellNavProvider.PopModalAsync();
+        }
+
         private IShellService _shellService;
 
-        public GetStartedViewModel(IDeviceDisplay deviceDisplay, IShellService shellService)
+        public GetStartedViewModel(IDeviceDisplay deviceDisplay, IShellService shellService, IPermissionService permissionService, INonShellNavProvider nonShellNavProvider)
         {
             _deviceDisplay = deviceDisplay;
             _shellService = shellService;
             _deviceDisplay.MainDisplayInfoChanged += (s, e) => SetImageHeight();
+            _permissionService = permissionService;
+            _nonShellNavProvider = nonShellNavProvider;
             CarouselViewItems = new List<CarouselViewItem>
             {
                 new CarouselViewItem { ImageName = "screen1", Description = "The Instant Metronome is a quick and easy way to set BPM and Groove and just use a metronome. The menu in the upper-right is for other features."},

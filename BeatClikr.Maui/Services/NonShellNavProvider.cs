@@ -13,6 +13,11 @@ namespace BeatClikr.Maui.Services
         {
             return await Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
         }
+
+        public async Task<Page> PopModalAsync()
+        {
+            return await Application.Current.MainPage.Navigation.PopModalAsync();
+        }
     }
 }
 
