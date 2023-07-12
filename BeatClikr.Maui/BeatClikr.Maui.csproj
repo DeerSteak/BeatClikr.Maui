@@ -35,7 +35,7 @@
 	  <CreatePackage>false</CreatePackage>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationVersion>1</ApplicationVersion>
-	  <CodesignProvision>beatclikr_profile_dev</CodesignProvision>
+	  <CodesignProvision>Automatic</CodesignProvision>
 	  <CodesignKey>iPhone Developer</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	</PropertyGroup>

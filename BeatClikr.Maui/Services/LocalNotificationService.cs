@@ -11,11 +11,10 @@ namespace BeatClikr.Maui.Services
 
         public async Task<bool> RegisterForNotifications()
         {
-            var success = false;
             var center = ServiceHelper.GetService<INotificationService>();
-
             var perm = await center.RequestNotificationPermission();
 
+            bool success;
             if (!perm)
                 return perm;
             else
@@ -58,7 +57,7 @@ namespace BeatClikr.Maui.Services
             DoSnackbar(false);
         }
 
-        private void DoSnackbar(bool isRegistered)
+        private static void DoSnackbar(bool isRegistered)
         {
             var msg = isRegistered
                 ? "You will receive reminders daily, starting this time tomorrow"
