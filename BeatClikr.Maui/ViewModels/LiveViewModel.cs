@@ -44,7 +44,7 @@ public partial class LiveViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void AddSongToPlaylist()
+    private async Task AddSongToPlaylist()
     {
         var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
         addPage.Title = "Add to Live Playlist";
@@ -75,7 +75,7 @@ public partial class LiveViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void SongSelected()
+    private async Task SongSelected()
     {
         if (SelectedSong == null)
             return;

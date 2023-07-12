@@ -190,7 +190,7 @@ public partial class SongDetailsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void Cancel()
+    private async Task Cancel()
     {
         var stayPut = false;
         if (_recordChanged)
@@ -200,9 +200,8 @@ public partial class SongDetailsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void Save()
+    private async Task Save()
     {
-        var result = 0;
         if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Artist) || BeatsPerMinute <= 0)
         {
             await _shellService.DisplayAlert("Incomplete Form", "Both the Artist and Title should be set, and the BPM must be greater than 0", "OK");
@@ -210,7 +209,7 @@ public partial class SongDetailsViewModel : ObservableObject
         }
 
         if (_recordChanged)
-            result = _persistence.SaveSongToLibrary(Song);
+            _persistence.SaveSongToLibrary(Song);
         try
         {
             await _shellService.PopAsync();

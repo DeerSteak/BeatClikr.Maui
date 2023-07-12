@@ -11,12 +11,14 @@ public partial class AboutViewModel : ObservableObject
     [ObservableProperty]
     private string _year;
 
-    private IAppInfo _appInfo;
-    private IShellService _shellService;
-    private ILogger<AboutViewModel> _logger;
-    private IStoreReview _review;
+    private readonly IAppInfo _appInfo;
+    private readonly IShellService _shellService;
+    private readonly ILogger<AboutViewModel> _logger;
+    private readonly IStoreReview _review;
 
-    public AboutViewModel(IShellService shellService, IAppInfo appInfo, ILogger<AboutViewModel> logger, IStoreReview review)
+    public AboutViewModel(IShellService shellService,
+        IAppInfo appInfo, ILogger<AboutViewModel> logger,
+        IStoreReview review)
     {
         _shellService = shellService;
         _appInfo = appInfo;
@@ -26,10 +28,7 @@ public partial class AboutViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void WriteReview()
-    {
-        _review.OpenStoreListing("1512245974");
-    }
+    private void WriteReview() => _review.OpenStoreListing("1512245974");
 
     [RelayCommand]
     private async Task SendFeedback() => await SendEmail();
@@ -38,7 +37,7 @@ public partial class AboutViewModel : ObservableObject
     {
         string subject = "BeatClikr feedback";
         string body = $"BeatClikr Version: {_appInfo.Version}\n\r\n\r";
-        List<string> recipients = new List<string>
+        List<string> recipients = new()
         {
             "beatclikr@gmail.com"
         };

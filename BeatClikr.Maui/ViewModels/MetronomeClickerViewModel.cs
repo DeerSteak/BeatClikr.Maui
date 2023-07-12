@@ -112,7 +112,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void StartStop()
+    private async Task StartStop()
     {
         if (!IsPlaying)
         {

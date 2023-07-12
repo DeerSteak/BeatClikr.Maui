@@ -27,8 +27,8 @@ public class MetronomeService : IMetronomeService
     private AudioTrack _audioTrack;
     double _subdivisionLengthInMilliseconds;
     private bool _useHaptic;
-    private readonly VibrationEffect _beatEffect;
-    private readonly VibrationEffect _rhythmEffect;
+    private VibrationEffect _beatEffect;
+    private VibrationEffect _rhythmEffect;
     private readonly bool _canVibrate;
 
     static Vibrator vibrator;
@@ -58,6 +58,11 @@ public class MetronomeService : IMetronomeService
     public void SetHaptic()
     {
         _useHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
+        if (_useHaptic)
+        {
+            _beatEffect = VibrationEffect.CreateOneShot(10, 255);
+            _rhythmEffect = VibrationEffect.CreateOneShot(10, 128);
+        }
     }
 
     public void Play()

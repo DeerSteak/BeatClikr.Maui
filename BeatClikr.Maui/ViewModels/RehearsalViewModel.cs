@@ -44,7 +44,7 @@ public partial class RehearsalViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void AddSongToPlaylist()
+    private async Task AddSongToPlaylist()
     {
         var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
         addPage.Title = "Add to Rehearsal Playlist";
@@ -75,7 +75,7 @@ public partial class RehearsalViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void SongSelected()
+    private async Task SongSelected()
     {
         if (SelectedSong == null)
             return;

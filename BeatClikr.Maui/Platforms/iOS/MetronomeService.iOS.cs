@@ -72,7 +72,7 @@ public class MetronomeService : IMetronomeService
             }
             _previouslySetup = true;
         }
-        catch (Exception ex)
+        catch
         {
 
         }
