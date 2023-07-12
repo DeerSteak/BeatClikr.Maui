@@ -249,5 +249,7 @@
 	<string>BeatClikr does not use your location.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>BeatClikr does not use your location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>BeatClikr does not use your location.</string>
 </dict>
 </plist>
