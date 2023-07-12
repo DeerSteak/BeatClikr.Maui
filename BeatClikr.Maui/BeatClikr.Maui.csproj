@@ -43,7 +43,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationVersion>1</ApplicationVersion>
-	  <CodesignProvision>beatclikr_profile_dev</CodesignProvision>
+	  <CodesignProvision>Automatic</CodesignProvision>
 	  <CodesignKey>iPhone Developer</CodesignKey>
 	</PropertyGroup>
 

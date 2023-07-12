@@ -1,6 +1,7 @@
 ﻿using AppTrackingTransparency;
 using Foundation;
 using Google.MobileAds;
+using StoreKit;
 using UIKit;
 
 namespace BeatClikr.Maui;
@@ -30,12 +31,11 @@ public class AppDelegate : MauiUIApplicationDelegate
         return MauiProgram.CreateMauiApp();
     }
 
-    
+
 
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
     {
-        MobileAds.SharedInstance.Start(CompletionHandler);        
-
+        MobileAds.SharedInstance.Start(CompletionHandler);
         return base.FinishedLaunching(application, launchOptions);
     }
 
