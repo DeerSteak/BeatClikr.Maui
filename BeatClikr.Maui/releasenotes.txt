@@ -1,1 +1,3 @@
-﻿This is my release notes file
+﻿New in this version (2.4.0)
+- Ability to set practice reminders (will prompt on start first time)
+- StoreKit in-app review implementation
