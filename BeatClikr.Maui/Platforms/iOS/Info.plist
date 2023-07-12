@@ -243,5 +243,11 @@
 			<string>3qcr597p9d.skadnetwork</string>
 		</dict>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>BeatClikr does not use your location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>BeatClikr does not use your location.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>BeatClikr does not use your location.</string>
 </dict>
 </plist>
