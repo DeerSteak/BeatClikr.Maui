@@ -18,4 +18,5 @@ public static class PreferenceKeys
     public const string HasAskedFlashlight = "HasAskedFlashlight";
     public const string HasAskedHaptic = "HasAskedHaptic";
     public const string PracticeReminders = "SendPracticeReminders";
+    public const string HasAskedReminders = "HasAskedReminders";
 }

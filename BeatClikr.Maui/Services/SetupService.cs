@@ -1,12 +1,11 @@
-﻿using System;
-using BeatClikr.Maui.Services.Interfaces;
+﻿using BeatClikr.Maui.Services.Interfaces;
 
 namespace BeatClikr.Maui.Helpers
 {
-	public class PermissionService : IPermissionService
-	{
-		public async Task SetupFlashlight()
-		{
+    public class SetupService : ISetupService
+    {
+        private async Task SetupFlashlight()
+        {
             var result = await Permissions.CheckStatusAsync<Permissions.Flashlight>();
             if (result == PermissionStatus.Granted)
                 return;
@@ -26,7 +25,7 @@ namespace BeatClikr.Maui.Helpers
             Preferences.Set(PreferenceKeys.UseFlashlight, pref);
         }
 
-        public async Task SetupHaptic()
+        private async Task SetupHaptic()
         {
             var result = await Permissions.CheckStatusAsync<Permissions.Vibrate>();
             if (result == PermissionStatus.Granted)
@@ -47,7 +46,16 @@ namespace BeatClikr.Maui.Helpers
             Preferences.Set(PreferenceKeys.UseHaptic, pref);
         }
 
-        public async Task FirstTimeFlashlightQuestion()
+        private async Task SetupReminders()
+        {
+            ILocalNotificationService service = ServiceHelper.GetService<ILocalNotificationService>();
+            if (service != null)
+            {
+                await service.RegisterForNotifications();
+            }
+        }
+
+        private async Task FirstTimeFlashlightQuestion()
         {
             if (!Preferences.ContainsKey(PreferenceKeys.UseFlashlight))
             {
@@ -61,7 +69,7 @@ namespace BeatClikr.Maui.Helpers
             await SetupFlashlight();
         }
 
-        public async Task FirstTimeHapticQuestion()
+        private async Task FirstTimeHapticQuestion()
         {
             if (!Preferences.ContainsKey(PreferenceKeys.UseHaptic))
             {
@@ -75,17 +83,27 @@ namespace BeatClikr.Maui.Helpers
             await SetupHaptic();
         }
 
-        public async Task AskAllPermissions()
+        private async Task FirstTimePracticeReminders()
+        {
+            if (!Preferences.ContainsKey(PreferenceKeys.PracticeReminders))
+            {
+                var questionText = "BeatClikr can remind you to practice at this time each day. Would you like these remidners? If so, press Yes and select Allow on the next prompt.";
+                var questionResponse = await (ServiceHelper.GetService<INonShellNavProvider>()).DisplayAlert("Get practice reminders?", questionText, "Yes", "No");
+                Preferences.Set(PreferenceKeys.PracticeReminders, questionResponse);
+            }
+            Preferences.Set(PreferenceKeys.HasAskedReminders, true);
+            await SetupReminders();
+        }
+
+        public async Task SetupFeatures()
         {
             if (!Preferences.ContainsKey(PreferenceKeys.HasAskedFlashlight))
-            {
                 await FirstTimeFlashlightQuestion().ConfigureAwait(true);
-            }
             if (!Preferences.ContainsKey(PreferenceKeys.HasAskedHaptic))
-            {
                 await FirstTimeHapticQuestion().ConfigureAwait(true);
-            }
+            if (!Preferences.ContainsKey(PreferenceKeys.HasAskedReminders))
+                await FirstTimePracticeReminders().ConfigureAwait(true);
         }
-    }    
+    }
 }
 

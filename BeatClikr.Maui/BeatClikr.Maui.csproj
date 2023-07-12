@@ -18,8 +18,8 @@
 		<ApplicationIdGuid>c1d2a1a3-2e25-4345-ab63-ec83b8ef4862</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>2.3.1</ApplicationDisplayVersion>
-		<ApplicationVersion>2023050501</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
@@ -35,11 +35,16 @@
 	  <CreatePackage>false</CreatePackage>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationVersion>1</ApplicationVersion>
+	  <CodesignProvision>beatclikr_profile_dev</CodesignProvision>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationVersion>1</ApplicationVersion>
+	  <CodesignProvision>beatclikr_profile_dev</CodesignProvision>
+	  <CodesignKey>iPhone Developer</CodesignKey>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
@@ -76,7 +81,7 @@
 	  <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" />
 	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.4" />
 	  <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.5" />
-	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 	  <PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
 	  <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 	  <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.5" />

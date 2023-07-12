@@ -8,7 +8,7 @@ namespace BeatClikr.Maui.ViewModels
     public partial class GetStartedViewModel : ObservableObject
     {
         private IDeviceDisplay _deviceDisplay;
-        private IPermissionService _permissionService;
+        private ISetupService _permissionService;
         private INonShellNavProvider _nonShellNavProvider;
 
         [ObservableProperty]
@@ -21,16 +21,14 @@ namespace BeatClikr.Maui.ViewModels
         private async Task GetStarted()
         {
             Preferences.Set(PreferenceKeys.Onboarded, DateTime.Now);
-            await _permissionService.AskAllPermissions();
+            await _permissionService.SetupFeatures();
             await _nonShellNavProvider.PopModalAsync();
         }
 
-        private IShellService _shellService;
 
-        public GetStartedViewModel(IDeviceDisplay deviceDisplay, IShellService shellService, IPermissionService permissionService, INonShellNavProvider nonShellNavProvider)
+        public GetStartedViewModel(IDeviceDisplay deviceDisplay, IShellService shellService, ISetupService permissionService, INonShellNavProvider nonShellNavProvider)
         {
             _deviceDisplay = deviceDisplay;
-            _shellService = shellService;
             _deviceDisplay.MainDisplayInfoChanged += (s, e) => SetImageHeight();
             _permissionService = permissionService;
             _nonShellNavProvider = nonShellNavProvider;

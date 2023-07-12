@@ -6,7 +6,7 @@ using Plugin.LocalNotification;
 namespace BeatClikr.Maui.Services
 {
     public class LocalNotificationService : ILocalNotificationService
-	{
+    {
         private const int REMINDER_ID = 1000;
 
         public async Task<bool> RegisterForNotifications()
@@ -33,10 +33,11 @@ namespace BeatClikr.Maui.Services
                     iOS = new Plugin.LocalNotification.iOSOption.iOSOptions()
                     {
                         SummaryArgument = "It's time to practice!",
+                        Priority = Plugin.LocalNotification.iOSOption.iOSPriority.TimeSensitive
                     },
                     Schedule = new NotificationRequestSchedule()
                     {
-                        NotifyTime = DateTime.Now.AddDays(1),
+                        NotifyTime = DateTime.Now,
                         RepeatType = NotificationRepeat.Daily
                     }
                 };

@@ -4,8 +4,8 @@ namespace BeatClikr.Maui.Views;
 
 public partial class GetStartedPage : ContentPage
 {
-    private IPermissionService _permissionService;
-    public GetStartedPage(ViewModels.GetStartedViewModel getStartedViewModel, IPermissionService permissionService)
+    private ISetupService _permissionService;
+    public GetStartedPage(ViewModels.GetStartedViewModel getStartedViewModel, ISetupService permissionService)
     {
         InitializeComponent();
         BindingContext = getStartedViewModel;
@@ -17,6 +17,7 @@ public partial class GetStartedPage : ContentPage
         base.OnAppearing();
         (BindingContext as ViewModels.GetStartedViewModel).SetImageHeight();
         AnalyticsHelper.TrackEvent($"{GetType()} appearing");
+        App.SetupAdmob();
     }
 
     protected override void OnDisappearing()

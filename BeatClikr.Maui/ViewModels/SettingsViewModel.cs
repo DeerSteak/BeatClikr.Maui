@@ -1,10 +1,7 @@
 ﻿using BeatClikr.Maui.Models;
 using BeatClikr.Maui.Services.Interfaces;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Plugin.LocalNotification;
 
 namespace BeatClikr.Maui.ViewModels;
 
@@ -27,11 +24,14 @@ public partial class SettingsViewModel : ObservableObject
                 .RegisterForNotifications()
                 .ContinueWith(async (result) =>
             {
-                SendReminders = await result;
-            });            
+                //if something fails, turn it back off
+                var shouldSend = await result;
+                if (!shouldSend)
+                    SendReminders = shouldSend;
+            });
         }
         else
-        {            
+        {
             _localNotificationService.ClearReminderNotifications();
         }
     }
@@ -41,7 +41,7 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnUseFlashlightChanged(bool value)
     {
         Preferences.Set(PreferenceKeys.UseFlashlight, value);
-    }    
+    }
 
     [ObservableProperty]
     private bool _showPersonalizedAdButton;
@@ -150,7 +150,7 @@ public partial class SettingsViewModel : ObservableObject
         _localNotificationService = localNotificationService;
 
         RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
-        BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();        
+        BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();
         ShowPersonalizedAdButton = _deviceInfo.Platform != DevicePlatform.Android;
         SendReminders = Preferences.Get(PreferenceKeys.PracticeReminders, false);
     }
@@ -179,7 +179,7 @@ public partial class SettingsViewModel : ObservableObject
         ShowHaptic = _vibration.IsSupported;
         UseHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
 
-        App.SetupAdmob();
+        //App.SetupAdmob();
 
         _isBootstrapping = false;
     }

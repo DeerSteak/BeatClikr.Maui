@@ -14,7 +14,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     private IMetronomeService _metronome;
     private IDeviceInfo _deviceInfo;
     private IDeviceDisplay _deviceDisplay;
-    private IPermissionService _permissionService;
+    private ISetupService _permissionService;
 
     [ObservableProperty]
     private bool _isPlaying;
@@ -66,7 +66,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [ObservableProperty]
     private Action _resetAnimator;
 
-    public MetronomeClickerViewModel(IDeviceDisplay deviceDisplay, IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo, IPermissionService permissionService)
+    public MetronomeClickerViewModel(IDeviceDisplay deviceDisplay, IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo, ISetupService permissionService)
     {
         _shellService = shellService;
         _metronome = metronome;
@@ -116,7 +116,7 @@ public partial class MetronomeClickerViewModel : ObservableObject
     {
         if (!IsPlaying)
         {
-            await _permissionService.AskAllPermissions().ConfigureAwait(true);
+            await _permissionService.SetupFeatures().ConfigureAwait(true);
             SetupMetronome();
         }
         IsPlaying = !IsPlaying;

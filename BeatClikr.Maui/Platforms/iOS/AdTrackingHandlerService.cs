@@ -1,10 +1,9 @@
-﻿using System;
-using AppTrackingTransparency;
+﻿using AppTrackingTransparency;
 using BeatClikr.Maui.Services.Interfaces;
 namespace BeatClikr.Maui.Platforms.iOS
 {
-	public class AdTrackingHandlerService : IAdTrackingHandlerService
-	{
+    public class AdTrackingHandlerService : IAdTrackingHandlerService
+    {
         private IShellService _shellService;
         private IAppInfo _appInfo;
         public AdTrackingHandlerService(IShellService shellService, IAppInfo appInfo)
@@ -15,6 +14,11 @@ namespace BeatClikr.Maui.Platforms.iOS
 
         public async Task<bool> AskTrackingPermission()
         {
+            if (!OperatingSystem.IsIOSVersionAtLeast(14))
+            {
+                return true;
+            }
+
             var status = ATTrackingManager.TrackingAuthorizationStatus;
             switch (status)
             {

@@ -1,21 +1,17 @@
 ﻿global using BeatClikr.Maui.Constants;
 global using BeatClikr.Maui.Enums;
 global using BeatClikr.Maui.Helpers;
+using System.Reflection;
 using BeatClikr.Maui.Services;
 using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
-using MetroLog.Targets;
-using MetroLog;
+using MetroLog.MicrosoftExtensions;
+using MetroLog.Operators;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Plugin.MauiMTAdmob;
-using System.Reflection;
-using MetroLog.MicrosoftExtensions;
-using MetroLog.Operators;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Alerts;
 using Plugin.LocalNotification;
+using Plugin.MauiMTAdmob;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -27,23 +23,20 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
-        if (AnalyticsHelper.CanTrack)
+        builder.Logging.AddStreamingFileLogger(options =>
         {
-            builder.Logging.AddStreamingFileLogger(options =>
-            {
-                options.MinLevel = Microsoft.Extensions.Logging.LogLevel.Error;
-                options.MaxLevel = Microsoft.Extensions.Logging.LogLevel.Critical;
-                options.RetainDays = 2;
-                options.FolderPath = Path.Combine(
-                    FileSystem.CacheDirectory,
-                    "BeatClikrLog");
-            });
+            options.MinLevel = Microsoft.Extensions.Logging.LogLevel.Warning;
+            options.MaxLevel = Microsoft.Extensions.Logging.LogLevel.Critical;
+            options.RetainDays = 7;
+            options.FolderPath = Path.Combine(
+                FileSystem.CacheDirectory,
+                "BeatClikrLog");
+        });
 
-            AppCenter.Start(
-                "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
-                "ios=fb97bcfa-abf2-4528-adaf-3a84cc92a357",
-                typeof(Crashes), typeof(Analytics));
-        }
+        AppCenter.Start(
+            "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
+            "ios=fb97bcfa-abf2-4528-adaf-3a84cc92a357",
+            typeof(Crashes), typeof(Analytics));
 
         builder
             .UseMauiApp<App>()
@@ -76,17 +69,17 @@ public static class MauiProgram
     public static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
     {
         mauiAppBuilder.Services.AddSingleton(LogOperatorRetriever.Instance);
-        mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);        
+        mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);
         mauiAppBuilder.Services.AddSingleton(AppInfo.Current);
         mauiAppBuilder.Services.AddSingleton(DeviceDisplay.Current);
         mauiAppBuilder.Services.AddSingleton(Vibration.Default);
+        mauiAppBuilder.Services.AddSingleton(LocalNotificationCenter.Current);
         mauiAppBuilder.Services.AddSingleton(Flashlight.Default);
         mauiAppBuilder.Services.AddSingleton<IShellService, ShellService>();
         mauiAppBuilder.Services.AddSingleton<IDataService, DataService>();
         mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();
-        mauiAppBuilder.Services.AddSingleton<INotificationService>(LocalNotificationCenter.Current);
         mauiAppBuilder.Services.AddSingleton<ILocalNotificationService, LocalNotificationService>();
-        mauiAppBuilder.Services.AddSingleton<IPermissionService, PermissionService>();
+        mauiAppBuilder.Services.AddSingleton<ISetupService, SetupService>();
 #if IOS
         mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.iOS.MetronomeService>();
         mauiAppBuilder.Services.AddSingleton<IAdTrackingHandlerService, Platforms.iOS.AdTrackingHandlerService>();
