@@ -75,6 +75,7 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton(Vibration.Default);
         mauiAppBuilder.Services.AddSingleton(LocalNotificationCenter.Current);
         mauiAppBuilder.Services.AddSingleton(Flashlight.Default);
+        mauiAppBuilder.Services.AddSingleton(Plugin.StoreReview.CrossStoreReview.Current);
         mauiAppBuilder.Services.AddSingleton<IShellService, ShellService>();
         mauiAppBuilder.Services.AddSingleton<IDataService, DataService>();
         mauiAppBuilder.Services.AddSingleton<INonShellNavProvider, NonShellNavProvider>();
