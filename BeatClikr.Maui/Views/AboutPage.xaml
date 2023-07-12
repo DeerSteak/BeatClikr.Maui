@@ -31,6 +31,7 @@
                 HorizontalTextAlignment="Center"
                 Text="All Rights Reserved" />            
             <BoxView HeightRequest="60" Color="Transparent" />
+            <Button Command="{Binding WriteReviewCommand}" Padding="16" Text="Leave Review"/>
             <Button Command="{Binding SendFeedbackCommand}" Padding="16" Text="Send Feedback" />
         </StackLayout>
     </Grid>

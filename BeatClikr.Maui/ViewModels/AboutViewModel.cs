@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Plugin.StoreReview.Abstractions;
 
 namespace BeatClikr.Maui.ViewModels;
 
@@ -13,23 +14,30 @@ public partial class AboutViewModel : ObservableObject
     private IAppInfo _appInfo;
     private IShellService _shellService;
     private ILogger<AboutViewModel> _logger;
+    private IStoreReview _review;
 
-    public AboutViewModel(IShellService shellService, IAppInfo appInfo, ILogger<AboutViewModel> logger)
+    public AboutViewModel(IShellService shellService, IAppInfo appInfo, ILogger<AboutViewModel> logger, IStoreReview review)
     {
         _shellService = shellService;
         _appInfo = appInfo;
         _logger = logger;
-
-        Year = $"\u00a9{DateTime.Now.Year} Ben Funk";
+        _review = review;
+        Year = $"\u00a9{DateTime.Now.Year} Benjamin Funk";
     }
 
     [RelayCommand]
-    private async void SendFeedback() => await SendEmail();
+    private void WriteReview()
+    {
+        _review.OpenStoreListing("1512245974");
+    }
+
+    [RelayCommand]
+    private async Task SendFeedback() => await SendEmail();
 
     private async Task SendEmail()
     {
         string subject = "BeatClikr feedback";
-        string body = $"BeatClikr Version: {_appInfo.Version.ToString()}\n\r\n\r";
+        string body = $"BeatClikr Version: {_appInfo.Version}\n\r\n\r";
         List<string> recipients = new List<string>
         {
             "beatclikr@gmail.com"
