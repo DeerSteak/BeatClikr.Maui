@@ -17,7 +17,6 @@ public partial class GetStartedPage : ContentPage
         base.OnAppearing();
         (BindingContext as ViewModels.GetStartedViewModel).SetImageHeight();
         AnalyticsHelper.TrackEvent($"{GetType()} appearing");
-        App.SetupAdmob();
     }
 
     protected override void OnDisappearing()

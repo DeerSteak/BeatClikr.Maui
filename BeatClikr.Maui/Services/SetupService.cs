@@ -1,4 +1,6 @@
 ﻿using BeatClikr.Maui.Services.Interfaces;
+using Plugin.MauiMTAdmob;
+using Plugin.MauiMTAdmob.Extra;
 
 namespace BeatClikr.Maui.Helpers
 {
@@ -23,6 +25,24 @@ namespace BeatClikr.Maui.Helpers
 
             var pref = result == PermissionStatus.Granted;
             Preferences.Set(PreferenceKeys.UseFlashlight, pref);
+        }
+
+        private async Task SetupAdmob()
+        {
+            var usePersonalizedAds = true;
+#if IOS
+            var trackingService = ServiceHelper.GetService<Services.Interfaces.IAdTrackingHandlerService>();
+            usePersonalizedAds = await trackingService.AskTrackingPermission();
+#endif
+
+#if IOS || ANDROID
+            CrossMauiMTAdmob.Current.UserPersonalizedAds = usePersonalizedAds;
+            CrossMauiMTAdmob.Current.ComplyWithFamilyPolicies = true;
+            CrossMauiMTAdmob.Current.UseRestrictedDataProcessing = true;
+            CrossMauiMTAdmob.Current.TagForChildDirectedTreatment = MTTagForChildDirectedTreatment.TagForChildDirectedTreatmentUnspecified;
+            CrossMauiMTAdmob.Current.TagForUnderAgeOfConsent = MTTagForUnderAgeOfConsent.TagForUnderAgeOfConsentUnspecified;
+            CrossMauiMTAdmob.Current.MaxAdContentRating = MTMaxAdContentRating.MaxAdContentRatingG;
+#endif
         }
 
         private async Task SetupHaptic()
@@ -97,6 +117,7 @@ namespace BeatClikr.Maui.Helpers
 
         public async Task SetupFeatures()
         {
+            await SetupAdmob();
             if (!Preferences.ContainsKey(PreferenceKeys.HasAskedFlashlight))
                 await FirstTimeFlashlightQuestion().ConfigureAwait(true);
             if (!Preferences.ContainsKey(PreferenceKeys.HasAskedHaptic))

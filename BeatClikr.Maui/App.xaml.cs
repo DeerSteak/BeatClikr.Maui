@@ -12,7 +12,6 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        SetupAdmob();
         MainPage = ServiceHelper.GetService<Views.AppShell>();
     }
 
@@ -53,6 +52,7 @@ public partial class App : Application
 
         if (!Preferences.ContainsKey(PreferenceKeys.LiveRhythm))
             Preferences.Set(PreferenceKeys.LiveRhythm, FileNames.ClickLo);
+
     }
 
     protected override void OnSleep()
@@ -63,24 +63,6 @@ public partial class App : Application
         var metronome = ServiceHelper.GetService<MetronomeClickerViewModel>();
         metronome?.StopCommand.Execute(null);
         base.OnSleep();
-    }
-
-    public static void SetupAdmob()
-    {
-        var usePersonalizedAds = true;
-#if IOS
-        var trackingService = ServiceHelper.GetService<Services.Interfaces.IAdTrackingHandlerService>();
-        usePersonalizedAds = trackingService.AskTrackingPermission().Result;
-#endif
-
-#if IOS || ANDROID
-        CrossMauiMTAdmob.Current.UserPersonalizedAds = usePersonalizedAds;
-        CrossMauiMTAdmob.Current.ComplyWithFamilyPolicies = true;
-        CrossMauiMTAdmob.Current.UseRestrictedDataProcessing = true;
-        CrossMauiMTAdmob.Current.TagForChildDirectedTreatment = MTTagForChildDirectedTreatment.TagForChildDirectedTreatmentUnspecified;
-        CrossMauiMTAdmob.Current.TagForUnderAgeOfConsent = MTTagForUnderAgeOfConsent.TagForUnderAgeOfConsentUnspecified;
-        CrossMauiMTAdmob.Current.MaxAdContentRating = MTMaxAdContentRating.MaxAdContentRatingG;
-#endif
     }
 }
 
