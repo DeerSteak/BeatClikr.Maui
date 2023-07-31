@@ -28,6 +28,8 @@ public class AppDelegate : MauiUIApplicationDelegate
             AnalyticsHelper.CanTrack = true;
         }
 
+        UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+
         return MauiProgram.CreateMauiApp();
     }
 

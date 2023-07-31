@@ -19,6 +19,9 @@ namespace BeatClikr.Maui.Services
                 return perm;
             else
             {
+                var totalSeconds = (DateTime.Now - DateTime.Today).TotalSeconds;
+                var seconds = Preferences.Get(PreferenceKeys.ReminderTime, (int)totalSeconds);
+
                 var req = new NotificationRequest()
                 {
                     NotificationId = REMINDER_ID,
@@ -36,7 +39,7 @@ namespace BeatClikr.Maui.Services
                     },
                     Schedule = new NotificationRequestSchedule()
                     {
-                        NotifyTime = DateTime.Now,
+                        NotifyTime = DateTime.Today.AddSeconds(seconds),
                         RepeatType = NotificationRepeat.Daily
                     }
                 };
@@ -59,8 +62,12 @@ namespace BeatClikr.Maui.Services
 
         private static void DoSnackbar(bool isRegistered)
         {
+            var totalSeconds = (DateTime.Now - DateTime.Today).TotalSeconds;
+            var seconds = Preferences.Get(PreferenceKeys.ReminderTime, (int)totalSeconds);
+            var timespan = TimeSpan.FromSeconds(totalSeconds);
+
             var msg = isRegistered
-                ? "You will receive reminders daily, starting this time tomorrow"
+                ? $"You will receive reminders daily at {timespan:hh:mm}"
             : "Previously-scheduled notifications canceled.";
 
             var snackbarOptions = new SnackbarOptions

@@ -11,6 +11,35 @@ public partial class SettingsViewModel : ObservableObject
     private ILocalNotificationService _localNotificationService;
 
     [ObservableProperty]
+    TimeSpan _reminderTime;
+    partial void OnReminderTimeChanged(TimeSpan oldValue, TimeSpan newValue)
+    {
+        var seconds = newValue.TotalSeconds;
+        Preferences.Set(PreferenceKeys.ReminderTime, seconds);
+        ReminderDataChanged();
+    }
+
+    private void ReminderDataChanged()
+    {
+        if (SendReminders)
+        {
+            var success = _localNotificationService
+                .RegisterForNotifications()
+                .ContinueWith(async (result) =>
+                {
+                    //if something fails, turn it back off
+                    var shouldSend = await result;
+                    if (!shouldSend)
+                        SendReminders = shouldSend;
+                });
+        }
+        else
+        {
+            _localNotificationService.ClearReminderNotifications();
+        }
+    }
+
+    [ObservableProperty]
     bool _sendReminders;
     partial void OnSendRemindersChanged(bool value)
     {
@@ -18,22 +47,7 @@ public partial class SettingsViewModel : ObservableObject
             return;
 
         Preferences.Set(PreferenceKeys.PracticeReminders, value);
-        if (value)
-        {
-            var success = _localNotificationService
-                .RegisterForNotifications()
-                .ContinueWith(async (result) =>
-            {
-                //if something fails, turn it back off
-                var shouldSend = await result;
-                if (!shouldSend)
-                    SendReminders = shouldSend;
-            });
-        }
-        else
-        {
-            _localNotificationService.ClearReminderNotifications();
-        }
+        ReminderDataChanged();
     }
 
     [ObservableProperty]
@@ -149,10 +163,14 @@ public partial class SettingsViewModel : ObservableObject
         _appInfo = appInfo;
         _localNotificationService = localNotificationService;
 
+        var now = DateTime.Now - DateTime.Today;
+
         RhythmInstruments = InstrumentPicker.Instruments.Where(x => x.IsRhythm).ToList();
         BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();
         ShowPersonalizedAdButton = _deviceInfo.Platform != DevicePlatform.Android;
         SendReminders = Preferences.Get(PreferenceKeys.PracticeReminders, false);
+        var seconds = Preferences.Get(PreferenceKeys.ReminderTime, now.TotalSeconds);
+        ReminderTime = TimeSpan.FromSeconds(seconds);
     }
 
     public void Init()

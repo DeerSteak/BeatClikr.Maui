@@ -24,6 +24,7 @@
                             Grid.Column="1"
                             IsToggled="{Binding SendReminders}" />
                     </Grid>
+                    <TimePicker IsEnabled="{Binding SendReminders}" Time="{Binding ReminderTime}"  />
 
                     <cc:Separator />
                     <Label Style="{StaticResource LabelHeader}" Text="Metronome Playback" />
