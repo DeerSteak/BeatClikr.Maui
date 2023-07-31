@@ -1,3 +1,2 @@
-﻿New in this version (2.4.0)
-- Ability to set practice reminders (will prompt on start first time)
-- StoreKit in-app review implementation
+﻿New in this version (2.5.0)
+- You can now choose what time practice reminders appear on the Settings screen.
