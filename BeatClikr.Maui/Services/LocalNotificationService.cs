@@ -19,15 +19,15 @@ namespace BeatClikr.Maui.Services
                 return perm;
             else
             {
-                var totalSeconds = (DateTime.Now - DateTime.Today).TotalSeconds;
-                var seconds = Preferences.Get(PreferenceKeys.ReminderTime, (int)totalSeconds);
+                int totalSeconds = (int)(DateTime.Now - DateTime.Today).TotalSeconds;
+                int seconds = Preferences.Get(PreferenceKeys.ReminderTime, (int)totalSeconds);
 
                 var req = new NotificationRequest()
                 {
                     NotificationId = REMINDER_ID,
                     BadgeNumber = 1,
                     Title = "BeatClikr Practice Reminder",
-                    Description = "This notification means it's time to grab your instrument and get practicing!",
+                    Description = "It's time to grab your instrument and practice!",
                     Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions()
                     {
                         ChannelId = "beatClikrReminders"
@@ -62,12 +62,16 @@ namespace BeatClikr.Maui.Services
 
         private static void DoSnackbar(bool isRegistered)
         {
-            var totalSeconds = (DateTime.Now - DateTime.Today).TotalSeconds;
+            var totalSeconds = (int)(DateTime.Now - DateTime.Today).TotalSeconds;
             var seconds = Preferences.Get(PreferenceKeys.ReminderTime, (int)totalSeconds);
-            var timespan = TimeSpan.FromSeconds(totalSeconds);
+            var timeSpan = TimeSpan.FromSeconds(seconds);
+            var time = "";
+
+            if (isRegistered)
+                time = timeSpan.ToString(@"hh\:mm");
 
             var msg = isRegistered
-                ? $"You will receive reminders daily at {timespan:hh:mm}"
+                ? $"You will receive reminders daily at {time}"
             : "Previously-scheduled notifications canceled.";
 
             var snackbarOptions = new SnackbarOptions

@@ -14,13 +14,15 @@ public partial class SettingsViewModel : ObservableObject
     TimeSpan _reminderTime;
     partial void OnReminderTimeChanged(TimeSpan oldValue, TimeSpan newValue)
     {
-        var seconds = newValue.TotalSeconds;
+        var seconds = (int)newValue.TotalSeconds;
         Preferences.Set(PreferenceKeys.ReminderTime, seconds);
         ReminderDataChanged();
     }
 
     private void ReminderDataChanged()
     {
+        if (_isBootstrapping)
+            return;
         if (SendReminders)
         {
             var success = _localNotificationService
@@ -43,9 +45,6 @@ public partial class SettingsViewModel : ObservableObject
     bool _sendReminders;
     partial void OnSendRemindersChanged(bool value)
     {
-        if (_isBootstrapping)
-            return;
-
         Preferences.Set(PreferenceKeys.PracticeReminders, value);
         ReminderDataChanged();
     }
@@ -169,7 +168,7 @@ public partial class SettingsViewModel : ObservableObject
         BeatInstruments = InstrumentPicker.Instruments.Where(x => x.IsBeat).ToList();
         ShowPersonalizedAdButton = _deviceInfo.Platform != DevicePlatform.Android;
         SendReminders = Preferences.Get(PreferenceKeys.PracticeReminders, false);
-        var seconds = Preferences.Get(PreferenceKeys.ReminderTime, now.TotalSeconds);
+        int seconds = Preferences.Get(PreferenceKeys.ReminderTime, (int)now.TotalSeconds);
         ReminderTime = TimeSpan.FromSeconds(seconds);
     }
 
