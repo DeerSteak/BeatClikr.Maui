@@ -6,19 +6,28 @@
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
     xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="Song Details"
     x:DataType="vm:SongDetailsViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Song Details" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding CancelCommand}" Text="CANCEL">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Xmark}" />
+                <FontImageSource
+                    FontFamily="FARegular"
+                    Glyph="{Static const:IconFont.Xmark}"
+                    Color="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
         <ToolbarItem Command="{Binding SaveCommand}" Text="SAVE">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Check}" />
+                <FontImageSource
+                    FontFamily="FARegular"
+                    Glyph="{Static const:IconFont.Check}"
+                    Color="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -35,12 +44,12 @@
                     HorizontalTextAlignment="Start"
                     Keyboard="Numeric"
                     Placeholder="Beats Per Measure"
-                    Text="{Binding BeatsPerMeasure}" />
+                    Text="{Binding BeatsPerMeasure, Mode=TwoWay}" />
                 <Picker
                     Title="Groove"
                     ItemsSource="{Binding Subdivisions}"
-                    SelectedIndex="{Binding SelectedSubdivisionIndex}" />
-                <BoxView HeightRequest="30" />       
+                    SelectedIndex="{Binding SelectedSubdivisionIndex, Mode=TwoWay}" />
+                <BoxView HeightRequest="30" />
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -62,7 +71,7 @@
                         Grid.Column="2"
                         HorizontalOptions="Center"
                         HorizontalTextAlignment="Center"
-                        Text="{Binding BeatsPerMinute}" />
+                        Text="{Binding BeatsPerMinute, Mode=TwoWay}" />
                 </Grid>
                 <BoxView BackgroundColor="Transparent" HeightRequest="8" />
                 <Button Command="{Binding PlayPauseCommand}" Text="PLAY/PAUSE" />

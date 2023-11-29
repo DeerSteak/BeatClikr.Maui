@@ -2,15 +2,15 @@
 
 public static class ServiceHelper
 {
-	public static TService GetService<TService>() => Current.GetService<TService>();
+    public static TService GetService<TService>() => Current.GetService<TService>();
 
-	public static IServiceProvider Current =>
-#if IOS || MACCATALYST 
-			MauiUIApplicationDelegate.Current.Services;
+    public static IServiceProvider Current =>
+#if IOS || MACCATALYST
+            MauiUIApplicationDelegate.Current.Services;
 #elif ANDROID
-			MauiApplication.Current.Services;
+            MauiApplication.Current.Services;
 #else
-			null;
+            null;
 #endif
 }
 

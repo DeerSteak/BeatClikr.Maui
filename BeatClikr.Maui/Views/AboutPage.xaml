@@ -3,13 +3,13 @@
     x:Class="BeatClikr.Maui.Views.AboutPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
-    Title="AboutPage"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="About BeatClikr"
     x:DataType="vm:AboutViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="About BeatClikr" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -25,51 +25,14 @@
             <Label
                 HorizontalOptions="Center"
                 HorizontalTextAlignment="Center"
-                Text="© 2020 BFunk Studios" />
+                Text="{Binding Year}" />
             <Label
                 HorizontalOptions="Center"
                 HorizontalTextAlignment="Center"
-                Text="All Rights Reserved" />
-            <Label
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
-                Text="Some icons by" />
-            <Label
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
-                Text="Freepik"
-                TextColor="Blue">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding IconAuthorLabelCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Label
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
-                Text="Good Ware"
-                TextColor="Blue">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding BulbAuthorLabelCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                <Label
-                    HorizontalTextAlignment="Center"
-                    Text="from"
-                    VerticalOptions="Center"
-                    VerticalTextAlignment="Center" />
-                <Label
-                    Text="FlatIcon.com"
-                    TextColor="Blue"
-                    VerticalOptions="Center"
-                    VerticalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SiteLabelCommand}" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </StackLayout>
+                Text="All Rights Reserved" />            
             <BoxView HeightRequest="60" Color="Transparent" />
-            <Button Command="{Binding SendFeedbackCommand}" Text="FEEDBACK" />
+            <Button Command="{Binding WriteReviewCommand}" Padding="16" Text="Leave Review"/>
+            <Button Command="{Binding SendFeedbackCommand}" Padding="16" Text="Send Feedback" />
         </StackLayout>
     </Grid>
 </ContentPage>

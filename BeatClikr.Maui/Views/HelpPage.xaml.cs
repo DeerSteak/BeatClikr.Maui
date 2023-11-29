@@ -1,17 +1,27 @@
-﻿using BeatClikr.Maui.ViewModels;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class HelpPage : ContentPage
 {
-	public HelpPage(HelpViewModel viewModel)
-	{
-		InitializeComponent();
-		BindingContext = viewModel;
-	}
+    public HelpPage(ViewModels.HelpViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 
-	public HelpPage() : this(ServiceHelper.GetService<ViewModels.HelpViewModel>())
-	{
+    public HelpPage() : this(ServiceHelper.GetService<ViewModels.HelpViewModel>())
+    {
 
-	}
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
+    }
 }

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeatClikr.Maui.Views.InstantMetronomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
+    Title="Instant Metronome"
+    x:DataType="vm:InstantMetronomeViewModel">
+
+    <ScrollView>
+        <Grid
+            ColumnDefinitions="*"
+            RowDefinitions="Auto,*,Auto"
+            RowSpacing="0">
+            <cc:MetronomeClickerView Grid.Row="0" />
+            <ScrollView Grid.Row="1">
+                <StackLayout Padding="16" VerticalOptions="StartAndExpand">
+                    <Label Text="Groove" />
+                    <Picker
+                        Title="Groove"
+                        ItemsSource="{Binding Subdivisions}"
+                        SelectedIndex="{Binding SelectedSubdivisionIndex}" />
+                    <BoxView HeightRequest="30" />
+                    <Grid ColumnDefinitions="*,*,2*,*,*" RowDefinitions="Auto,Auto">
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Command="{Binding BpmMinusOneCommand}"
+                            HorizontalOptions="Fill"
+                            Text="-1">
+                        </Button>
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            Command="{Binding BpmPlusOneCommand}"
+                            HorizontalOptions="Fill"
+                            Text="+1">
+                        </Button>
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            HorizontalOptions="CenterAndExpand"
+                            Orientation="Horizontal"
+                            Spacing="6">
+                            <Label
+                                FontSize="Large"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding BeatsPerMinute}"
+                                VerticalOptions="Center" />
+                            <Label
+                                FontSize="Large"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="BPM"
+                                VerticalOptions="Center" />
+                        </StackLayout>
+                        <Slider
+                            Grid.Row="1"
+                            Grid.ColumnSpan="5"
+                            DragCompletedCommand="{Binding SliderDragCompletedCommand}"
+                            DragStartedCommand="{Binding SliderDragStartedCommand}"
+                            Maximum="180"
+                            Minimum="30"
+                            Value="{Binding BeatsPerMinute, Mode=TwoWay}" />
+                    </Grid>
+                    <BoxView HeightRequest="30" />
+                    <Button Command="{Binding PlayStopToggledCommand}" Text="Play/Pause" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="16" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="16" />
+                    <Label Text="Beat" />
+                    <Picker
+                        Title="Beat"
+                        ItemsSource="{Binding BeatInstruments}"
+                        SelectedItem="{Binding InstantBeat}" />
+                    <Label Text="Rhythm" />
+                    <Picker
+                        Title="Groove"
+                        ItemsSource="{Binding RhythmInstruments}"
+                        SelectedItem="{Binding InstantRhythm}" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                </StackLayout>
+            </ScrollView>
+            <mt:MTAdView x:Name="AdView" Grid.Row="2" />
+        </Grid>
+    </ScrollView>
+</ContentPage>

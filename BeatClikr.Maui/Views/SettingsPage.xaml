@@ -4,29 +4,131 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
-    Title="SettingsPage">
-    <Shell.TitleView>
-        <cc:TitleView Title="Settings" />
-    </Shell.TitleView>
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="Settings"
+    x:DataType="vm:SettingsViewModel">
     <ContentPage.Content>
         <Grid RowDefinitions="*, Auto">
             <ScrollView>
-                <StackLayout Padding="16">
+                <StackLayout Padding="16" Spacing="6">
+                    <Label Style="{StaticResource LabelHeader}" Text="Practice Reminders" />
+                    <Label LineBreakMode="WordWrap" Text="BeatClikr can send you daily reminders to pick up your instrument and play." />
+                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Send practice reminders (starting this time tomorrow)" />
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            IsToggled="{Binding SendReminders}" />
+                    </Grid>
+                    <TimePicker IsEnabled="{Binding SendReminders}" Time="{Binding ReminderTime}"  />
+
+                    <cc:Separator />
+                    <Label Style="{StaticResource LabelHeader}" Text="Metronome Playback" />
+                    <Label LineBreakMode="WordWrap" Text="BeatClikr will always animate the bulb icon, and it plays audio by default. Choose other playback settings below." />
+
+                    <Grid
+                        ColumnDefinitions="*, Auto"
+                        RowDefinitions="Auto, Auto, Auto, Auto"
+                        RowSpacing="6">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Use flashlight"
+                            VerticalOptions="Center" />
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsToggled="{Binding UseFlashlight}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Always mute metronome"
+                            VerticalOptions="Center" />
+                        <Switch
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsToggled="{Binding GlobalMute}" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Use Vibration"
+                            VerticalOptions="Center" />
+                        <Switch
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsToggled="{Binding UseHaptic}" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            IsVisible="{Binding ShowPersonalizedAdButton}"
+                            Text="Use peronalized ads"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Command="{Binding PersonalizedAdsChangedCommand}"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding ShowPersonalizedAdButton}"
+                            Text="Go To Settings" />
+                    </Grid>
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                    <cc:Separator />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                    <Label Style="{StaticResource LabelHeader}" Text="Playback Instruments" />
                     <Label LineBreakMode="WordWrap" Text="In each area, select the main sound played on each beat and rhythm/groove sound that plays on subdivisions" />
-                    <Label Style="{StaticResource LabelHeader}" Text="Instant/Library Metronome" />
-                    <Picker x:Name="InstantBeatPicker" Title="Beat" />
-                    <Picker x:Name="InstantRhythmPicker" Title="Groove" />
-
-                    <Label Style="{StaticResource LabelHeader}" Text="Rehearsal Mode" />
-                    <Picker x:Name="RehearsalBeatPicker" Title="Beat" />
-                    <Picker x:Name="RehearsalRhythmPicker" Title="Groove" />
-
-                    <Label Style="{StaticResource LabelHeader}" Text="Live Mode" />
-                    <Picker x:Name="LiveBeatPicker" Title="Beat" />
-                    <Picker x:Name="LiveRhythmPicker" Title="Groove" />
+                    <Label Style="{StaticResource LabelSubHeader}" Text="Instant/Library Metronome" />
+                    <Label Text="Beat" />
+                    <Picker
+                        Title="Beat"
+                        ItemsSource="{Binding BeatInstruments}"
+                        SelectedItem="{Binding InstantBeat}" />
+                    <Label Text="Rhythm" />
+                    <Picker
+                        Title="Groove"
+                        ItemsSource="{Binding RhythmInstruments}"
+                        SelectedItem="{Binding InstantRhythm}" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                    <cc:Separator />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                    <Label Style="{StaticResource LabelSubHeader}" Text="Rehearsal Mode" />
+                    <Label Text="Beat" />
+                    <Picker
+                        Title="Beat"
+                        ItemsSource="{Binding BeatInstruments}"
+                        SelectedItem="{Binding RehearsalBeat}" />
+                    <Label Text="Rhythm" />
+                    <Picker
+                        Title="Groove"
+                        ItemsSource="{Binding RhythmInstruments}"
+                        SelectedItem="{Binding RehearsalRhythm}" />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                    <cc:Separator />
+                    <BoxView BackgroundColor="Transparent" HeightRequest="6" />
+                    <Label Style="{StaticResource LabelSubHeader}" Text="Live Mode" />
+                    <Label Text="Beat" />
+                    <Picker
+                        Title="Beat"
+                        ItemsSource="{Binding BeatInstruments}"
+                        SelectedItem="{Binding LiveBeat}" />
+                    <Label Text="Rhythm" />
+                    <Picker
+                        Title="Groove"
+                        ItemsSource="{Binding RhythmInstruments}"
+                        SelectedItem="{Binding LiveRhythm}" />
                 </StackLayout>
             </ScrollView>
-            <cc:AdMobView Grid.Row="1" />
+            <mt:MTAdView x:Name="AdView" Grid.Row="1" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

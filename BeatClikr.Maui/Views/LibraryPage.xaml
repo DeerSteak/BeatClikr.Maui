@@ -4,18 +4,23 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
+    xmlns:mt="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMtAdmob"
     xmlns:const="clr-namespace:BeatClikr.Maui.Constants"
     xmlns:m="clr-namespace:BeatClikr.Maui.Models"
     xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
-    Title="LibraryPage"
+    Title="Library"
     x:DataType="vm:LibraryViewModel">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Library" />
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddItemCommand}" Text="ADD">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FARegular" Glyph="{Static const:IconFont.Plus}" />
+                <FontImageSource
+                    FontFamily="FARegular"
+                    Glyph="{Static const:IconFont.Plus}"
+                    Color="{AppThemeBinding Dark=White,
+                                            Light=Black}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -28,35 +33,25 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackLayout Grid.Row="0" Spacing="0">
-                <ContentView>
-                    <cc:MetronomeClickerView />
-                </ContentView>
+                <cc:MetronomeClickerView />
                 <SearchBar Grid.Row="0" Text="{Binding Filter}" />
             </StackLayout>
-            <ListView
+            <CollectionView
                 Grid.Row="1"
+                ItemSizingStrategy="MeasureFirstItem"
                 ItemsSource="{Binding FilteredSongs}"
-                SelectedItem="{Binding SelectedSong}"
-                ItemSelected="ListView_ItemSelected">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <VerticalStackLayout Margin="8,0" VerticalOptions="Center" x:DataType="m:Song">
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="Medium"
-                                    Text="{Binding Title}" />
-                                <HorizontalStackLayout>
-                                    <Label Text="{Binding Artist}" TextColor="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
-                                    <Label Text=" / " TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                    <Label Text="{Binding BeatsPerMinute}" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                    <Label Text="BPM" TextColor="{AppThemeBinding Dark={StaticResource TextDarkSecondary}, Light={StaticResource TextLightSecondary}}" />
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
-                        </ViewCell>
+                SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
+                SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="m:Song">
+                        <cc:SongCollectionItemView
+                            Title="{Binding Title}"
+                            Artist="{Binding Artist}"
+                            Bpm="{Binding BeatsPerMinute}" />
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
             <StackLayout
                 Grid.Row="2"
                 Margin="8"
@@ -77,7 +72,7 @@
                     HorizontalOptions="EndAndExpand"
                     Text="STOP" />
             </StackLayout>
-            <cc:AdMobView Grid.Row="3" />
+            <mt:MTAdView x:Name="AdView" Grid.Row="3" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

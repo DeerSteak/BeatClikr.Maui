@@ -1,17 +1,20 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace BeatClikr.Maui.ViewModels
+namespace BeatClikr.Maui.ViewModels;
+
+public partial class AppShellViewModel : ObservableObject
 {
-	public partial class AppShellViewModel : ObservableObject
-	{
-		[ObservableProperty]
-		private string _versionInfo;
+    [ObservableProperty]
+    private string _versionInfo;
 
-		public AppShellViewModel(IDeviceInfo deviceInfo)
-		{
-			VersionInfo = $"Version {deviceInfo.VersionString}";
-		}
-	}
+    public AppShellViewModel(IAppInfo appInfo)
+    {
+        VersionInfo = $"Version {appInfo.Version}";
+    }
+
+    public void AskFlashlight()
+    {
+
+    }
 }
 

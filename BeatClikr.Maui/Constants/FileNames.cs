@@ -2,6 +2,8 @@
 
 public static class FileNames
 {
+    public const string ClickHi = "clickhi";
+    public const string ClickLo = "clicklo";
     public const string Cowbell = "cowbell";
     public const string CrashL = "crashl";
     public const string CrashR = "crashr";
@@ -10,13 +12,13 @@ public static class FileNames
     public const string Kick = "kick";
     public const string Ride = "ride";
     public const string RideBell = "ridebell";
+    public const string Silence = "silence";
     public const string Snare = "snare";
     public const string Tamb = "tamb";
     public const string TomHigh = "tomhi";
     public const string TomLow = "tomlow";
     public const string TomMid = "tommid";
-    public const string Set1 = "Set1";
-    public const string Set2 = "Set2";
-    public static readonly string Platform = DeviceInfo.Platform == DevicePlatform.iOS ? "apple" : "other";
-    public static readonly string Extension = DeviceInfo.Platform == DevicePlatform.iOS ? "caf" : "m4a";
+    public const string Set1 = "set-1";
+    public const string Set2 = "set-2";
+
 }

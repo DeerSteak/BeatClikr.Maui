@@ -4,14 +4,55 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:cc="clr-namespace:BeatClikr.Maui.CustomControls"
-    Title="GetStartedPage">
-    <Shell.TitleView>
+    xmlns:m="clr-namespace:BeatClikr.Maui.Models"
+    xmlns:vm="clr-namespace:BeatClikr.Maui.ViewModels"
+    Title="Getting Started"
+    x:DataType="vm:GetStartedViewModel"
+    Shell.PresentationMode="ModalAnimated">
+    <!--<Shell.TitleView>
         <cc:TitleView Title="Getting Started" />
-    </Shell.TitleView>
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    </Shell.TitleView>-->
+    <Grid RowDefinitions="*, Auto, Auto, *" RowSpacing="8">
+        <CarouselView
+            Grid.Row="1"
+            HeightRequest="{Binding ImageHeight}"
+            ItemsSource="{Binding CarouselViewItems}">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="m:CarouselViewItem">
+                    <ContentView Padding="16" VerticalOptions="FillAndExpand">
+                        <Frame
+                            Margin="10"
+                            Padding="10"
+                            BorderColor="DarkGray"
+                            CornerRadius="5"
+                            HasShadow="True"
+                            HorizontalOptions="Center"
+                            VerticalOptions="FillAndExpand">
+                            <Frame.Shadow
+                                Brush="Gray"
+                                Opacity="0.5"
+                                Radius="40"
+                                Offset="20,20" />
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Image
+                                    VerticalOptions="StartAndExpand"
+                                    Aspect="AspectFit"
+                                    HeightRequest="{Binding HeightRequest}"
+                                    Source="{Binding ImageName}" />
+                                <BoxView BackgroundColor="Transparent" HeightRequest="10" />
+                                <Label Text="{Binding Description}" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </ContentView>
+
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+        <Button
+            Grid.Row="2"
+            Margin="16"
+            Command="{Binding GetStartedCommand}"
+            Text="Let's go!" />
+    </Grid>
 </ContentPage>

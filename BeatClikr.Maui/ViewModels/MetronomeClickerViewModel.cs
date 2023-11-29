@@ -1,223 +1,188 @@
-﻿using System.Timers;
-using BeatClikr.Maui.Constants;
-using BeatClikr.Maui.Enums;
-using BeatClikr.Maui.Helpers;
-using BeatClikr.Maui.Models;
-using CommunityToolkit.Maui.Behaviors;
+﻿using BeatClikr.Maui.Models;
+using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Plugin.Maui.Audio;
+using Microsoft.AppCenter.Analytics;
 
-namespace BeatClikr.Maui.ViewModels
+namespace BeatClikr.Maui.ViewModels;
+
+public partial class MetronomeClickerViewModel : ObservableObject
 {
-    public partial class MetronomeClickerViewModel : ObservableObject
+    private IShellService _shellService;
+    private readonly string _bulbDim;
+    private readonly string _bulbLit;
+    private IMetronomeService _metronome;
+    private IDeviceInfo _deviceInfo;
+    private IDeviceDisplay _deviceDisplay;
+    private ISetupService _permissionService;
+
+    [ObservableProperty]
+    private bool _isPlaying;
+
+    [ObservableProperty]
+    private bool _isLiveMode;
+    partial void OnIsLiveModeChanged(bool value)
     {
-        private System.Timers.Timer _timer;
-        private IAudioPlayer _playerBeat;
-        private IAudioPlayer _playerRhythm;
-        private int _subdivisionNumber;
-        private int _beatsPlayed = 0;
-        private readonly ImageSource _bulbDim;
-        private readonly ImageSource _bulbLit;
-        private bool _playSubdivisions;
-        private readonly bool _onApple;
-        private readonly IAudioManager _audioManager;
-        private bool _flashlightEnabled;
-        //private IconTintColorBehavior _behavior = new IconTintColorBehavior();
+        IMetronomeService.LiveMode = value;
+    }
 
-        [ObservableProperty]
-        private bool _isPlaying;
+    [ObservableProperty]
+    private string _beatBox;
 
-        [ObservableProperty]
-        private bool _isLiveMode;
+    [ObservableProperty]
+    private bool _muteOverride;
+    partial void OnMuteOverrideChanged(bool value)
+    {
+        IsSilent = value;
+    }
 
-        [ObservableProperty]
-        private ImageSource _beatBox;
+    [ObservableProperty]
+    private bool _useFlashlight;
+    partial void OnUseFlashlightChanged(bool value)
+    {
+        if (!value)
+            Task.Run(async () => await Flashlight.Default.TurnOffAsync());
+    }
 
-        [ObservableProperty]
-        private ClickerBeatType _beatType;
-        partial void OnBeatTypeChanged(ClickerBeatType value)
+    [ObservableProperty]
+    private ClickerBeatType _beatType;
+    partial void OnBeatTypeChanged(ClickerBeatType value)
+    {
+        SetupMetronome();
+    }
+
+    [ObservableProperty]
+    private Song _song;
+
+    [ObservableProperty]
+    private bool _isSilent;
+
+    [ObservableProperty]
+    private Action<uint> _setBeatMilliseconds;
+
+    [ObservableProperty]
+    private Action _animate;
+
+    [ObservableProperty]
+    private Action _resetAnimator;
+
+    public MetronomeClickerViewModel(IDeviceDisplay deviceDisplay, IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo, ISetupService permissionService)
+    {
+        _shellService = shellService;
+        _metronome = metronome;
+        _deviceInfo = deviceInfo;
+        _deviceDisplay = deviceDisplay;
+        _permissionService = permissionService;
+        var currentTheme = appInfo.RequestedTheme;
+
+        MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
+        UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, true);
+
+        _bulbDim = Constants.IconFont.Lightbulb;
+
+        _bulbLit = Constants.IconFont.LightbulbOn;
+
+        BeatBox = _bulbDim;
+        Song = new Song();
+
+        IMetronomeService.BeatAction = BeatAction;
+        IMetronomeService.RhythmAction = RhythmAction;
+    }
+
+    private void BeatAction()
+    {
+        Animate?.Invoke();
+        BeatBox = _bulbLit;
+    }
+
+    private void RhythmAction()
+    {
+        BeatBox = _bulbDim;
+    }
+
+    [RelayCommand]
+    private void SetSong(Song song)
+    {
+        var wasPlaying = IsPlaying;
+        Stop();
+        this.Song = song;
+        SetupMetronome();
+        if (wasPlaying)
+            _metronome.Play();
+    }
+
+    [RelayCommand]
+    private async Task StartStop()
+    {
+        if (!IsPlaying)
         {
-            SetSounds(FileNames.Set1);
+            await _permissionService.SetupFeatures().ConfigureAwait(true);
+            SetupMetronome();
+        }
+        IsPlaying = !IsPlaying;
+        if (IsPlaying)
+            Start();
+        else
+            Stop();
+    }
+
+    [RelayCommand]
+    private void Stop()
+    {
+        ResetAnimator?.Invoke();
+        IsPlaying = false;
+        _metronome.Stop();
+        RhythmAction();
+        _deviceDisplay.KeepScreenOn = false;
+
+        AnalyticsHelper.TrackEvent($"Metronome stopped");
+
+    }
+
+    [RelayCommand]
+    private void Start()
+    {
+        _metronome.Play();
+        _deviceDisplay.KeepScreenOn = true;
+
+        AnalyticsHelper.TrackEvent($"Metronome started");
+    }
+
+    [RelayCommand]
+    private void SetupMetronome()
+    {
+        var mute = Preferences.Get(PreferenceKeys.MuteMetronome, false);
+        IMetronomeService.MuteOverride = mute;
+        string beat;
+
+        string rhythm;
+        switch (BeatType)
+        {
+            case ClickerBeatType.Live:
+                rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.ClickLo);
+                beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.ClickHi);
+                break;
+            case ClickerBeatType.Rehearsal:
+                rhythm = Preferences.Get(PreferenceKeys.RehearsalRhythm, FileNames.ClickLo);
+                beat = Preferences.Get(PreferenceKeys.RehearsalBeat, FileNames.ClickHi);
+                break;
+            default:
+                rhythm = Preferences.Get(PreferenceKeys.InstantRhythm, FileNames.ClickLo);
+                beat = Preferences.Get(PreferenceKeys.InstantBeat, FileNames.ClickHi);
+                break;
         }
 
-        [ObservableProperty]
-        private Song _song;
-
-        [ObservableProperty]
-        private bool _isSilent;
-
-        public MetronomeClickerViewModel(IAudioManager audioManager, IAppInfo appInfo)
+        var numSubdivisions = Song.Subdivision switch
         {
-            _audioManager = audioManager;
-            
-            _onApple = DeviceInfo.Platform == DevicePlatform.iOS
-                || DeviceInfo.Platform == DevicePlatform.MacCatalyst;
-
-            var currentTheme = appInfo.RequestedTheme;            
-            //_behavior.TintColor = appInfo.RequestedTheme == AppTheme.Light
-            //    ? Color.FromArgb("#212121")
-            //    : Color.FromArgb("#FAFAFA");
-
-            _bulbDim = new FontImageSource()
-            {
-                FontFamily = "FARegular",
-                Glyph = Constants.IconFont.Lightbulb,
-                Color = appInfo.RequestedTheme == AppTheme.Dark ? Color.FromArgb("#FAFAFA") : Color.FromArgb("#212121"),
-                Size = 90
-            };
-
-            _bulbLit = new FontImageSource()
-            {
-                FontFamily = "FARegular",
-                Glyph = Constants.IconFont.LightbulbOn,
-                Color = appInfo.RequestedTheme == AppTheme.Dark ? Color.FromArgb("#FAFAFA") : Color.FromArgb("#212121"),
-                Size = 90
-            };
-
-            _flashlightEnabled = true;
-
-            BeatBox = _bulbDim;
-            Song = new Song();
-        }
-
-        [RelayCommand]
-        private void SetSong(Song song)
-        {
-            var wasPlaying = IsPlaying;
-            if (IsPlaying)
-                StopSongMetronome();
-            this.Song = song;
-            if (wasPlaying)
-                StartStop();
-        }
-
-        [RelayCommand]
-        private void StartStop()
-        {
-            IsPlaying = !IsPlaying;
-            if (IsPlaying)
-                PlaySongMetronome();
-            else
-                StopSongMetronome();
-        }
-
-        [RelayCommand]
-        private void Stop()
-        {
-            if (IsPlaying)
-                StopSongMetronome();
-        }
-
-        private void PlaySongMetronome()
-        {
-            IsSilent = false;
-            float timerInterval = PlaybackUtilities.GetTimerInterval(Song.Subdivision, Song.BeatsPerMinute);
-            _playSubdivisions = Song.Subdivision != SubdivisionEnum.Quarter;
-            _subdivisionNumber = 0;
-            _timer = new System.Timers.Timer(timerInterval) { AutoReset = true };
-            _timer.Elapsed += OnTimerElapsed;
-            _timer.Enabled = true;
-        }
-
-        private void StopSongMetronome()
-        {
-            _timer.Enabled = false;
-            BeatBox = _bulbDim;
-            //(BeatBox.Parent as Image).Behaviors.Add(_behavior);
-            IsPlaying = false;
-            IsSilent = false;
-        }
-
-        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-
-            if (IsLiveMode)
-            {
-                _beatsPlayed++;
-                if (_beatsPlayed > Song.BeatsPerMeasure)
-                    IsSilent = true;
-            }
-
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                if (_subdivisionNumber == 0)
-                    BeatBox = _bulbLit;
-                else
-                    BeatBox = _bulbDim;
-                //(BeatBox.Parent as Image).Behaviors.Add(_behavior);
-            });
-
-            if (!IsSilent)
-            {
-                if (_subdivisionNumber == 0)
-                {
-                    MainThread.BeginInvokeOnMainThread(() => BeatBox = _bulbLit);
-                    Task.Run(() => Flashlight.Default.TurnOnAsync().Start());
-                    PlayBeat();
-                }
-                else
-                {
-                    MainThread.BeginInvokeOnMainThread(() => BeatBox = _bulbDim);
-                    Task.Run(() => Flashlight.Default.TurnOffAsync().Start());
-                    if (_playSubdivisions)
-                        PlayRhythm();
-                }
-            }
-
-            _subdivisionNumber++;
-            if (_subdivisionNumber >= PlaybackUtilities.GetSubdivisionsPerBeat(Song.Subdivision))
-                _subdivisionNumber = 0;
-        }
-
-        private void PlayRhythm()
-        {
-            if (_onApple)
-            {
-                _playerRhythm.Stop();
-            }
-            _playerRhythm.Seek(0);
-            _playerRhythm.Play();
-        }
-
-        private void PlayBeat()
-        {
-            if (_onApple)
-            {
-                _playerBeat.Stop();
-            }
-            _playerBeat.Seek(0);
-            _playerBeat.Play();
-        }
-
-        private void SetSounds(string set)
-        {
-            string rhythm = string.Empty;
-            string beat = string.Empty;
-
-            switch (BeatType)
-            {
-                case ClickerBeatType.Live:
-                    rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
-                    beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.Kick);
-                    break;
-                case ClickerBeatType.Instant:
-                    rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
-                    beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.Kick);
-                    break;
-                case ClickerBeatType.Rehearsal:
-                    rhythm = Preferences.Get(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
-                    beat = Preferences.Get(PreferenceKeys.LiveBeat, FileNames.Kick);
-                    break;
-                default:
-                    rhythm = FileNames.HatClosed;
-                    beat = FileNames.Kick;
-                    break;
-            }
-
-            _playerRhythm = _audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(rhythm, set).Result);
-            _playerBeat = _audioManager.CreatePlayer(PlaybackUtilities.GetStreamFromFile(beat, set).Result);
-        }
+            Subdivisions.Eighth => 2,
+            Subdivisions.TripletEighth => 3,
+            Subdivisions.Sixteenth => 4,
+            Subdivisions.Quarter => 1,
+            _ => 1,
+        };
+        _metronome.SetupMetronome(beat, rhythm, FileNames.Set1);
+        _metronome.SetTempo(Song.BeatsPerMinute, numSubdivisions);
+        SetBeatMilliseconds?.Invoke((uint)(_metronome.GetMillisecondsPerBeat()));
     }
 }
 

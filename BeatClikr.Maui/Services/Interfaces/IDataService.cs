@@ -1,15 +1,15 @@
 ﻿using BeatClikr.Maui.Models;
 namespace BeatClikr.Maui.Services.Interfaces
 {
-	public interface IDataService
-	{
-        Task<List<Song>> GetLibrarySongs();
-        Task<List<Song>> GetLibrarySongs(string filter);
-        Task<int> SaveSongToLibrary(Song song);
-        Task<int> SaveSongListToLibrary(List<Song> songs);
-        Task<List<Song>> GetLiveSongs();
-        Task<List<Song>> GetRehearsalSongs();
-        Task<Song> GetById(int id);
+    public interface IDataService
+    {
+        List<Song> GetLibrarySongs();
+        List<Song> GetLibrarySongs(string filter);
+        int SaveSongToLibrary(Song song);
+        int SaveSongListToLibrary(List<Song> songs);
+        List<Song> GetLiveSongs();
+        List<Song> GetRehearsalSongs();
+        Song GetById(int id);
     }
 }
 

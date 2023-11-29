@@ -1,0 +1,102 @@
+name: $(Date:yyyyMMdd)$(Rev:rr)
+
+variables:
+  - group: 'App Configuration'
+
+trigger: none
+
+stages:
+  # Stage for MAUI Android
+- stage: build_maui_android
+  jobs:
+  - job: build_maui_android_app
+    displayName: Build App for Android
+    pool:
+      vmImage: 'windows-latest'
+      demands:
+      - MSBuild
+      
+    steps:
+
+    - task: PowerShell@2
+      displayName: Set Display Version from version.txt
+      inputs:        
+        targetType: 'inline'
+        script: |
+          $data = Get-Content $(app-path-root)\version.txt
+          Write-Output $data
+          Write-Host "##vso[task.setvariable variable=displayVersion;]$data"
+    
+     # Download the keystore from secured files
+    - task: DownloadSecureFile@1
+      name: keystore
+      displayName: Download keystore 
+      inputs:
+        secureFile: '$(keystore-filename)'
+
+    - script: |
+        echo Downloaded $(keystore.secureFilePath)
+        echo Environment $(ENVIRONMENT)
+        echo Working Directory $(System.DefaultWorkingDirectory)\\$(keystore-filename)
+        mv $(keystore.secureFilePath) $(System.DefaultWorkingDirectory)
+      displayName: Move Keystore to Working Directory
+
+    # Install .NET SDKs  
+    - task: UseDotNet@2
+      displayName: Install .NET SDK
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotnet-version)'
+        includePreviewVersions: false
+
+    # Install Java SDK for Android
+    - task: JavaToolInstaller@0
+      displayName: Install Java SDK
+      inputs:
+        versionSpec: '11'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
+
+    # Install all workloads your solution is supported
+    - powershell: dotnet workload install maui-android maui-ios
+      displayName: Install .NET MAUI Workload
+
+    # build project
+    - task: CmdLine@2
+      displayName: 'Build project'
+      inputs:
+        script: |
+          dotnet publish $(app-path-project) -f $(app-target-framework-android) -c Release /p:ApplicationId=$(app-id-android) /p:ApplicationDisplayVersion=$(displayVersion) /p:ApplicationVersion=$(Build.BuildNumber) /p:AndroidSigningKeyPass=$(key-password) /p:AndroidSigningStorePass=$(keystore-password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(keystore-filename) /p:AndroidSigningKeyAlias=$(keystore-alias) /p:AndroidKeyStore=true
+    
+    # Copy files to artifact directory  Temporary just to make sure the AAB is generated and signed correctly
+    - task: CopyFiles@2
+      displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: '$(system.defaultworkingdirectory)'
+        Contents: '$(app-path-contents)/$(app-build-configuration)/$(app-target-framework-android)/publish/**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        CleanTargetFolder: true
+    
+    # Publish artifacts
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop_maui_android'
+        publishLocation: 'Container'  
+    
+    - task: CmdLine@2
+      inputs:
+        script: |
+          ls $(app-path-root)
+          ls $(Build.ArtifactStagingDirectory)
+        
+    - task: AppCenterDistribute@3
+      inputs:
+        serverEndpoint: 'AppCenter Connection'
+        appSlug: '$(app-slug-android)'
+        appFile: '$(app-file-android)'
+        symbolsOption: 'Android'
+        releaseNotesOption: 'file'
+        releaseNotesFile: '$(app-path-root)/releasenotes.txt'
+        destinationType: 'groups'

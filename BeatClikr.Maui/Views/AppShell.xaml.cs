@@ -1,20 +1,18 @@
-﻿using Plugin.MauiMTAdmob;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class AppShell : Shell
 {
-	public AppShell(ViewModels.AppShellViewModel viewModel)
-	{
+    public AppShell(ViewModels.AppShellViewModel viewModel)
+    {
         InitializeComponent();
         BindingContext = viewModel;
 
-		Routing.RegisterRoute(RouteNames.AboutRoute, typeof(AboutPage));
+        Routing.RegisterRoute(RouteNames.AboutRoute, typeof(AboutPage));
         Routing.RegisterRoute(RouteNames.AppShellRoute, typeof(AppShell));
         Routing.RegisterRoute(RouteNames.HelpRoute, typeof(HelpPage));
         Routing.RegisterRoute(RouteNames.LibraryRoute, typeof(LibraryPage));
         Routing.RegisterRoute(RouteNames.LiveRoute, typeof(LivePage));
-        Routing.RegisterRoute(RouteNames.MetronomeRoute, typeof(MetronomePage));
+        Routing.RegisterRoute(RouteNames.InstantMetronomeRoute, typeof(InstantMetronomePage));
         Routing.RegisterRoute(RouteNames.RehearsalRoute, typeof(RehearsalPage));
         Routing.RegisterRoute(RouteNames.SettingsRoute, typeof(SettingsPage));
         Routing.RegisterRoute(RouteNames.SongDetailsRoute, typeof(SongDetailsPage));
@@ -24,6 +22,13 @@ public partial class AppShell : Shell
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }
 

@@ -2,14 +2,14 @@
 
 public partial class AboutPage : ContentPage
 {
-	public AboutPage(ViewModels.AboutViewModel vm)
-	{
-		InitializeComponent();
-		BindingContext = vm;
-	}
+    public AboutPage(ViewModels.AboutViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
 
-	public AboutPage() : this(ServiceHelper.GetService<ViewModels.AboutViewModel>())
-	{
+    public AboutPage() : this(ServiceHelper.GetService<ViewModels.AboutViewModel>())
+    {
 
-	}
+    }
 }

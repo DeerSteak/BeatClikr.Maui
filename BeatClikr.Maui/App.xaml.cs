@@ -1,5 +1,9 @@
-﻿using Plugin.MauiMTAdmob;
+﻿using BeatClikr.Maui.ViewModels;
+using MetroLog;
+using Microsoft.AppCenter.Crashes;
+using Plugin.MauiMTAdmob;
 using Plugin.MauiMTAdmob.Extra;
+using System.Text;
 
 namespace BeatClikr.Maui;
 
@@ -8,52 +12,57 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        SetupAdmob();
         MainPage = ServiceHelper.GetService<Views.AppShell>();
     }
 
     protected override void OnStart()
     {
         base.OnStart();
+        Crashes.GetErrorAttachments = (ErrorReport report) =>
+        {
+            var path = Path.Combine(
+                FileSystem.CacheDirectory,
+                "BeatClikrLog");
+            if (File.Exists(path))
+            {
+                var text = File.ReadAllText(path);
+
+                return new ErrorAttachmentLog[]
+                {
+                ErrorAttachmentLog.AttachmentWithText(text, "error.log"),
+                };
+            }
+            return new ErrorAttachmentLog[0];
+        };
 
         if (!Preferences.ContainsKey(PreferenceKeys.InstantBeat))
-            Preferences.Set(PreferenceKeys.InstantBeat, FileNames.Kick);
+            Preferences.Set(PreferenceKeys.InstantBeat, FileNames.ClickHi);
 
         if (!Preferences.ContainsKey(PreferenceKeys.InstantRhythm))
-            Preferences.Set(PreferenceKeys.InstantRhythm, FileNames.HatClosed);
+            Preferences.Set(PreferenceKeys.InstantRhythm, FileNames.ClickLo);
 
         if (!Preferences.ContainsKey(PreferenceKeys.RehearsalBeat))
-            Preferences.Set(PreferenceKeys.RehearsalBeat, FileNames.Kick);
+            Preferences.Set(PreferenceKeys.RehearsalBeat, FileNames.ClickHi);
 
         if (!Preferences.ContainsKey(PreferenceKeys.RehearsalRhythm))
-            Preferences.Set(PreferenceKeys.RehearsalRhythm, FileNames.HatClosed);
+            Preferences.Set(PreferenceKeys.RehearsalRhythm, FileNames.ClickLo);
 
         if (!Preferences.ContainsKey(PreferenceKeys.LiveBeat))
-            Preferences.Set(PreferenceKeys.LiveBeat, FileNames.Kick);
+            Preferences.Set(PreferenceKeys.LiveBeat, FileNames.ClickHi);
 
         if (!Preferences.ContainsKey(PreferenceKeys.LiveRhythm))
-            Preferences.Set(PreferenceKeys.LiveRhythm, FileNames.HatClosed);
+            Preferences.Set(PreferenceKeys.LiveRhythm, FileNames.ClickLo);
 
-        if (!Preferences.ContainsKey(PreferenceKeys.UsePersonalizedAds))
-            Preferences.Set(PreferenceKeys.UsePersonalizedAds, true);
     }
 
-    private void SetupAdmob()
+    protected override void OnSleep()
     {
-        var useAds = Preferences.Get(PreferenceKeys.UsePersonalizedAds, true);
-#if IOS || ANDROID
-        CrossMauiMTAdmob.Current.UserPersonalizedAds = useAds;
-        if (useAds)
-            CrossMauiMTAdmob.Current.AdsId = DeviceInfo.Platform == DevicePlatform.iOS
-                ? "ca-app-pub-8377432895177958/7490720167"
-                : "ca-app-pub-8377432895177958/9298625858";
-        CrossMauiMTAdmob.Current.ComplyWithFamilyPolicies = true;
-        CrossMauiMTAdmob.Current.UseRestrictedDataProcessing = true;
-        CrossMauiMTAdmob.Current.TestDevices = new List<string>() { };
-        CrossMauiMTAdmob.Current.TagForChildDirectedTreatment = MTTagForChildDirectedTreatment.TagForChildDirectedTreatmentUnspecified;
-        CrossMauiMTAdmob.Current.TagForUnderAgeOfConsent = MTTagForUnderAgeOfConsent.TagForUnderAgeOfConsentUnspecified;
-        CrossMauiMTAdmob.Current.MaxAdContentRating = MTMaxAdContentRating.MaxAdContentRatingG;
-#endif
+        var deviceDisplay = ServiceHelper.GetService<IDeviceDisplay>();
+        if (deviceDisplay != null)
+            deviceDisplay.KeepScreenOn = false;
+        var metronome = ServiceHelper.GetService<MetronomeClickerViewModel>();
+        metronome?.StopCommand.Execute(null);
+        base.OnSleep();
     }
 }
 
