@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter.Analytics;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class SettingsPage : ContentPage
 {
@@ -15,12 +13,5 @@ public partial class SettingsPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.SettingsViewModel).Init();
-        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

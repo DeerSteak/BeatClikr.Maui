@@ -7,9 +7,6 @@ using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
 using Plugin.LocalNotification;
 using Plugin.MauiMTAdmob;
 
@@ -32,11 +29,6 @@ public static class MauiProgram
                 FileSystem.CacheDirectory,
                 "BeatClikrLog");
         });
-
-        AppCenter.Start(
-            "android=e2635483-a1e8-47c5-b57f-5ae2c50be4d1;" +
-            "ios=fb97bcfa-abf2-4528-adaf-3a84cc92a357",
-            typeof(Crashes), typeof(Analytics));
 
         builder
             .UseMauiApp<App>()

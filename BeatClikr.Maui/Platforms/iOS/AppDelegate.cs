@@ -23,10 +23,6 @@ public class AppDelegate : MauiUIApplicationDelegate
                 TrackingCompletionHandler(status);
             }
         }
-        else
-        {
-            AnalyticsHelper.CanTrack = true;
-        }
 
         UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
 
@@ -45,7 +41,7 @@ public class AppDelegate : MauiUIApplicationDelegate
 
     private void TrackingCompletionHandler(ATTrackingManagerAuthorizationStatus status)
     {
-        AnalyticsHelper.CanTrack = status == ATTrackingManagerAuthorizationStatus.Authorized;
+        
     }
 }
 

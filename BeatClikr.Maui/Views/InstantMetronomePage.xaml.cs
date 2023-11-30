@@ -33,7 +33,6 @@ public partial class InstantMetronomePage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
-        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
         var istest =
 #if DEBUG
             true;
@@ -49,7 +48,6 @@ public partial class InstantMetronomePage : ContentPage
         var vm = BindingContext as ViewModels.InstantMetronomeViewModel;
         if (vm.WasPlaying)
             vm.StopCommand.Execute(null);
-        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
