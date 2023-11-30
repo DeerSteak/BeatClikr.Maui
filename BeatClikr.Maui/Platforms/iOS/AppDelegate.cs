@@ -3,6 +3,7 @@ using Foundation;
 using Google.MobileAds;
 using StoreKit;
 using UIKit;
+using UserNotifications;
 
 namespace BeatClikr.Maui;
 
@@ -23,12 +24,15 @@ public class AppDelegate : MauiUIApplicationDelegate
                 TrackingCompletionHandler(status);
             }
         }
-        else
-        {
-            AnalyticsHelper.CanTrack = true;
-        }
 
-        UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+        if (OperatingSystem.IsIOSVersionAtLeast(16) || OperatingSystem.IsMacCatalystVersionAtLeast(16)) 
+        {
+            UNUserNotificationCenter.Current.SetBadgeCount(0, null);
+        } 
+        else 
+        {
+            UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+        }        
 
         return MauiProgram.CreateMauiApp();
     }
@@ -45,7 +49,7 @@ public class AppDelegate : MauiUIApplicationDelegate
 
     private void TrackingCompletionHandler(ATTrackingManagerAuthorizationStatus status)
     {
-        AnalyticsHelper.CanTrack = status == ATTrackingManagerAuthorizationStatus.Authorized;
+        
     }
 }
 

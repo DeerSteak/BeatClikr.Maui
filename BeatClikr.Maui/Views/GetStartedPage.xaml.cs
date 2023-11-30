@@ -16,12 +16,5 @@ public partial class GetStartedPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.GetStartedViewModel).SetImageHeight();
-        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

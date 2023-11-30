@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter.Analytics;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class LibraryPage : ContentPage
 {
@@ -14,18 +12,5 @@ public partial class LibraryPage : ContentPage
     public LibraryPage() : this(ServiceHelper.GetService<ViewModels.LibraryViewModel>())
     {
 
-    }
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        (BindingContext as ViewModels.LibraryViewModel).Init();
-        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

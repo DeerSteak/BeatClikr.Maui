@@ -24,8 +24,6 @@ public class MainActivity : MauiAppCompatActivity
         {
             SetupNotificationChannels();
         }
-
-        AnalyticsHelper.CanTrack = true;
     }
 
     private void SetupNotificationChannels()

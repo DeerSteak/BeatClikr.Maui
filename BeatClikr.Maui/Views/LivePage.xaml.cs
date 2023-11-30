@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter.Analytics;
-
-namespace BeatClikr.Maui.Views;
+﻿namespace BeatClikr.Maui.Views;
 
 public partial class LivePage : ContentPage
 {
@@ -22,12 +20,5 @@ public partial class LivePage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.LiveViewModel).Init();
-        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }
