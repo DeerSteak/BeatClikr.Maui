@@ -3,6 +3,7 @@ using Foundation;
 using Google.MobileAds;
 using StoreKit;
 using UIKit;
+using UserNotifications;
 
 namespace BeatClikr.Maui;
 
@@ -24,7 +25,14 @@ public class AppDelegate : MauiUIApplicationDelegate
             }
         }
 
-        UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+        if (OperatingSystem.IsIOSVersionAtLeast(16) || OperatingSystem.IsMacCatalystVersionAtLeast(16)) 
+        {
+            UNUserNotificationCenter.Current.SetBadgeCount(0, null);
+        } 
+        else 
+        {
+            UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+        }        
 
         return MauiProgram.CreateMauiApp();
     }
