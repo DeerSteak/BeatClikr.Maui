@@ -9,7 +9,8 @@ public partial class InstantMetronomeViewModel : ObservableObject
 {
     private Subdivisions _subdivision;
     private const int _numBeats = 4;
-    private MetronomeClickerViewModel _metronomeClickerViewModel;
+    private readonly MetronomeClickerViewModel _metronomeClickerViewModel;
+    private readonly IMetronomeService _metronomeService;
 
     [ObservableProperty]
     private double _millisecondsPerBeat;
@@ -43,7 +44,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
     private int _beatsPerMinute;
 
     [ObservableProperty]
-    private string[] _subdivisions = new string[] { "Quarter", "Eighth", "Eighth Triplet", "Sixteenth" };
+    private string[] _subdivisions = ["Quarter", "Eighth", "Eighth Triplet", "Sixteenth"];
 
     [ObservableProperty]
     List<InstrumentPicker> _rhythmInstruments;
@@ -67,11 +68,12 @@ public partial class InstantMetronomeViewModel : ObservableObject
         SetupMetronome();
     }
 
-    public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel, IShellService shellService)
+    public InstantMetronomeViewModel(MetronomeClickerViewModel metronomeClickerViewModel, IShellService shellService, IMetronomeService metronome)
     {
         _subdivision = Enums.Subdivisions.Quarter;
         _metronomeClickerViewModel = metronomeClickerViewModel;
         _shellService = shellService;
+        _metronomeService = metronome;
 
         BeatsPerMinute = Preferences.Get(PreferenceKeys.InstantBpm, 60);
         SelectedSubdivisionIndex = Preferences.Get(PreferenceKeys.InstantSelectedSubdivisionIndex, 0);
@@ -96,7 +98,7 @@ public partial class InstantMetronomeViewModel : ObservableObject
         _metronomeClickerViewModel.BeatType = ClickerBeatType.Instant;
         _metronomeClickerViewModel.IsLiveMode = false;
         _metronomeClickerViewModel.SetupMetronomeCommand.Execute(null);
-
+        CheckLowLatency();
     }
 
     [RelayCommand]
@@ -157,11 +159,24 @@ public partial class InstantMetronomeViewModel : ObservableObject
         DidChangeBpm();
     }
 
+    private async void CheckLowLatency()
+    {
+        var remindPref = Preferences.Get(PreferenceKeys.DontRemindLowLatencyAudio, false);
+        if (!remindPref && !_metronomeService.SupportsLowLatency())
+        {
+            var result = await _shellService.DisplayAlert("High Audio Latency", "This device does not support low latency audio. The sound of the click and animations may not be in sync.", "OK", "Don't Remind Me");
+            if (!result)
+            {
+                Preferences.Set(PreferenceKeys.DontRemindLowLatencyAudio, true);
+            }
+        }
+    }
+
     private void SetupMetronome()
     {
         WasPlaying = _metronomeClickerViewModel.IsPlaying;
         _metronomeClickerViewModel.StopCommand.Execute(null);
-        var song = new Models.Song()
+        var song = new Song()
         {
             Title = "Instant metronome",
             Artist = "BeatClikr",

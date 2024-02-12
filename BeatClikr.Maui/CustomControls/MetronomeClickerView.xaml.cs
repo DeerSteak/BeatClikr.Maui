@@ -17,7 +17,7 @@ public partial class MetronomeClickerView : ContentView
     }
 
     public MetronomeClickerView()
-        : this(ServiceHelper.GetService<ViewModels.MetronomeClickerViewModel>())
+        : this(IPlatformApplication.Current.Services.GetService<ViewModels.MetronomeClickerViewModel>())
     {
     }
 

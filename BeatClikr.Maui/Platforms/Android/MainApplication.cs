@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Runtime;
 
 [assembly: UsesFeature("android.hardware.camera", Required = false)]

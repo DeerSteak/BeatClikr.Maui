@@ -11,7 +11,7 @@ public partial class LivePage : ContentPage
         Appearing += (s, e) => liveViewModel.Init();
     }
 
-    public LivePage() : this(ServiceHelper.GetService<ViewModels.LiveViewModel>())
+    public LivePage() : this(IPlatformApplication.Current.Services.GetService<ViewModels.LiveViewModel>())
     {
 
     }
@@ -20,5 +20,12 @@ public partial class LivePage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.LiveViewModel).Init();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

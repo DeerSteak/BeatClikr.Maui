@@ -8,8 +8,20 @@ public partial class HelpPage : ContentPage
         BindingContext = viewModel;
     }
 
-    public HelpPage() : this(ServiceHelper.GetService<ViewModels.HelpViewModel>())
+    public HelpPage() : this(IPlatformApplication.Current.Services.GetService<ViewModels.HelpViewModel>())
     {
 
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

@@ -5,8 +5,6 @@ using System.Reflection;
 using BeatClikr.Maui.Services;
 using BeatClikr.Maui.Services.Interfaces;
 using CommunityToolkit.Maui;
-using MetroLog.MicrosoftExtensions;
-using MetroLog.Operators;
 using Plugin.LocalNotification;
 using Plugin.MauiMTAdmob;
 
@@ -19,16 +17,6 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-
-        builder.Logging.AddStreamingFileLogger(options =>
-        {
-            options.MinLevel = Microsoft.Extensions.Logging.LogLevel.Warning;
-            options.MaxLevel = Microsoft.Extensions.Logging.LogLevel.Critical;
-            options.RetainDays = 7;
-            options.FolderPath = Path.Combine(
-                FileSystem.CacheDirectory,
-                "BeatClikrLog");
-        });
 
         builder
             .UseMauiApp<App>()
@@ -60,7 +48,6 @@ public static class MauiProgram
 
     public static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
     {
-        mauiAppBuilder.Services.AddSingleton(LogOperatorRetriever.Instance);
         mauiAppBuilder.Services.AddSingleton(DeviceInfo.Current);
         mauiAppBuilder.Services.AddSingleton(AppInfo.Current);
         mauiAppBuilder.Services.AddSingleton(DeviceDisplay.Current);
@@ -77,7 +64,7 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.iOS.MetronomeService>();
         mauiAppBuilder.Services.AddSingleton<IAdTrackingHandlerService, Platforms.iOS.AdTrackingHandlerService>();
 #elif ANDROID
-        mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.Android.MetronomeService>();
+        mauiAppBuilder.Services.AddSingleton<IMetronomeService, Platforms.Droid.MetronomeService>();
 #endif
         return mauiAppBuilder;
     }
@@ -92,7 +79,7 @@ public static class MauiProgram
         return mauiAppBuilder;
     }
 
-    private static System.Type[] GetTypesForNamespace(string nameSpace)
+    private static Type[] GetTypesForNamespace(string nameSpace)
     {
         Type[] theList = Assembly.GetExecutingAssembly().GetTypes()
                             .Where(x => !string.IsNullOrEmpty(x.Namespace))

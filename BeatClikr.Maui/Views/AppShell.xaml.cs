@@ -18,5 +18,17 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(RouteNames.SongDetailsRoute, typeof(SongDetailsPage));
         Routing.RegisterRoute(RouteNames.GetStartedRoute, typeof(GetStartedPage));
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
+    }
 }
 

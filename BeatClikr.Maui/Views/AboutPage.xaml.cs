@@ -8,7 +8,7 @@ public partial class AboutPage : ContentPage
         BindingContext = vm;
     }
 
-    public AboutPage() : this(ServiceHelper.GetService<ViewModels.AboutViewModel>())
+    public AboutPage() : this(IPlatformApplication.Current.Services.GetService<ViewModels.AboutViewModel>())
     {
 
     }

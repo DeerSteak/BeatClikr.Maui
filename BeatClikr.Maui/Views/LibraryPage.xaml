@@ -72,7 +72,7 @@
                     HorizontalOptions="EndAndExpand"
                     Text="STOP" />
             </StackLayout>
-            <mt:MTAdView x:Name="AdView" Grid.Row="3" />
+            <mt:MTAdView x:Name="AdView" Grid.Row="3" ZIndex="5" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

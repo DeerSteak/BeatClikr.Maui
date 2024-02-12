@@ -1,20 +1,16 @@
-﻿using Microsoft.Extensions.Logging;
-using Plugin.StoreReview.Abstractions;
+﻿using Plugin.StoreReview.Abstractions;
 
 namespace BeatClikr.Maui.Views;
 
 public partial class InstantMetronomePage : ContentPage
 {
-    private ILogger _logger;
-    private IStoreReview _review;
+    private readonly IStoreReview _review;
     public InstantMetronomePage(
             ViewModels.InstantMetronomeViewModel metronomeViewModel,
-            ILogger<InstantMetronomePage> logger,
             IStoreReview review
         )
     {
         BindingContext = metronomeViewModel;
-        _logger = logger;
         _review = review;
         InitializeComponent();
         AdView.AdsId = DeviceInfo.Platform == DevicePlatform.Android
@@ -23,9 +19,8 @@ public partial class InstantMetronomePage : ContentPage
     }
 
     public InstantMetronomePage() : this(
-            ServiceHelper.GetService<ViewModels.InstantMetronomeViewModel>(),
-            ServiceHelper.GetService<ILogger<InstantMetronomePage>>(),
-            ServiceHelper.GetService<IStoreReview>()
+            IPlatformApplication.Current.Services.GetService<ViewModels.InstantMetronomeViewModel>(),
+            IPlatformApplication.Current.Services.GetService<IStoreReview>()
         )
     { }
 
@@ -33,6 +28,7 @@ public partial class InstantMetronomePage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.InstantMetronomeViewModel).Init();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
         var istest =
 #if DEBUG
             true;
@@ -48,6 +44,7 @@ public partial class InstantMetronomePage : ContentPage
         var vm = BindingContext as ViewModels.InstantMetronomeViewModel;
         if (vm.WasPlaying)
             vm.StopCommand.Execute(null);
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -57,6 +54,6 @@ public partial class InstantMetronomePage : ContentPage
         var onboarded = Preferences.Get(PreferenceKeys.Onboarded,
             new DateTime(1900, 1, 1));
         if (onboarded < new DateTime(2023, 1, 29))
-            Shell.Current.Navigation.PushModalAsync(ServiceHelper.GetService<GetStartedPage>());
+            Shell.Current.Navigation.PushModalAsync(IPlatformApplication.Current.Services.GetService<GetStartedPage>());
     }
 }

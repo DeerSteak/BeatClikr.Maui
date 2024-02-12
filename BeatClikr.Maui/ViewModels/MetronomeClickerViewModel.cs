@@ -133,6 +133,9 @@ public partial class MetronomeClickerViewModel : ObservableObject
         _metronome.Stop();
         RhythmAction();
         _deviceDisplay.KeepScreenOn = false;
+
+        AnalyticsHelper.TrackEvent($"Metronome stopped");
+
     }
 
     [RelayCommand]
@@ -140,6 +143,8 @@ public partial class MetronomeClickerViewModel : ObservableObject
     {
         _metronome.Play();
         _deviceDisplay.KeepScreenOn = true;
+
+        AnalyticsHelper.TrackEvent($"Metronome started");
     }
 
     [RelayCommand]

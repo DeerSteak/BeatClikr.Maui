@@ -20,4 +20,5 @@ public static class PreferenceKeys
     public const string PracticeReminders = "SendPracticeReminders";
     public const string HasAskedReminders = "HasAskedReminders";
     public const string ReminderTime = "ReminderTime";
+    public const string DontRemindLowLatencyAudio = "DontRemindLowLatencyAudio";
 }

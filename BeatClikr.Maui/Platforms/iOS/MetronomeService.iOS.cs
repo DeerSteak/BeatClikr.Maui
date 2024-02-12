@@ -39,7 +39,7 @@ public class MetronomeService : IMetronomeService
     UIImpactFeedbackGenerator _beatGenerator;
     UIImpactFeedbackGenerator _rhythmGenerator;
 
-    AVCaptureDevice _device;
+    readonly AVCaptureDevice _device;
 
     public MetronomeService()
     {
@@ -128,19 +128,12 @@ public class MetronomeService : IMetronomeService
 
     public void SetTempo(int bpm, int subdivisions)
     {
-        switch (bpm)
+        _bpm = bpm switch
         {
-            case < 30:
-                _bpm = 30;
-                break;
-            case > 240:
-                _bpm = 240;
-                break;
-            default:
-                _bpm = bpm;
-                break;
-        }
-
+            < 30 => 30,
+            > 240 => 240,
+            _ => bpm,
+        };
         switch (subdivisions)
         {
             case <= 1:
@@ -221,8 +214,7 @@ public class MetronomeService : IMetronomeService
 
     public void Stop()
     {
-        if (_timer != null)
-            _timer.Invalidate();
+        _timer?.Invalidate();
         ToggleFlashlight(false);
     }
 
@@ -244,12 +236,11 @@ public class MetronomeService : IMetronomeService
 
         if (error == null)
         {
-#pragma warning disable CA1416 // Validate platform compatibility
 #pragma warning disable CA1422 // Validate platform compatibility
             if (on)
             {
                 if (_device.HasTorch)
-                    _device.SetTorchModeLevel(AVCaptureDevice.MaxAvailableTorchLevel, out var torchErr);
+                    _device.SetTorchModeLevel(AVCaptureDevice.MaxAvailableTorchLevel, out _);
                 else if (_device.HasFlash)
                     _device.FlashMode = AVCaptureFlashMode.On;
             }
@@ -261,7 +252,6 @@ public class MetronomeService : IMetronomeService
                     _device.FlashMode = AVCaptureFlashMode.Off;
             }
 #pragma warning restore CA1422 // Validate platform compatibility
-#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         _device.UnlockForConfiguration();
@@ -276,18 +266,21 @@ public class MetronomeService : IMetronomeService
 
     void VibrateBeat()
     {
-        if (_beatGenerator != null)
-            _beatGenerator.ImpactOccurred();
+        _beatGenerator?.ImpactOccurred();
     }
 
     void VibrateRhythm()
     {
-        if (_rhythmGenerator != null)
-            _rhythmGenerator.ImpactOccurred();
+        _rhythmGenerator?.ImpactOccurred();
     }
 
     public double GetMillisecondsPerBeat()
     {
         return 60000 / _bpm;
+    }
+
+    public bool SupportsLowLatency()
+    {
+        return true;
     }
 }

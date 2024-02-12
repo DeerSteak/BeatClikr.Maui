@@ -4,7 +4,7 @@ namespace BeatClikr.Maui.Services;
 
 public class ShellService : IShellService
 {
-    private Shell _appShell = ServiceHelper.GetService<Views.AppShell>();
+    private Shell _appShell = IPlatformApplication.Current.Services.GetService<Views.AppShell>();
 
     public async Task<bool> DisplayAlert(string title, string message, string accept, string cancel) => await _appShell.DisplayAlert(title, message, accept, cancel);
     public async Task DisplayAlert(string title, string message, string cancel) => await _appShell.DisplayAlert(title, message, cancel);

@@ -11,7 +11,7 @@ namespace BeatClikr.Maui.Services
 
         public async Task<bool> RegisterForNotifications()
         {
-            var center = ServiceHelper.GetService<INotificationService>();
+            var center = IPlatformApplication.Current.Services.GetService<INotificationService>();
             var perm = await center.RequestNotificationPermission();
 
             bool success;
@@ -55,7 +55,7 @@ namespace BeatClikr.Maui.Services
 
         public void ClearReminderNotifications()
         {
-            var center = ServiceHelper.GetService<INotificationService>();
+            var center = IPlatformApplication.Current.Services.GetService<INotificationService>();
             center.Clear(REMINDER_ID);
             DoSnackbar(false);
         }

@@ -61,11 +61,11 @@ public partial class LibraryViewModel : ObservableObject
 
     private void GoToSongDetails()
     {
-        var addPage = ServiceHelper.GetService<Views.SongDetailsPage>();
+        var addPage = IPlatformApplication.Current.Services.GetService<Views.SongDetailsPage>();
         addPage.Disappearing -= (s, e) => OnFilterChanged(Filter);
         addPage.Disappearing += (s, e) => OnFilterChanged(Filter);
 
-        var addVm = ServiceHelper.GetService<ViewModels.SongDetailsViewModel>();
+        var addVm = IPlatformApplication.Current.Services.GetService<ViewModels.SongDetailsViewModel>();
         addVm.SongId = SelectedSong?.Id ?? null;
 
         _shellService.GoToAsync(RouteNames.SongDetailsRoute);

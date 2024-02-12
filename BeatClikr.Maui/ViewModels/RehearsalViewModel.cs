@@ -46,12 +46,12 @@ public partial class RehearsalViewModel : ObservableObject
     [RelayCommand]
     private async Task AddSongToPlaylist()
     {
-        var addPage = ServiceHelper.GetService<Views.LibraryPage>() as Views.LibraryPage;
+        var addPage = IPlatformApplication.Current.Services.GetService<Views.LibraryPage>() as Views.LibraryPage;
         addPage.Title = "Add to Rehearsal Playlist";
         addPage.Disappearing -= (s, e) => AddPageDisappearing(s as Views.LibraryPage);
         addPage.Disappearing += (s, e) => AddPageDisappearing(s as Views.LibraryPage);
 
-        var addVm = ServiceHelper.GetService<LibraryViewModel>();
+        var addVm = IPlatformApplication.Current.Services.GetService<LibraryViewModel>();
         addVm.AddToPlaylist = true;
 
         await _shellService.GoToAsync(RouteNames.LibraryRoute, true);
@@ -62,7 +62,7 @@ public partial class RehearsalViewModel : ObservableObject
         page.Title = "Library";
         page.Disappearing -= (s, e) => AddPageDisappearing(s as Views.LibraryPage);
 
-        var addVm = ServiceHelper.GetService<LibraryViewModel>();
+        var addVm = IPlatformApplication.Current.Services.GetService<LibraryViewModel>();
         addVm.AddToPlaylist = false;
 
         if (Song.Instance != null)

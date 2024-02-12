@@ -1,68 +1,35 @@
-﻿using Android.Content;
-using Android.Media;
-using Android.OS;
+﻿using Android.Content.PM;
 using BeatClikr.Maui.Services.Interfaces;
 using Java.Util;
 using Java.Util.Concurrent;
 
-namespace BeatClikr.Maui.Platforms.Android;
+namespace BeatClikr.Maui.Platforms.Droid;
 
-public class MetronomeService : IMetronomeService
+public class MetronomeService : IMetronomeService, IDisposable
 {
     private int _bpm;
     private int _subdivisions;
     private bool _playSubdivisions;
-    private const int SAMPLE_RATE = 44100;
-    private const int WAV_BUFFER_OFFSET = 44;
     private ScheduledThreadPoolExecutor _timer;
     private int _timerEventCounter;
     private int _beatsPlayed;
     private bool _liveModeStarted;
-
-    private byte[] _beatBuffer;
-    private byte[] _rhythmBuffer;
-    private readonly static byte[] _silenceBuffer = SetSilenceBuffer();
-    private readonly int _minBufferSize;
-
-    private AudioTrack _audioTrack;
+    private readonly SoundPoolNotePlayer _notePlayer;
+    private string _beatFileName;
+    private string _rhythmFileName;
     double _subdivisionLengthInMilliseconds;
-    private bool _useHaptic;
-    private VibrationEffect _beatEffect;
-    private VibrationEffect _rhythmEffect;
-    private readonly bool _canVibrate;
-
-    static Vibrator vibrator;
-
-    static Vibrator Vibrator =>
-        vibrator ??= GetVibrator();
-
-    //different ways to do this for Android 30 and below, vs. Android 31 and above.
-    private static Vibrator GetVibrator()
-    {
-        if (OperatingSystem.IsAndroidVersionAtLeast(31))
-        {
-            var mgr = MainApplication.Context.GetSystemService(Context.VibratorManagerService) as VibratorManager;
-            return mgr?.DefaultVibrator;
-        }
-        else
-            return MainApplication.Context.GetSystemService(Context.VibratorService) as Vibrator;
-    }
-
+    private readonly VibratorPlayer _vibratorPlayer;
+ 
     public MetronomeService()
-    {
-        _minBufferSize = AudioTrack.GetMinBufferSize(SAMPLE_RATE, ChannelOut.Stereo, Encoding.Pcm16bit);
-        _canVibrate = Vibrator == null;
+    {        
+        _vibratorPlayer = new VibratorPlayer();        
+        _notePlayer = new SoundPoolNotePlayer();
         SetHaptic();
     }
 
     public void SetHaptic()
     {
-        _useHaptic = Preferences.Get(PreferenceKeys.UseHaptic, false);
-        if (_useHaptic)
-        {
-            _beatEffect = VibrationEffect.CreateOneShot(10, 255);
-            _rhythmEffect = VibrationEffect.CreateOneShot(10, 128);
-        }
+        _vibratorPlayer.SetHaptic();
     }
 
     public void Play()
@@ -75,45 +42,12 @@ public class MetronomeService : IMetronomeService
 
     public void SetBeat(string fileName, string set)
     {
-        _beatBuffer = SetBuffer(fileName, set);
+        _beatFileName = fileName;        
     }
 
     public void SetRhythm(string fileName, string set)
     {
-        _rhythmBuffer = SetBuffer(fileName, set);
-    }
-
-    private static byte[] SetBuffer(string fileName, string set)
-    {
-        byte[] bytes;
-        using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{set}/{fileName}.wav").Result;
-        using (MemoryStream memoryStream = new())
-        {
-            fileStream.CopyTo(memoryStream);
-            var buffer = memoryStream.GetBuffer();
-            if (buffer.Length < _silenceBuffer.Length)
-            {
-                bytes = new byte[_silenceBuffer.Length - WAV_BUFFER_OFFSET - WAV_BUFFER_OFFSET];
-                Buffer.BlockCopy(buffer, WAV_BUFFER_OFFSET, bytes, 0, buffer.Length - WAV_BUFFER_OFFSET);
-                Buffer.BlockCopy(_silenceBuffer, WAV_BUFFER_OFFSET, bytes, buffer.Length - WAV_BUFFER_OFFSET, _silenceBuffer.Length - buffer.Length - 44);
-            }
-            else
-            {
-                bytes = new byte[buffer.Length - WAV_BUFFER_OFFSET];
-                Buffer.BlockCopy(buffer, WAV_BUFFER_OFFSET, bytes, 0, buffer.Length - WAV_BUFFER_OFFSET);
-            }
-        }
-
-        return bytes;
-    }
-
-    private static byte[] SetSilenceBuffer()
-    {
-        using System.IO.Stream fileStream = FileSystem.Current.OpenAppPackageFileAsync($"{FileNames.Set1}/{FileNames.Silence}.wav").Result;
-        using MemoryStream memoryStream = new();
-        fileStream.CopyTo(memoryStream);
-        var buffer = memoryStream.GetBuffer();
-        return buffer;
+        _rhythmFileName = fileName;        
     }
 
     public void SetTempo(int bpm, int subdivisions)
@@ -144,85 +78,33 @@ public class MetronomeService : IMetronomeService
 
     private void StartTimer()
     {
-        _audioTrack.SetVolume(0);
-        var bytesWritten = _audioTrack.Write(_silenceBuffer, 0, _silenceBuffer.Length, WriteMode.NonBlocking);
-        _audioTrack.Play();
-        _audioTrack.SetVolume(.9f);
-
         var task = new MetronomeTimerTask
         {
             Action = HandleTimer
         };
-
         _timer = new ScheduledThreadPoolExecutor(_subdivisions);
         _timer.ScheduleAtFixedRate(task, 0, (long)_subdivisionLengthInMilliseconds, TimeUnit.Milliseconds);
     }
 
     public void SetupMetronome(string beatFileName, string rhythmFileName, string set)
-    {
-        SetBeat(beatFileName, set);
-        SetRhythm(rhythmFileName, set);
+    {   
+        _beatFileName = beatFileName;
+        _rhythmFileName = rhythmFileName;
+
         SetTempo(_bpm, _subdivisions);
 
-        _subdivisionLengthInMilliseconds = 60000D / (double)(_bpm * _subdivisions);
-
-        if (OperatingSystem.IsAndroidVersionAtLeast(23))
-        {
-            _audioTrack = new AudioTrack.Builder()
-                .SetAudioAttributes(GetAudioAttributesBuilder().Build())
-                .SetAudioFormat(new AudioFormat.Builder()
-                    .SetChannelMask(ChannelOut.Stereo)
-                    .SetEncoding(Encoding.Pcm16bit)
-                    .SetSampleRate(SAMPLE_RATE)
-                    .Build())
-                .SetTransferMode(AudioTrackMode.Stream)
-                .SetBufferSizeInBytes(_minBufferSize)
-                .Build();
-            _audioTrack.SetVolume(0);
-        }
+        _subdivisionLengthInMilliseconds = 60000D / (_bpm * _subdivisions);       
     }
 
-    private static AudioAttributes.Builder GetAudioAttributesBuilder()
-    {
-        var audioAttributesBuilder = new AudioAttributes.Builder()
-            .SetContentType(AudioContentType.Music)
-            .SetFlags(AudioFlags.AudibilityEnforced)
-            .SetUsage(AudioUsageKind.Media);
-
-        if (OperatingSystem.IsAndroidVersionAtLeast(29))
-            audioAttributesBuilder = audioAttributesBuilder
-                .SetAllowedCapturePolicy(CapturePolicies.ByAll)
-                .SetHapticChannelsMuted(false);
-
-        if (OperatingSystem.IsAndroidVersionAtLeast(32))
-            audioAttributesBuilder = audioAttributesBuilder
-                .SetIsContentSpatialized(false)
-                .SetSpatializationBehavior((int)AudioSpatializationBehavior.Never);
-
-        return audioAttributesBuilder;
-    }
-
-    public void Stop()
-    {
-        _timer?.ShutdownNow();
-
-        if (_audioTrack?.PlayState == PlayState.Playing)
-        {
-            _audioTrack.SetVolume(0);
-            _audioTrack.Pause();
-            _audioTrack.Flush();
-            _audioTrack.Stop();
-        }
-    }
+    public void Stop() => _timer?.ShutdownNow();
 
     private void HandleTimer()
     {
         if (_timerEventCounter == 1)
         {
             if (!IMetronomeService.MuteOverride && !_liveModeStarted)
-                _audioTrack.Write(_beatBuffer, 0, _beatBuffer.Length, WriteMode.NonBlocking);
-            if (_useHaptic && _canVibrate)
-                Vibrator?.Vibrate(_beatEffect);
+                _notePlayer.Play(_beatFileName);
+            _vibratorPlayer.PlayBeat();
             MainThread.BeginInvokeOnMainThread(() => IMetronomeService.BeatAction());
 
             if (IMetronomeService.LiveMode && !_liveModeStarted)
@@ -237,9 +119,8 @@ public class MetronomeService : IMetronomeService
             if (_playSubdivisions)
             {
                 if (!IMetronomeService.MuteOverride && !_liveModeStarted)
-                    _audioTrack.Write(_rhythmBuffer, 0, _rhythmBuffer.Length, WriteMode.NonBlocking);
-                if (_useHaptic && _canVibrate)
-                    Vibrator?.Vibrate(_rhythmEffect);
+                    _notePlayer.Play(_rhythmFileName);
+                _vibratorPlayer.PlayRhythm();
             }
             MainThread.BeginInvokeOnMainThread(() =>
                 IMetronomeService.RhythmAction());
@@ -250,9 +131,19 @@ public class MetronomeService : IMetronomeService
             _timerEventCounter = 1;
     }
 
-    public double GetMillisecondsPerBeat()
+    public double GetMillisecondsPerBeat() => 60000 / _bpm;
+
+    public void Dispose()
     {
-        return 60000 / _bpm;
+        _notePlayer.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    public bool SupportsLowLatency()
+    {
+        var lla = Android.App.Application.Context.PackageManager.HasSystemFeature(PackageManager.FeatureAudioLowLatency);
+        var pa = Android.App.Application.Context.PackageManager.HasSystemFeature(PackageManager.FeatureAudioPro);
+        return pa || lla;
     }
 }
 
@@ -264,4 +155,3 @@ public class MetronomeTimerTask : TimerTask
         Action();
     }
 }
-

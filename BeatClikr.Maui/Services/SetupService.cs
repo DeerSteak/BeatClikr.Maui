@@ -20,30 +20,23 @@ namespace BeatClikr.Maui.Helpers
             result = await Permissions.RequestAsync<Permissions.Flashlight>();
             if (result != PermissionStatus.Granted)
             {
-                await (ServiceHelper.GetService<INonShellNavProvider>()).DisplayAlert("Flashlight Permission Denied", "BeatClikr will not use the flashlight. If you change your mind, you can enable the flashlight again on the Settings page.", "OK");
+                await (IPlatformApplication.Current.Services.GetService<INonShellNavProvider>()).DisplayAlert("Flashlight Permission Denied", "BeatClikr will not use the flashlight. If you change your mind, you can enable the flashlight again on the Settings page.", "OK");
             }
 
             var pref = result == PermissionStatus.Granted;
             Preferences.Set(PreferenceKeys.UseFlashlight, pref);
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously - Android throws this because iOS uses await.
         private async Task SetupAdmob()
-        {
-            var usePersonalizedAds = true;
-#if IOS
-            var trackingService = ServiceHelper.GetService<Services.Interfaces.IAdTrackingHandlerService>();
-            usePersonalizedAds = await trackingService.AskTrackingPermission();
-#endif
-
-#if IOS || ANDROID
-            CrossMauiMTAdmob.Current.UserPersonalizedAds = usePersonalizedAds;
+        {            
             CrossMauiMTAdmob.Current.ComplyWithFamilyPolicies = true;
             CrossMauiMTAdmob.Current.UseRestrictedDataProcessing = true;
             CrossMauiMTAdmob.Current.TagForChildDirectedTreatment = MTTagForChildDirectedTreatment.TagForChildDirectedTreatmentUnspecified;
             CrossMauiMTAdmob.Current.TagForUnderAgeOfConsent = MTTagForUnderAgeOfConsent.TagForUnderAgeOfConsentUnspecified;
             CrossMauiMTAdmob.Current.MaxAdContentRating = MTMaxAdContentRating.MaxAdContentRatingG;
-#endif
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously - Android throws this because iOS uses await.
 
         private async Task SetupHaptic()
         {
@@ -59,7 +52,7 @@ namespace BeatClikr.Maui.Helpers
             result = await Permissions.RequestAsync<Permissions.Vibrate>();
             if (result != PermissionStatus.Granted)
             {
-                await (ServiceHelper.GetService<INonShellNavProvider>()).DisplayAlert("Vibration Permission Denied", "BeatClikr will vibrate. If you change your mind, you can enable the vibration setting again on the Settings page.", "OK");
+                await (IPlatformApplication.Current.Services.GetService<INonShellNavProvider>()).DisplayAlert("Vibration Permission Denied", "BeatClikr will vibrate. If you change your mind, you can enable the vibration setting again on the Settings page.", "OK");
             }
 
             var pref = result == PermissionStatus.Granted;
@@ -68,7 +61,7 @@ namespace BeatClikr.Maui.Helpers
 
         private async Task SetupReminders()
         {
-            ILocalNotificationService service = ServiceHelper.GetService<ILocalNotificationService>();
+            ILocalNotificationService service = IPlatformApplication.Current.Services.GetService<ILocalNotificationService>();
             if (service != null)
             {
                 await service.RegisterForNotifications();
@@ -82,7 +75,7 @@ namespace BeatClikr.Maui.Helpers
                 var baseText = "BeatClikr can show the beat using your device's flashlight. Do you want to use that feature?";
                 var androidText = baseText + " You will be asked permission to use your device's camera.";
                 var questionText = DeviceInfo.Platform == DevicePlatform.iOS ? baseText : androidText;
-                var questionResponse = await (ServiceHelper.GetService<INonShellNavProvider>()).DisplayAlert("Use Flashlight?", questionText, "Yes", "No");
+                var questionResponse = await (IPlatformApplication.Current.Services.GetService<INonShellNavProvider>()).DisplayAlert("Use Flashlight?", questionText, "Yes", "No");
                 Preferences.Set(PreferenceKeys.UseFlashlight, questionResponse);
             }
             Preferences.Set(PreferenceKeys.HasAskedFlashlight, true);
@@ -96,7 +89,7 @@ namespace BeatClikr.Maui.Helpers
                 var baseText = "BeatClikr can vibrate the device to indicate the beat. Do you want to use that feature?";
                 var androidText = baseText + " You will be asked permission to use your device's camera.";
                 var questionText = DeviceInfo.Platform == DevicePlatform.iOS ? baseText : androidText;
-                var questionResponse = await (ServiceHelper.GetService<INonShellNavProvider>()).DisplayAlert("Use Vibration?", questionText, "Yes", "No");
+                var questionResponse = await (IPlatformApplication.Current.Services.GetService<INonShellNavProvider>()).DisplayAlert("Use Vibration?", questionText, "Yes", "No");
                 Preferences.Set(PreferenceKeys.UseHaptic, questionResponse);
             }
             Preferences.Set(PreferenceKeys.HasAskedHaptic, true);
@@ -108,7 +101,7 @@ namespace BeatClikr.Maui.Helpers
             if (!Preferences.ContainsKey(PreferenceKeys.PracticeReminders))
             {
                 var questionText = "BeatClikr can remind you to practice at this time each day. Would you like these remidners? If so, press Yes and select Allow on the next prompt.";
-                var questionResponse = await (ServiceHelper.GetService<INonShellNavProvider>()).DisplayAlert("Get practice reminders?", questionText, "Yes", "No");
+                var questionResponse = await (IPlatformApplication.Current.Services.GetService<INonShellNavProvider>()).DisplayAlert("Get practice reminders?", questionText, "Yes", "No");
                 Preferences.Set(PreferenceKeys.PracticeReminders, questionResponse);
             }
             Preferences.Set(PreferenceKeys.HasAskedReminders, true);

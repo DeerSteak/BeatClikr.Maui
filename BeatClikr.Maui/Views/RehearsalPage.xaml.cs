@@ -12,7 +12,7 @@ public partial class RehearsalPage : ContentPage
         BindingContext = rehearsalViewModel;
     }
 
-    public RehearsalPage() : this(ServiceHelper.GetService<ViewModels.RehearsalViewModel>())
+    public RehearsalPage() : this(IPlatformApplication.Current.Services.GetService<ViewModels.RehearsalViewModel>())
     {
 
     }
@@ -21,10 +21,12 @@ public partial class RehearsalPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.RehearsalViewModel).Init();
+        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
+        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

@@ -83,7 +83,7 @@
                     <BoxView BackgroundColor="Transparent" HeightRequest="6" />
                 </StackLayout>
             </ScrollView>
-            <mt:MTAdView x:Name="AdView" Grid.Row="2" />
+            <mt:MTAdView x:Name="AdView" Grid.Row="2" ZIndex="5" />
         </Grid>
     </ScrollView>
 </ContentPage>

@@ -128,7 +128,7 @@
                         SelectedItem="{Binding LiveRhythm}" />
                 </StackLayout>
             </ScrollView>
-            <mt:MTAdView x:Name="AdView" Grid.Row="1" />
+            <mt:MTAdView x:Name="AdView" Grid.Row="1" ZIndex="5" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

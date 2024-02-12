@@ -1,8 +1,4 @@
 ﻿using BeatClikr.Maui.ViewModels;
-using MetroLog;
-using Plugin.MauiMTAdmob;
-using Plugin.MauiMTAdmob.Extra;
-using System.Text;
 
 namespace BeatClikr.Maui;
 
@@ -11,7 +7,7 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        MainPage = ServiceHelper.GetService<Views.AppShell>();
+        MainPage = IPlatformApplication.Current.Services.GetService<Views.AppShell>();
     }
 
     protected override void OnStart()
@@ -40,10 +36,10 @@ public partial class App : Application
 
     protected override void OnSleep()
     {
-        var deviceDisplay = ServiceHelper.GetService<IDeviceDisplay>();
+        var deviceDisplay = IPlatformApplication.Current.Services.GetService<IDeviceDisplay>();
         if (deviceDisplay != null)
             deviceDisplay.KeepScreenOn = false;
-        var metronome = ServiceHelper.GetService<MetronomeClickerViewModel>();
+        var metronome = IPlatformApplication.Current.Services.GetService<MetronomeClickerViewModel>();
         metronome?.StopCommand.Execute(null);
         base.OnSleep();
     }
