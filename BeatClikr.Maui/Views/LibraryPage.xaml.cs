@@ -18,12 +18,10 @@ public partial class LibraryPage : ContentPage
     {
         base.OnAppearing();
         (BindingContext as ViewModels.LibraryViewModel).Init();
-        AnalyticsHelper.TrackEvent($"{GetType()} appearing");
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        AnalyticsHelper.TrackEvent($"{GetType()} disappearing");
     }
 }

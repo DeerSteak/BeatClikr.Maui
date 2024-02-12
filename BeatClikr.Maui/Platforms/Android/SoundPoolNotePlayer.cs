@@ -29,17 +29,17 @@ namespace BeatClikr.Maui.Platforms.Droid
             return audioAttributesBuilder.Build();
         }
 
-        public void Play(string fileName)
+        public void Play(string fileName, bool isBeat)
         {
+            var volume = isBeat ? 1.5f : 1.0f;
             var soundHandle = GetSoundHandle(fileName);            
-            _soundPool.Play(soundHandle, 1f, 1f, 1, 0, 1f);            
+            _soundPool.Play(soundHandle, volume, volume, 1, 0, 1f);            
         }
 
         private void LoadNote(string fileName)
         {            
-            var soundId = GetResourceDescriptor(fileName);            
-            if (_soundHandles.ContainsKey(fileName))
-                _soundHandles.Remove(fileName);
+            var soundId = GetResourceDescriptor(fileName);
+            _soundHandles.Remove(fileName);
             _soundHandles[fileName] = _soundPool.Load(_appContext, soundId, 1);            
         }
 
@@ -100,6 +100,10 @@ namespace BeatClikr.Maui.Platforms.Droid
 
         private void OnLoadCompleteListener(object sender, SoundPool.LoadCompleteEventArgs args) => _soundPool?.Play(args.SampleId, 1f, 1f, 1, 0, 1f);
 
-        public void Dispose() => Clear();
+        public void Dispose()
+        {
+            Clear();
+            GC.SuppressFinalize(this);
+        }
     }
 }

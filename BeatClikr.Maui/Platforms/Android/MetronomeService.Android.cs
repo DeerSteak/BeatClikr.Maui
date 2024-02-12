@@ -1,7 +1,10 @@
 ﻿using Android.Content.PM;
+using Android.OS;
+using AndroidX.Core.App;
 using BeatClikr.Maui.Services.Interfaces;
 using Java.Util;
 using Java.Util.Concurrent;
+using Microsoft.Maui.Platform;
 
 namespace BeatClikr.Maui.Platforms.Droid;
 
@@ -19,11 +22,11 @@ public class MetronomeService : IMetronomeService, IDisposable
     private string _rhythmFileName;
     double _subdivisionLengthInMilliseconds;
     private readonly VibratorPlayer _vibratorPlayer;
- 
+     
     public MetronomeService()
     {        
         _vibratorPlayer = new VibratorPlayer();        
-        _notePlayer = new SoundPoolNotePlayer();
+        _notePlayer = new SoundPoolNotePlayer();        
         SetHaptic();
     }
 
@@ -103,7 +106,7 @@ public class MetronomeService : IMetronomeService, IDisposable
         if (_timerEventCounter == 1)
         {
             if (!IMetronomeService.MuteOverride && !_liveModeStarted)
-                _notePlayer.Play(_beatFileName);
+                _notePlayer.Play(_beatFileName, true);
             _vibratorPlayer.PlayBeat();
             MainThread.BeginInvokeOnMainThread(() => IMetronomeService.BeatAction());
 
@@ -119,7 +122,7 @@ public class MetronomeService : IMetronomeService, IDisposable
             if (_playSubdivisions)
             {
                 if (!IMetronomeService.MuteOverride && !_liveModeStarted)
-                    _notePlayer.Play(_rhythmFileName);
+                    _notePlayer.Play(_rhythmFileName, false);
                 _vibratorPlayer.PlayRhythm();
             }
             MainThread.BeginInvokeOnMainThread(() =>

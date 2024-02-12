@@ -279,8 +279,10 @@ public class MetronomeService : IMetronomeService
         return 60000 / _bpm;
     }
 
+    #region Android only
     public bool SupportsLowLatency()
     {
         return true;
     }
+    #endregion
 }

@@ -7,13 +7,11 @@ namespace BeatClikr.Maui.ViewModels;
 
 public partial class MetronomeClickerViewModel : ObservableObject
 {
-    private IShellService _shellService;
     private readonly string _bulbDim;
     private readonly string _bulbLit;
-    private IMetronomeService _metronome;
-    private IDeviceInfo _deviceInfo;
-    private IDeviceDisplay _deviceDisplay;
-    private ISetupService _permissionService;
+    private readonly IMetronomeService _metronome;
+    private readonly IDeviceDisplay _deviceDisplay;
+    private readonly ISetupService _permissionService;
 
     [ObservableProperty]
     private bool _isPlaying;
@@ -65,11 +63,9 @@ public partial class MetronomeClickerViewModel : ObservableObject
     [ObservableProperty]
     private Action _resetAnimator;
 
-    public MetronomeClickerViewModel(IDeviceDisplay deviceDisplay, IAppInfo appInfo, IShellService shellService, IMetronomeService metronome, IDeviceInfo deviceInfo, ISetupService permissionService)
-    {
-        _shellService = shellService;
+    public MetronomeClickerViewModel(IDeviceDisplay deviceDisplay, IAppInfo appInfo, IMetronomeService metronome, ISetupService permissionService)
+    {        
         _metronome = metronome;
-        _deviceInfo = deviceInfo;
         _deviceDisplay = deviceDisplay;
         _permissionService = permissionService;
         var currentTheme = appInfo.RequestedTheme;
@@ -77,9 +73,9 @@ public partial class MetronomeClickerViewModel : ObservableObject
         MuteOverride = Preferences.Get(PreferenceKeys.MuteMetronome, false);
         UseFlashlight = Preferences.Get(PreferenceKeys.UseFlashlight, true);
 
-        _bulbDim = Constants.IconFont.Lightbulb;
+        _bulbDim = IconFont.Lightbulb;
 
-        _bulbLit = Constants.IconFont.LightbulbOn;
+        _bulbLit = IconFont.LightbulbOn;
 
         BeatBox = _bulbDim;
         Song = new Song();
@@ -133,9 +129,6 @@ public partial class MetronomeClickerViewModel : ObservableObject
         _metronome.Stop();
         RhythmAction();
         _deviceDisplay.KeepScreenOn = false;
-
-        AnalyticsHelper.TrackEvent($"Metronome stopped");
-
     }
 
     [RelayCommand]
@@ -143,8 +136,6 @@ public partial class MetronomeClickerViewModel : ObservableObject
     {
         _metronome.Play();
         _deviceDisplay.KeepScreenOn = true;
-
-        AnalyticsHelper.TrackEvent($"Metronome started");
     }
 
     [RelayCommand]
